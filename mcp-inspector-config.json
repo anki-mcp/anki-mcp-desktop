@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "stdio-server": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["dist/main.js"],
+      "env": {
+        "MCP_SERVER_NAME": "anki-mcp-stdio",
+        "MCP_SERVER_VERSION": "1.0.0"
+      },
+      "note": "Anki MCP server with STDIO transport - run manually"
+    }
+  }
+}
