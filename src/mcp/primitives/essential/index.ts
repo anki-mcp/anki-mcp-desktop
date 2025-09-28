@@ -15,6 +15,7 @@ export { AnkiConnectClient, AnkiConnectError } from '../../clients/anki-connect.
 export { EchoTool } from './tools/echo.tool';
 export { SyncTool } from './tools/sync.tool';
 export { ListDecksTool } from './tools/list-decks.tool';
+export { CreateDeckTool } from './tools/create-deck.tool';
 export { GetDueCardsTool } from './tools/get-due-cards.tool';
 export { PresentCardTool } from './tools/present-card.tool';
 export { RateCardTool } from './tools/rate-card.tool';
@@ -32,6 +33,7 @@ import { AnkiConnectClient } from '../../clients/anki-connect.client';
 import { EchoTool } from './tools/echo.tool';
 import { SyncTool } from './tools/sync.tool';
 import { ListDecksTool } from './tools/list-decks.tool';
+import { CreateDeckTool } from './tools/create-deck.tool';
 import { GetDueCardsTool } from './tools/get-due-cards.tool';
 import { PresentCardTool } from './tools/present-card.tool';
 import { RateCardTool } from './tools/rate-card.tool';
@@ -46,6 +48,7 @@ const MCP_PRIMITIVES = [
   EchoTool,
   SyncTool,
   ListDecksTool,
+  CreateDeckTool,
   GetDueCardsTool,
   PresentCardTool,
   RateCardTool,
