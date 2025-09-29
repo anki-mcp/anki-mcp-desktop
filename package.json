@@ -12,12 +12,17 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "lint": "eslint \"{src,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
+    "test:unit": "jest --testPathPattern='spec\\.ts$' --silent",
+    "test:tools": "jest src/mcp/primitives/essential/tools/__tests__ --silent",
+    "test:workflows": "jest test/workflows --silent",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:ci": "jest --coverage --silent --maxWorkers=2",
+    "test:single": "npm test -- src/mcp/primitives/essential/tools/__tests__/delete-notes.tool.spec.ts",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist node_modules",
     "inspector:stdio": "./node_modules/.bin/mcp-inspector --config mcp-inspector-config.json --server stdio-server",
@@ -70,16 +75,38 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
+    "rootDir": ".",
+    "roots": [
+      "<rootDir>/src",
+      "<rootDir>/test"
+    ],
+    "testRegex": ".*\\.(spec|test)\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "src/**/*.(t|j)s",
+      "!src/**/*.spec.ts",
+      "!src/**/*.test.ts",
+      "!src/**/__tests__/**",
+      "!src/**/__mocks__/**",
+      "!src/test-fixtures/**",
+      "!src/main.ts"
     ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "coverageDirectory": "coverage",
+    "testEnvironment": "node",
+    "coverageThreshold": {
+      "global": {
+        "branches": 70,
+        "functions": 70,
+        "lines": 70,
+        "statements": 70
+      }
+    },
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1",
+      "^@test/(.*)$": "<rootDir>/test/$1"
+    }
   },
   "engines": {
     "node": ">=20"

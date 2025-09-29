@@ -203,5 +203,28 @@ npm run build         # Build the project
 npm run start:dev     # Start with watch mode (auto-rebuild)
 npm run type-check    # Run TypeScript type checking
 npm run lint          # Run ESLint
-npm run test          # Run tests
 ```
+
+### Testing Commands
+
+```bash
+npm test              # Run all tests
+npm run test:unit     # Run unit tests only
+npm run test:tools    # Run tool-specific tests
+npm run test:workflows # Run workflow integration tests
+npm run test:e2e      # Run end-to-end tests
+npm run test:cov      # Run tests with coverage report
+npm run test:watch    # Run tests in watch mode
+npm run test:debug    # Run tests with debugger
+npm run test:ci       # Run tests for CI (silent, with coverage)
+```
+
+### Test Coverage
+
+The project maintains 70% minimum coverage thresholds for:
+- Branches
+- Functions
+- Lines
+- Statements
+
+Coverage reports are generated in the `coverage/` directory.
