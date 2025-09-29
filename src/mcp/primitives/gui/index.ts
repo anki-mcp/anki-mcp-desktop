@@ -1,12 +1,8 @@
-// Tools
-export { EchoLocalTool } from './tools/echo-local.tool';
-
 // Module
 import { Module, DynamicModule } from '@nestjs/common';
-import { EchoLocalTool } from './tools/echo-local.tool';
 
-const MCP_GUI_PRIMITIVES = [
-  EchoLocalTool,
+const MCP_GUI_PRIMITIVES: any[] = [
+  // Currently no GUI-specific primitives
 ];
 
 @Module({})

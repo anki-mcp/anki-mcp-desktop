@@ -12,7 +12,6 @@ export * from '../../utils/anki.utils';
 export { AnkiConnectClient, AnkiConnectError } from '../../clients/anki-connect.client';
 
 // Tools
-export { EchoTool } from './tools/echo.tool';
 export { SyncTool } from './tools/sync.tool';
 export { ListDecksTool } from './tools/list-decks.tool';
 export { CreateDeckTool } from './tools/create-deck.tool';
@@ -25,7 +24,6 @@ export { ModelStylingTool } from './tools/model-styling.tool';
 export { AddNoteTool } from './tools/add-note.tool';
 
 // Prompts
-export { ExamplePrompt } from './prompts/example.prompt';
 export { ReviewSessionPrompt } from './prompts/review-session.prompt';
 
 // Resources
@@ -34,7 +32,6 @@ export { SystemInfoResource } from './resources/system-info.resource';
 // Module
 import { Module, DynamicModule, Provider, Type } from '@nestjs/common';
 import { AnkiConnectClient } from '../../clients/anki-connect.client';
-import { EchoTool } from './tools/echo.tool';
 import { SyncTool } from './tools/sync.tool';
 import { ListDecksTool } from './tools/list-decks.tool';
 import { CreateDeckTool } from './tools/create-deck.tool';
@@ -45,7 +42,6 @@ import { ModelNamesTool } from './tools/model-names.tool';
 import { ModelFieldNamesTool } from './tools/model-field-names.tool';
 import { ModelStylingTool } from './tools/model-styling.tool';
 import { AddNoteTool } from './tools/add-note.tool';
-import { ExamplePrompt } from './prompts/example.prompt';
 import { ReviewSessionPrompt } from './prompts/review-session.prompt';
 import { SystemInfoResource } from './resources/system-info.resource';
 
@@ -53,7 +49,6 @@ const MCP_PRIMITIVES = [
   // Client
   AnkiConnectClient,
   // Tools
-  EchoTool,
   SyncTool,
   ListDecksTool,
   CreateDeckTool,
@@ -65,7 +60,6 @@ const MCP_PRIMITIVES = [
   ModelStylingTool,
   AddNoteTool,
   // Prompts
-  ExamplePrompt,
   ReviewSessionPrompt,
   // Resources
   SystemInfoResource,

@@ -1,17 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Scope } from '@nestjs/common';
 import { Prompt } from '@rekog/mcp-nest';
-import { GetPromptResult } from '@modelcontextprotocol/sdk/types.js';
+import { z } from 'zod';
 
-/**
- * Prompt for guided Anki review sessions
- */
-@Injectable()
-@Prompt({
-  name: 'anki_review',
-  description: 'Guidelines for conducting Anki spaced repetition review sessions',
-})
+@Injectable({ scope: Scope.REQUEST })
 export class ReviewSessionPrompt {
-  async getPrompt(_args?: Record<string, string>): Promise<GetPromptResult> {
+  @Prompt({
+    name: 'anki_review',
+    description: 'Guidelines for conducting Anki spaced repetition review sessions',
+    parameters: z.object({}),
+  })
+  getAnkiReviewPrompt() {
     const promptText = `You are helping a user review Anki flashcards using spaced repetition. Follow this workflow:
 
 ## CRITICAL: Synchronization Requirements
