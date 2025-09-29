@@ -119,3 +119,61 @@ export interface AnkiConnectResponse<T = any> {
   result: T;
   error: string | null;
 }
+
+/**
+ * Options for duplicate checking when adding notes
+ */
+export interface NoteOptions {
+  /** Whether to allow adding duplicate notes (default: false) */
+  allowDuplicate?: boolean;
+
+  /** Scope for duplicate checking: "deck" checks only target deck, "collection" checks entire collection */
+  duplicateScope?: 'deck' | 'collection';
+
+  /** Advanced options for duplicate scope checking */
+  duplicateScopeOptions?: {
+    /** Specific deck to check for duplicates in (if undefined, uses target deck) */
+    deckName?: string;
+    /** Whether to check child decks for duplicates (default: false) */
+    checkChildren?: boolean;
+    /** Whether to check across all note types/models (default: false) */
+    checkAllModels?: boolean;
+  };
+}
+
+/**
+ * Parameters for adding a new note to Anki
+ */
+export interface AddNoteParams {
+  /** The deck to add the note to */
+  deckName: string;
+
+  /** The note type/model to use (e.g., "Basic", "Basic (and reversed card)", "Cloze") */
+  modelName: string;
+
+  /** Field values as key-value pairs (e.g., {"Front": "question", "Back": "answer"}) */
+  fields: Record<string, string>;
+
+  /** Optional tags to add to the note for organization and searching */
+  tags?: string[];
+
+  /** Options for duplicate checking and handling */
+  options?: NoteOptions;
+}
+
+/**
+ * Information about an Anki note type/model
+ */
+export interface Model {
+  /** The name of the model as displayed in Anki */
+  name: string;
+
+  /** Unique identifier for the model */
+  id: number;
+
+  /** CSS styling used for rendering cards of this type */
+  css: string;
+
+  /** Array of field names in the order they appear in the model */
+  fields: string[];
+}

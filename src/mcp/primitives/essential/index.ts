@@ -19,6 +19,10 @@ export { CreateDeckTool } from './tools/create-deck.tool';
 export { GetDueCardsTool } from './tools/get-due-cards.tool';
 export { PresentCardTool } from './tools/present-card.tool';
 export { RateCardTool } from './tools/rate-card.tool';
+export { ModelNamesTool } from './tools/model-names.tool';
+export { ModelFieldNamesTool } from './tools/model-field-names.tool';
+export { ModelStylingTool } from './tools/model-styling.tool';
+export { AddNoteTool } from './tools/add-note.tool';
 
 // Prompts
 export { ExamplePrompt } from './prompts/example.prompt';
@@ -37,6 +41,10 @@ import { CreateDeckTool } from './tools/create-deck.tool';
 import { GetDueCardsTool } from './tools/get-due-cards.tool';
 import { PresentCardTool } from './tools/present-card.tool';
 import { RateCardTool } from './tools/rate-card.tool';
+import { ModelNamesTool } from './tools/model-names.tool';
+import { ModelFieldNamesTool } from './tools/model-field-names.tool';
+import { ModelStylingTool } from './tools/model-styling.tool';
+import { AddNoteTool } from './tools/add-note.tool';
 import { ExamplePrompt } from './prompts/example.prompt';
 import { ReviewSessionPrompt } from './prompts/review-session.prompt';
 import { SystemInfoResource } from './resources/system-info.resource';
@@ -52,6 +60,10 @@ const MCP_PRIMITIVES = [
   GetDueCardsTool,
   PresentCardTool,
   RateCardTool,
+  ModelNamesTool,
+  ModelFieldNamesTool,
+  ModelStylingTool,
+  AddNoteTool,
   // Prompts
   ExamplePrompt,
   ReviewSessionPrompt,
