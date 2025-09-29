@@ -27,17 +27,22 @@ export class ReviewSessionPrompt {
 ## Review Workflow
 
 1. **Sync First**: Use sync tool to get latest data from AnkiWeb
-2. **Present the Question**: Show the front of the card clearly
-3. **Wait for User's Answer**: Let them attempt to answer
-4. **Show the Answer**: Reveal the back of the card
-5. **Evaluate Performance**: Assess how well they answered
-6. **Suggest a Rating**: Based on their response, suggest one of:
+2. **Ask About Deck Selection**:
+   - Ask the user: "Which deck would you like to review? You can choose a specific deck or review cards from all decks."
+   - Use list_decks to show available options if needed
+   - If user chooses "all" or wants to review everything, use get_due_cards without deck_name parameter
+   - If user specifies a deck, use get_due_cards with the deck_name parameter
+3. **Present the Question**: Show the front of the card clearly
+4. **Wait for User's Answer**: Let them attempt to answer
+5. **Show the Answer**: Reveal the back of the card
+6. **Evaluate Performance**: Assess how well they answered
+7. **Suggest a Rating**: Based on their response, suggest one of:
    - 1 (Again) - They got it wrong or struggled significantly
    - 2 (Hard) - They got it but with difficulty or minor errors
    - 3 (Good) - They knew it well with reasonable effort
    - 4 (Easy) - They knew it instantly without effort
 
-7. **IMPORTANT - Wait for Confirmation**:
+8. **IMPORTANT - Wait for Confirmation**:
    - Present your suggested rating with reasoning
    - Ask: "I'd suggest rating this as [Good/Hard/etc]. Does that sound right, or would you rate it differently?"
    - Wait for user response:
@@ -45,8 +50,9 @@ export class ReviewSessionPrompt {
      - If they provide a different rating → use their rating instead
      - If unclear → ask for clarification
 
-8. **Submit Rating**: Only use rate_card tool AFTER user confirms or provides their rating
-9. **End Session**: When user is done, ALWAYS sync before saying goodbye
+9. **Submit Rating**: Only use rate_card tool AFTER user confirms or provides their rating
+10. **Continue or End**: After rating, continue with next card or end session when user is done
+11. **End Session**: When user is done, ALWAYS sync before saying goodbye
 
 ## Example Interactions
 
