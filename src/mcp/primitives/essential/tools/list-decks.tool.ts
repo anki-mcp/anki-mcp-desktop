@@ -4,7 +4,7 @@ import type { Context } from '@rekog/mcp-nest';
 import { z } from 'zod';
 import { AnkiConnectClient } from '../../../clients/anki-connect.client';
 import { DeckInfo, DeckStats } from '../../../types/anki.types';
-import { createSuccessResponse, createErrorResponse, parseDeckStats } from '../../../utils/anki.utils';
+import { createSuccessResponse, createErrorResponse } from '../../../utils/anki.utils';
 
 /**
  * Tool for listing all available Anki decks
@@ -54,24 +54,30 @@ export class ListDecksTool {
       let summary: Record<string, number> | undefined;
 
       if (includeStats) {
-        // Get deck statistics for all decks
-        const deckStats = await this.ankiClient.invoke<Record<string, any>>('deckStats');
+        // Get deck statistics for all decks using the correct action name
+        // getDeckStats requires an array of deck names
+        const deckStatsResponse = await this.ankiClient.invoke<Record<string, any>>('getDeckStats', {
+          decks: deckNames,
+        });
 
         // Transform to our DeckInfo structure
+        // The response is keyed by deck ID, not name
+        const statsArray = Object.values(deckStatsResponse);
+
         decks = deckNames.map(name => {
-          const stats = deckStats[name];
+          // Find the stats for this deck by name
+          const stats = statsArray.find((s: any) => s.name === name);
           if (stats) {
-            const parsed = parseDeckStats(stats);
             return {
               name,
               stats: {
                 deck_id: stats.deck_id || 0,
                 name,
-                new_count: parsed.new_count,
-                learn_count: parsed.learn_count,
-                review_count: parsed.review_count,
-                total_new: parsed.new_count,
-                total_cards: parsed.total_cards,
+                new_count: stats.new_count || 0,
+                learn_count: stats.learn_count || 0,
+                review_count: stats.review_count || 0,
+                total_new: stats.new_count || 0,
+                total_cards: stats.total_in_deck || 0,
               } as DeckStats,
             };
           }
