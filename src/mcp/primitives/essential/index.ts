@@ -22,6 +22,10 @@ export { ModelNamesTool } from './tools/model-names.tool';
 export { ModelFieldNamesTool } from './tools/model-field-names.tool';
 export { ModelStylingTool } from './tools/model-styling.tool';
 export { AddNoteTool } from './tools/add-note.tool';
+export { FindNotesTool } from './tools/find-notes.tool';
+export { NotesInfoTool } from './tools/notes-info.tool';
+export { UpdateNoteFieldsTool } from './tools/update-note-fields.tool';
+export { DeleteNotesTool } from './tools/delete-notes.tool';
 
 // Prompts
 export { ReviewSessionPrompt } from './prompts/review-session.prompt';
@@ -42,6 +46,10 @@ import { ModelNamesTool } from './tools/model-names.tool';
 import { ModelFieldNamesTool } from './tools/model-field-names.tool';
 import { ModelStylingTool } from './tools/model-styling.tool';
 import { AddNoteTool } from './tools/add-note.tool';
+import { FindNotesTool } from './tools/find-notes.tool';
+import { NotesInfoTool } from './tools/notes-info.tool';
+import { UpdateNoteFieldsTool } from './tools/update-note-fields.tool';
+import { DeleteNotesTool } from './tools/delete-notes.tool';
 import { ReviewSessionPrompt } from './prompts/review-session.prompt';
 import { SystemInfoResource } from './resources/system-info.resource';
 
@@ -59,6 +67,10 @@ const MCP_PRIMITIVES = [
   ModelFieldNamesTool,
   ModelStylingTool,
   AddNoteTool,
+  FindNotesTool,
+  NotesInfoTool,
+  UpdateNoteFieldsTool,
+  DeleteNotesTool,
   // Prompts
   ReviewSessionPrompt,
   // Resources

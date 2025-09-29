@@ -177,3 +177,54 @@ export interface Model {
   /** Array of field names in the order they appear in the model */
   fields: string[];
 }
+
+/**
+ * Detailed information about an Anki note
+ */
+export interface NoteInfo {
+  /** The unique identifier of the note */
+  noteId: number;
+
+  /** The name of the model/note type used by this note */
+  modelName: string;
+
+  /** Tags associated with the note */
+  tags: string[];
+
+  /** Fields with their content and order */
+  fields: Record<string, { value: string; order: number }>;
+
+  /** Array of card IDs associated with this note */
+  cards: number[];
+
+  /** Modification timestamp (Unix timestamp in milliseconds) */
+  mod: number;
+}
+
+/**
+ * Parameters for updating note fields
+ */
+export interface UpdateNoteFieldsParams {
+  /** The note to update */
+  note: {
+    /** ID of the note to update */
+    id: number;
+
+    /** Fields to update with new content (HTML supported) */
+    fields: Record<string, string>;
+
+    /** Optional audio files to add */
+    audio?: Array<{
+      url: string;
+      filename: string;
+      fields: string[];
+    }>;
+
+    /** Optional images to add */
+    picture?: Array<{
+      url: string;
+      filename: string;
+      fields: string[];
+    }>;
+  };
+}

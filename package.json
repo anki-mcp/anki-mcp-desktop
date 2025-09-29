@@ -20,7 +20,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist node_modules",
-    "inspector:stdio": "./node_modules/.bin/mcp-inspector --config mcp-inspector-config.json --server stdio-server"
+    "inspector:stdio": "./node_modules/.bin/mcp-inspector --config mcp-inspector-config.json --server stdio-server",
+    "inspector:debug": "./node_modules/.bin/mcp-inspector --config mcp-inspector-config.json --server stdio-server-debug"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.18.2",

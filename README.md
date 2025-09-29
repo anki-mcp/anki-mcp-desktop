@@ -6,16 +6,27 @@ Transform your Anki experience with natural language interaction - like having a
 
 ## Available Tools
 
+### Review & Study
 - `sync` - Sync with AnkiWeb
-- `list_decks` - Show available decks
-- `createDeck` - Create new decks
-- `modelNames` - List note types
-- `modelFieldNames` - Get fields for a note type
-- `modelStyling` - Get CSS styling for a note type
-- `addNote` - Create new notes
 - `get_due_cards` - Get cards for review
 - `present_card` - Show card for review
 - `rate_card` - Rate card performance
+
+### Deck Management
+- `list_decks` - Show available decks
+- `createDeck` - Create new decks
+
+### Note Management
+- `addNote` - Create new notes
+- `findNotes` - Search for notes using Anki query syntax
+- `notesInfo` - Get detailed information about notes (fields, tags, CSS)
+- `updateNoteFields` - Update existing note fields (CSS-aware, supports HTML)
+- `deleteNotes` - Delete notes and their cards
+
+### Model/Template Management
+- `modelNames` - List note types
+- `modelFieldNames` - Get fields for a note type
+- `modelStyling` - Get CSS styling for a note type
 
 ## Prerequisites
 
@@ -71,3 +82,126 @@ For more details, see the [official MCP documentation](https://modelcontextproto
 | `ANKI_CONNECT_API_VERSION` | API version | `6` |
 | `ANKI_CONNECT_API_KEY` | API key if configured in AnkiConnect | - |
 | `ANKI_CONNECT_TIMEOUT` | Request timeout in ms | `5000` |
+
+## Usage Examples
+
+### Searching and Updating Notes
+
+```
+# Search for notes in a specific deck
+findNotes(query: "deck:Spanish")
+
+# Get detailed information about notes
+notesInfo(notes: [1234567890, 1234567891])
+
+# Update a note's fields (HTML content supported)
+updateNoteFields(note: {
+  id: 1234567890,
+  fields: {
+    "Front": "<b>¿Cómo estás?</b>",
+    "Back": "How are you?"
+  }
+})
+
+# Delete notes (requires confirmation)
+deleteNotes(notes: [1234567890], confirmDeletion: true)
+```
+
+### Anki Query Syntax Examples
+
+The `findNotes` tool supports Anki's powerful query syntax:
+
+- `"deck:DeckName"` - All notes in a specific deck
+- `"tag:important"` - Notes with the "important" tag
+- `"is:due"` - Cards that are due for review
+- `"is:new"` - New cards that haven't been studied
+- `"added:7"` - Notes added in the last 7 days
+- `"front:hello"` - Notes with "hello" in the front field
+- `"flag:1"` - Notes with red flag
+- `"prop:due<=2"` - Cards due within 2 days
+- `"deck:Spanish tag:verb"` - Spanish deck notes with verb tag (AND)
+- `"deck:Spanish OR deck:French"` - Notes from either deck
+
+### Important Notes
+
+#### CSS and HTML Handling
+- The `notesInfo` tool returns CSS styling information for proper rendering awareness
+- The `updateNoteFields` tool supports HTML content in fields and preserves CSS styling
+- Each note model has its own CSS styling - use `modelStyling` to get model-specific CSS
+
+#### Update Warning
+⚠️ **IMPORTANT**: When using `updateNoteFields`, do NOT view the note in Anki's browser while updating, or the fields will not update properly. Close the browser or switch to a different note before updating.
+
+#### Deletion Safety
+The `deleteNotes` tool requires explicit confirmation (`confirmDeletion: true`) to prevent accidental deletions. Deleting a note removes ALL associated cards permanently.
+
+## Development
+
+### Debugging the MCP Server
+
+You can debug the MCP server using the MCP Inspector and attaching a debugger from your IDE (WebStorm, VS Code, etc.).
+
+#### Step 1: Configure Debug Server in MCP Inspector
+
+The `mcp-inspector-config.json` already includes a debug server configuration:
+
+```json
+{
+  "mcpServers": {
+    "stdio-server-debug": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["--inspect-brk=9229", "dist/main.js"],
+      "env": {
+        "MCP_SERVER_NAME": "anki-mcp-stdio-debug",
+        "MCP_SERVER_VERSION": "1.0.0",
+        "LOG_LEVEL": "debug"
+      },
+      "note": "Anki MCP server with debugging enabled on port 9229"
+    }
+  }
+}
+```
+
+#### Step 2: Start the Debug Server
+
+Run the MCP Inspector with the debug server:
+
+```bash
+npm run inspector:debug
+```
+
+This will start the server with Node.js debugging enabled on port 9229 and pause execution at the first line.
+
+#### Step 3: Attach Debugger from Your IDE
+
+##### WebStorm
+1. Go to **Run → Edit Configurations**
+2. Add a new **Attach to Node.js/Chrome** configuration
+3. Set the port to `9229`
+4. Click **Debug** to attach
+
+##### VS Code
+1. Open the Debug panel (Ctrl+Shift+D / Cmd+Shift+D)
+2. Select **Debug MCP Server (Attach)** configuration
+3. Press F5 to attach
+
+#### Step 4: Set Breakpoints and Debug
+
+Once attached, you can:
+- Set breakpoints in your TypeScript source files
+- Step through code execution
+- Inspect variables and call stack
+- Use the debug console for evaluating expressions
+
+The debugger will work with source maps, allowing you to debug the original TypeScript code rather than the compiled JavaScript.
+
+### Build Commands
+
+```bash
+npm run build         # Build the project
+npm run start:dev     # Start with watch mode (auto-rebuild)
+npm run type-check    # Run TypeScript type checking
+npm run lint          # Run ESLint
+npm run test          # Run tests
+```
