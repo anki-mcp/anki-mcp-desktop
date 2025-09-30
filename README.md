@@ -309,3 +309,28 @@ This project follows [Semantic Versioning](https://semver.org/) with a pre-1.0 d
   - Breaking changes will require major version bumps (2.0.0, etc.)
 
 **Current Status**: `0.1.0` - Initial beta release. The project is functional but APIs may change based on feedback and testing.
+
+## Similar Projects
+
+If you're exploring Anki MCP integrations, here are other projects in this space:
+
+### [scorzeth/anki-mcp-server](https://github.com/scorzeth/anki-mcp-server)
+- **Status**: Appears to be abandoned (no recent updates)
+- Early implementation of Anki MCP integration
+
+### [nailuoGG/anki-mcp-server](https://github.com/nailuoGG/anki-mcp-server)
+- **Approach**: Lightweight, single-file implementation
+- **Architecture**: Procedural code structure with all tools in one file
+- **Good for**: Simple use cases, minimal dependencies
+
+**Why this project (anki-mcp-desktop) differs:**
+- **Enterprise-grade architecture**: Built on NestJS with dependency injection
+- **Modular design**: Each tool is a separate class with clear separation of concerns
+- **Maintainability**: Easy to extend with new features without touching existing code
+- **Testing**: Comprehensive test suite with 70% coverage requirement
+- **Type safety**: Strict TypeScript with Zod validation
+- **Error handling**: Robust error handling with helpful user feedback
+- **Production-ready**: Proper logging, progress reporting, and MCPB bundle support
+- **Scalability**: Can easily grow from basic tools to complex workflows
+
+**Use case**: If you need a solid foundation for building advanced Anki integrations or plan to extend functionality significantly, this project's architectural approach makes it easier to maintain and scale over time.
