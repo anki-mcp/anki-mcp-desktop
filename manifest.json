@@ -2,11 +2,13 @@
   "manifest_version": "0.2",
   "name": "anki-mcp-desktop",
   "display_name": "Anki MCP Server",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Model Context Protocol server for Anki spaced repetition flashcard application",
   "long_description": "Transform your Anki experience with natural language interaction - like having a private tutor. This MCP server enables AI assistants to interact with Anki, allowing them to explain concepts, make learning more engaging, provide context, and adapt to your learning style. Features include review sessions, deck management, note creation and editing, and more.\n\nRequires Anki with the AnkiConnect plugin installed.",
   "author": {
-    "name": "Anatoly Tarnavsky"
+    "name": "Anatoly Tarnavsky",
+    "email": "support@ankimcp.io",
+    "url": "https://ankimcp.io"
   },
   "homepage": "https://ankimcp.io",
   "documentation": "https://github.com/anki-mcp-organization/anki-mcp-desktop#readme",
@@ -82,38 +84,38 @@
     "entry_point": "dist/main.js",
     "mcp_config": {
       "command": "node",
-      "args": ["${entry_point}"],
+      "args": ["${__dirname}/dist/main.js"],
       "env": {
-        "ANKI_CONNECT_URL": "${user_config.ankiConnectUrl}",
-        "ANKI_CONNECT_API_VERSION": "${user_config.ankiConnectApiVersion}",
-        "ANKI_CONNECT_API_KEY": "${user_config.ankiConnectApiKey}",
-        "ANKI_CONNECT_TIMEOUT": "${user_config.ankiConnectTimeout}"
+        "ANKI_CONNECT_URL": "${user_config.anki_connect_url}",
+        "ANKI_CONNECT_API_VERSION": "${user_config.anki_connect_api_version}",
+        "ANKI_CONNECT_API_KEY": "${user_config.anki_connect_api_key}",
+        "ANKI_CONNECT_TIMEOUT": "${user_config.anki_connect_timeout}"
       }
     }
   },
   "user_config": {
-    "ankiConnectUrl": {
+    "anki_connect_url": {
       "type": "string",
       "title": "AnkiConnect URL",
       "description": "URL of the AnkiConnect server (default: http://localhost:8765)",
       "default": "http://localhost:8765",
       "required": false
     },
-    "ankiConnectApiVersion": {
+    "anki_connect_api_version": {
       "type": "string",
       "title": "AnkiConnect API Version",
       "description": "API version to use (default: 6)",
       "default": "6",
       "required": false
     },
-    "ankiConnectApiKey": {
+    "anki_connect_api_key": {
       "type": "string",
       "title": "AnkiConnect API Key",
       "description": "Optional API key if configured in AnkiConnect",
       "required": false,
       "sensitive": true
     },
-    "ankiConnectTimeout": {
+    "anki_connect_timeout": {
       "type": "string",
       "title": "Request Timeout",
       "description": "Request timeout in milliseconds (default: 5000)",

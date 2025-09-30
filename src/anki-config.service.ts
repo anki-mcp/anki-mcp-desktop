@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { IAnkiConfig } from './mcp/config/anki-config.interface';
+import { sanitizeMcpbConfigValue } from './mcp/utils/mcpb-workarounds';
 
 /**
  * Configuration service implementing IAnkiConfig for the STDIO MCP server
@@ -25,7 +26,8 @@ export class AnkiConfigService implements IAnkiConfig {
   }
 
   get ankiConnectApiKey(): string | undefined {
-    return this.configService.get<string>('ANKI_CONNECT_API_KEY');
+    const apiKey = this.configService.get<string>('ANKI_CONNECT_API_KEY');
+    return sanitizeMcpbConfigValue(apiKey);
   }
 
   get ankiConnectTimeout(): number {

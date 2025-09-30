@@ -1,6 +1,6 @@
 {
   "name": "anki-mcp-desktop",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Anki MCP Desktop - Model Context Protocol for Anki",
   "author": "Anatoly Tarnavsky",
   "private": true,
@@ -20,15 +20,15 @@
     "test:tools": "jest src/mcp/primitives/essential/tools/__tests__ --silent",
     "test:workflows": "jest test/workflows --silent",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
     "test:ci": "jest --coverage --silent --maxWorkers=2",
     "test:single": "npm test -- src/mcp/primitives/essential/tools/__tests__/delete-notes.tool.spec.ts",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist node_modules",
     "inspector:stdio": "./node_modules/.bin/mcp-inspector --config mcp-inspector-config.json --server stdio-server",
     "inspector:debug": "./node_modules/.bin/mcp-inspector --config mcp-inspector-config.json --server stdio-server-debug",
+    "bundle:clean": "rm -f *.mcpb",
     "bundle:pack": "mcpb pack",
-    "bundle": "npm run build && npm run bundle:pack"
+    "bundle": "npm run bundle:clean && npm run build && npm run bundle:pack"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.18.2",

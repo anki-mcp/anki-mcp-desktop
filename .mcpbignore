@@ -1,6 +1,6 @@
 # Source files (not needed in bundle)
-src/
-test/
+/src/
+/test/
 
 # Test files and directories
 *.spec.ts

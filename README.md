@@ -1,5 +1,7 @@
 # Anki MCP Desktop
 
+**Version: 0.1.0 (Beta)** - This project is in active development. APIs and features may change.
+
 A Model Context Protocol (MCP) server that enables AI assistants to interact with Anki, the spaced repetition flashcard application.
 
 Transform your Anki experience with natural language interaction - like having a private tutor. The AI assistant doesn't just present questions and answers; it can explain concepts, make the learning process more engaging and human-like, provide context, and adapt to your learning style. It can create and edit notes on the fly, turning your study sessions into dynamic conversations. More features coming soon!
@@ -40,9 +42,9 @@ Transform your Anki experience with natural language interaction - like having a
 The easiest way to install this MCP server is using an MCPB bundle:
 
 1. Download the latest `.mcpb` bundle from the [Releases](https://github.com/anki-mcp-organization/anki-mcp-desktop/releases) page
-2. In Claude Desktop (or any MCPB-compatible client):
-   - Go to Settings → MCP Servers
-   - Click "Install from bundle" or drag-and-drop the `.mcpb` file
+2. In Claude Desktop, install the extension:
+   - **Method 1**: Go to Settings → Extensions, then drag and drop the `.mcpb` file
+   - **Method 2**: Go to Settings → Developer → Extensions → Install Extension, then select the `.mcpb` file
 3. Configure AnkiConnect URL if needed (defaults to `http://localhost:8765`)
 4. Restart Claude Desktop
 
@@ -179,6 +181,26 @@ The MCPB package includes:
 
 Source files, tests, and development configs are automatically excluded via `.mcpbignore`.
 
+### Logging in Claude Desktop
+
+When running as an MCPB extension in Claude Desktop, logs are written to:
+
+**Log Location**: `~/Library/Logs/Claude/` (macOS)
+
+The logs are split across multiple files:
+- **main.log** - General Claude Desktop application logs
+- **mcp-server-Anki MCP Server.log** - MCP protocol messages for this extension
+- **mcp.log** - Combined MCP logs from all servers
+
+**Note**: The pino logger output (INFO, ERROR, WARN messages from the server code) goes to stderr and appears in the MCP-specific log files. Claude Desktop determines which log file receives which messages, but generally:
+- Application startup and MCP protocol communication → MCP-specific log
+- Server internal logging (pino) → Both MCP-specific log and sometimes main.log
+
+To view logs in real-time:
+```bash
+tail -f ~/Library/Logs/Claude/mcp-server-Anki\ MCP\ Server.log
+```
+
 ### Debugging the MCP Server
 
 You can debug the MCP server using the MCP Inspector and attaching a debugger from your IDE (WebStorm, VS Code, etc.).
@@ -272,3 +294,18 @@ The project maintains 70% minimum coverage thresholds for:
 - Statements
 
 Coverage reports are generated in the `coverage/` directory.
+
+## Versioning
+
+This project follows [Semantic Versioning](https://semver.org/) with a pre-1.0 development approach:
+
+- **0.x.x** - Beta/Development versions (current phase)
+  - **0.1.x** - Bug fixes and patches
+  - **0.2.0+** - New features or minor improvements
+  - **Breaking changes** are acceptable in 0.x versions
+
+- **1.0.0** - First stable release
+  - Will be released when the API is stable and tested
+  - Breaking changes will require major version bumps (2.0.0, etc.)
+
+**Current Status**: `0.1.0` - Initial beta release. The project is functional but APIs may change based on feedback and testing.

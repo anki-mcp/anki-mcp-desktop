@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is an MCP (Model Context Protocol) server that enables AI assistants to interact with Anki via the AnkiConnect plugin. Built with NestJS and the `@rekog/mcp-nest` library, it exposes Anki functionality as MCP tools, prompts, and resources.
 
+**Version**: 0.1.0 (Beta) - This project is in active development. Breaking changes may occur in 0.x versions.
+
 ## Essential Commands
 
 ### Development
@@ -151,3 +153,30 @@ These work in both source code and tests via Jest's `moduleNameMapper`.
 - Set `LOG_LEVEL=debug` environment variable for verbose logging
 - Use `npm run inspector:debug` + IDE debugger for step-through debugging
 - MCP Inspector provides a web UI for testing tools interactively
+
+### MCPB Bundle Distribution
+
+The project can be packaged as an MCPB (Model Context Protocol Bundle) for one-click installation:
+
+```bash
+npm run bundle                # Build and package into .mcpb file
+npm run bundle:clean          # Remove old .mcpb files
+npm run bundle:pack           # Package dist/ and node_modules/ only
+```
+
+**Key Points**:
+- User config keys in `manifest.json` **must use snake_case** (e.g., `anki_connect_url`), not camelCase
+- MCPB variable substitution syntax: `${user_config.key_name}`
+- The `.mcpbignore` file uses patterns like `/src/` (with leading slash) to exclude only root-level directories, not node_modules subdirectories
+- Bundle includes: `dist/`, `node_modules/`, `package.json`, `manifest.json`, `icon.png`
+
+### Versioning Convention
+
+This project follows [Semantic Versioning](https://semver.org/):
+
+- **0.x.x** - Pre-1.0 development/beta (current)
+  - `0.1.x` - Bug fixes
+  - `0.2.0+` - New features
+  - Breaking changes allowed
+- **1.0.0** - First stable release (when API is stable)
+- **x.0.0** - Major versions (breaking changes after 1.0)
