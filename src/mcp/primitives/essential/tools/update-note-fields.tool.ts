@@ -19,7 +19,7 @@ export class UpdateNoteFieldsTool {
     description:
       'Update the fields of an existing note. Supports HTML content in fields and preserves CSS styling. ' +
       'WARNING: Do not view the note in Anki browser while updating, or the fields will not update properly. ' +
-      'Close the browser or switch to a different note before updating.',
+      'Close the browser or switch to a different note before updating. IMPORTANT: Only update notes that the user explicitly asked to modify.',
     parameters: z.object({
       note: z.object({
         id: z

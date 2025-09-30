@@ -18,7 +18,7 @@ export class DeleteNotesTool {
     name: 'deleteNotes',
     description:
       'Delete notes by their IDs. This will permanently remove the notes and ALL associated cards. ' +
-      'This action cannot be undone unless you have a backup. Use with caution.',
+      'This action cannot be undone unless you have a backup. CRITICAL: This is destructive and permanent - only delete notes the user explicitly confirmed for deletion.',
     parameters: z.object({
       notes: z
         .array(z.number())

@@ -37,11 +37,11 @@
     },
     {
       "name": "createDeck",
-      "description": "Create a new deck in Anki"
+      "description": "Create a new deck in Anki. IMPORTANT: Only create the deck - do NOT automatically add notes unless explicitly requested"
     },
     {
       "name": "addNote",
-      "description": "Create new notes with specified fields and tags"
+      "description": "Create new notes with specified fields and tags. IMPORTANT: Only create notes that were explicitly requested by the user"
     },
     {
       "name": "findNotes",
@@ -53,11 +53,11 @@
     },
     {
       "name": "updateNoteFields",
-      "description": "Update existing note fields with support for HTML content"
+      "description": "Update existing note fields with support for HTML content. IMPORTANT: Only update notes that the user explicitly asked to modify"
     },
     {
       "name": "deleteNotes",
-      "description": "Delete notes and all associated cards (requires confirmation)"
+      "description": "Delete notes and all associated cards. CRITICAL: This is destructive and permanent - only delete notes the user explicitly confirmed for deletion"
     },
     {
       "name": "modelNames",
@@ -73,6 +73,11 @@
     }
   ],
   "prompts": [
+    {
+      "name": "anki_guidelines",
+      "description": "General guidelines for using Anki tools responsibly",
+      "text": "When using Anki tools, follow these principles:\n\n## CRITICAL: User Consent and Explicit Permission\n\n**NEVER take actions without explicit user permission:**\n- Do NOT automatically create notes after creating a deck\n- Do NOT automatically populate decks with content\n- Do NOT modify, update, or delete existing notes unless explicitly asked\n- Do NOT make bulk changes without confirmation\n\n**Always ask before:**\n- Creating multiple notes at once\n- Modifying existing content\n- Deleting anything\n- Making any changes that affect the user's study data\n\n## Best Practices\n\n1. **Do exactly what the user asks** - nothing more, nothing less\n2. **Confirm before bulk operations** - Ask \"Should I create these 10 notes?\" not \"I'll create these 10 notes\"\n3. **One step at a time** - Don't chain operations without permission\n4. **Respect user workflow** - Let them guide the process\n\n## Example Scenarios\n\n❌ **BAD**: User: \"Create a Spanish deck\" → You: *creates deck AND starts adding notes*\n✅ **GOOD**: User: \"Create a Spanish deck\" → You: *creates deck only, confirms completion*\n\n❌ **BAD**: User: \"Find my Spanish notes\" → You: *finds them AND suggests updates*\n✅ **GOOD**: User: \"Find my Spanish notes\" → You: *shows results, waits for next instruction*"
+    },
     {
       "name": "anki_review",
       "description": "Guidelines for conducting Anki spaced repetition review sessions",
