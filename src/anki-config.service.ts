@@ -12,7 +12,7 @@ export class AnkiConfigService implements IAnkiConfig {
   get ankiConnectUrl(): string {
     return this.configService.get<string>(
       'ANKI_CONNECT_URL',
-      'https://anki.anatoly.dev',
+      'http://localhost:8765',
     );
   }
 

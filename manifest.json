@@ -1,0 +1,128 @@
+{
+  "manifest_version": "0.2",
+  "name": "anki-mcp-desktop",
+  "display_name": "Anki MCP Server",
+  "version": "1.0.0",
+  "description": "Model Context Protocol server for Anki spaced repetition flashcard application",
+  "long_description": "Transform your Anki experience with natural language interaction - like having a private tutor. This MCP server enables AI assistants to interact with Anki, allowing them to explain concepts, make learning more engaging, provide context, and adapt to your learning style. Features include review sessions, deck management, note creation and editing, and more.\n\nRequires Anki with the AnkiConnect plugin installed.",
+  "author": {
+    "name": "Anatoly Tarnavsky"
+  },
+  "homepage": "https://ankimcp.io",
+  "documentation": "https://github.com/anki-mcp-organization/anki-mcp-desktop#readme",
+  "support": "https://github.com/anki-mcp-organization/anki-mcp-desktop/issues",
+  "icon": "icon.png",
+  "tools": [
+    {
+      "name": "sync",
+      "description": "Sync with AnkiWeb to get latest data and push changes"
+    },
+    {
+      "name": "get_due_cards",
+      "description": "Get cards that are due for review, optionally filtered by deck"
+    },
+    {
+      "name": "present_card",
+      "description": "Show a card for review with its question/front side"
+    },
+    {
+      "name": "rate_card",
+      "description": "Rate card performance (Again, Hard, Good, Easy) and schedule next review"
+    },
+    {
+      "name": "list_decks",
+      "description": "Show all available Anki decks with their statistics"
+    },
+    {
+      "name": "createDeck",
+      "description": "Create a new deck in Anki"
+    },
+    {
+      "name": "addNote",
+      "description": "Create new notes with specified fields and tags"
+    },
+    {
+      "name": "findNotes",
+      "description": "Search for notes using Anki query syntax (deck:, tag:, is:due, etc.)"
+    },
+    {
+      "name": "notesInfo",
+      "description": "Get detailed information about notes including fields, tags, and CSS styling"
+    },
+    {
+      "name": "updateNoteFields",
+      "description": "Update existing note fields with support for HTML content"
+    },
+    {
+      "name": "deleteNotes",
+      "description": "Delete notes and all associated cards (requires confirmation)"
+    },
+    {
+      "name": "modelNames",
+      "description": "List all available note types/models"
+    },
+    {
+      "name": "modelFieldNames",
+      "description": "Get field names for a specific note type"
+    },
+    {
+      "name": "modelStyling",
+      "description": "Get CSS styling information for a note type"
+    }
+  ],
+  "prompts": [
+    {
+      "name": "anki_review",
+      "description": "Guidelines for conducting Anki spaced repetition review sessions",
+      "text": "You are helping a user review Anki flashcards using spaced repetition. Follow this workflow:\n\n## CRITICAL: Synchronization Requirements\n\n### At Session Start:\n1. **ALWAYS sync first** using the sync tool before getting any cards\n2. Remind user: \"I'll sync with AnkiWeb first to ensure we have your latest progress...\"\n3. Only proceed with get_due_cards after sync completes\n\n### At Session End:\n1. When user indicates they're done (e.g., \"that's all\", \"I'm done\", \"goodbye\"), ALWAYS sync\n2. Say: \"Great session! Let me sync your progress to AnkiWeb...\"\n3. Confirm sync completion before ending\n\n## Review Workflow\n\n1. **Sync First**: Use sync tool to get latest data from AnkiWeb\n2. **Ask About Deck Selection**: Ask which deck to review, use list_decks if needed\n3. **Present the Question**: Show the front of the card clearly\n4. **Wait for User's Answer**: Let them attempt to answer\n5. **Show the Answer**: Reveal the back of the card\n6. **Evaluate Performance**: Assess how well they answered\n7. **Suggest a Rating**: Based on their response, suggest 1 (Again), 2 (Hard), 3 (Good), or 4 (Easy)\n8. **IMPORTANT - Wait for Confirmation**: Present your suggested rating and ask if they agree\n9. **Submit Rating**: Only use rate_card tool AFTER user confirms or provides their rating\n10. **Continue or End**: After rating, continue with next card or end session when user is done\n11. **End Session**: When user is done, ALWAYS sync before saying goodbye\n\n## Key Principles\n- Never auto-rate without user input\n- Default to suggesting Good (3) when performance is solid\n- Be encouraging but honest in assessments\n- Accept user's self-assessment over your suggestion\n- Keep feedback concise and actionable"
+    }
+  ],
+  "server": {
+    "type": "node",
+    "entry_point": "dist/main.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${entry_point}"],
+      "env": {
+        "ANKI_CONNECT_URL": "${user_config.ankiConnectUrl}",
+        "ANKI_CONNECT_API_VERSION": "${user_config.ankiConnectApiVersion}",
+        "ANKI_CONNECT_API_KEY": "${user_config.ankiConnectApiKey}",
+        "ANKI_CONNECT_TIMEOUT": "${user_config.ankiConnectTimeout}"
+      }
+    }
+  },
+  "user_config": {
+    "ankiConnectUrl": {
+      "type": "string",
+      "title": "AnkiConnect URL",
+      "description": "URL of the AnkiConnect server (default: http://localhost:8765)",
+      "default": "http://localhost:8765",
+      "required": false
+    },
+    "ankiConnectApiVersion": {
+      "type": "string",
+      "title": "AnkiConnect API Version",
+      "description": "API version to use (default: 6)",
+      "default": "6",
+      "required": false
+    },
+    "ankiConnectApiKey": {
+      "type": "string",
+      "title": "AnkiConnect API Key",
+      "description": "Optional API key if configured in AnkiConnect",
+      "required": false,
+      "sensitive": true
+    },
+    "ankiConnectTimeout": {
+      "type": "string",
+      "title": "Request Timeout",
+      "description": "Request timeout in milliseconds (default: 5000)",
+      "default": "5000",
+      "required": false
+    }
+  },
+  "compatibility": {
+    "platforms": ["darwin", "linux", "win32"],
+    "node": ">=20"
+  }
+}

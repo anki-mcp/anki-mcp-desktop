@@ -1,0 +1,55 @@
+# Source files (not needed in bundle)
+src/
+test/
+
+# Test files and directories
+*.spec.ts
+*.test.ts
+__tests__/
+__mocks__/
+coverage/
+
+# Development configuration
+tsconfig.json
+tsconfig.build.json
+jest.config.js
+.eslintrc.js
+eslint.config.mjs
+.prettierrc
+.editorconfig
+
+# Git and GitHub
+.git/
+.github/
+.gitignore
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Documentation (user will read it on GitHub)
+CLAUDE.md
+
+# MCP Inspector config (not needed in bundle)
+mcp-inspector-config.json
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Build artifacts
+*.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db

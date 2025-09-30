@@ -2,9 +2,9 @@
   "name": "anki-mcp-desktop",
   "version": "1.0.0",
   "description": "Anki MCP Desktop - Model Context Protocol for Anki",
-  "author": "",
+  "author": "Anatoly Tarnavsky",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -26,7 +26,9 @@
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist node_modules",
     "inspector:stdio": "./node_modules/.bin/mcp-inspector --config mcp-inspector-config.json --server stdio-server",
-    "inspector:debug": "./node_modules/.bin/mcp-inspector --config mcp-inspector-config.json --server stdio-server-debug"
+    "inspector:debug": "./node_modules/.bin/mcp-inspector --config mcp-inspector-config.json --server stdio-server-debug",
+    "bundle:pack": "mcpb pack",
+    "bundle": "npm run build && npm run bundle:pack"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.18.2",
@@ -43,6 +45,7 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@anthropic-ai/mcpb": "^1.1.1",
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.36.0",
     "@modelcontextprotocol/inspector": "^0.16.7",

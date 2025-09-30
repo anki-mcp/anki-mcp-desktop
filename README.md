@@ -35,6 +35,23 @@ Transform your Anki experience with natural language interaction - like having a
 
 ## Installation
 
+### Option 1: MCPB Bundle (Recommended - One-Click Install)
+
+The easiest way to install this MCP server is using an MCPB bundle:
+
+1. Download the latest `.mcpb` bundle from the [Releases](https://github.com/anki-mcp-organization/anki-mcp-desktop/releases) page
+2. In Claude Desktop (or any MCPB-compatible client):
+   - Go to Settings → MCP Servers
+   - Click "Install from bundle" or drag-and-drop the `.mcpb` file
+3. Configure AnkiConnect URL if needed (defaults to `http://localhost:8765`)
+4. Restart Claude Desktop
+
+That's it! The bundle includes everything needed to run the server.
+
+### Option 2: Manual Installation from Source
+
+For development or advanced usage:
+
 ```bash
 npm install
 npm run build
@@ -137,6 +154,31 @@ The `deleteNotes` tool requires explicit confirmation (`confirmDeletion: true`) 
 
 ## Development
 
+### Building an MCPB Bundle
+
+To create a distributable MCPB bundle:
+
+```bash
+npm run bundle
+```
+
+This command will:
+1. Compile the TypeScript project (`npm run build`)
+2. Package everything into an `.mcpb` file (`npm run bundle:pack`)
+
+The output file will be named `anki-mcp-desktop-1.0.0.mcpb` (or current version) and can be distributed for one-click installation.
+
+#### What Gets Bundled
+
+The MCPB package includes:
+- Compiled JavaScript (`dist/` directory)
+- All dependencies (`node_modules/`)
+- Package metadata (`package.json`)
+- Manifest configuration (`manifest.json`)
+- Icon (`icon.png`)
+
+Source files, tests, and development configs are automatically excluded via `.mcpbignore`.
+
 ### Debugging the MCP Server
 
 You can debug the MCP server using the MCP Inspector and attaching a debugger from your IDE (WebStorm, VS Code, etc.).
@@ -199,10 +241,12 @@ The debugger will work with source maps, allowing you to debug the original Type
 ### Build Commands
 
 ```bash
-npm run build         # Build the project
+npm run build         # Build the project (compile TypeScript to JavaScript)
 npm run start:dev     # Start with watch mode (auto-rebuild)
 npm run type-check    # Run TypeScript type checking
 npm run lint          # Run ESLint
+npm run bundle        # Build and create MCPB bundle (one-click distribution)
+npm run bundle:pack   # Package dist/ and node_modules/ into .mcpb file
 ```
 
 ### Testing Commands
