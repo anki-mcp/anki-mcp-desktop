@@ -1,6 +1,6 @@
 {
   "name": "anki-mcp-desktop",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Anki MCP Desktop - Model Context Protocol for Anki",
   "author": "Anatoly Tarnavsky",
   "private": true,
