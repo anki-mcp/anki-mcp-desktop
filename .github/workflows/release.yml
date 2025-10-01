@@ -26,6 +26,11 @@ jobs:
       - name: Bundle
         run: npm run bundle
 
+      - name: Rename MCPB with version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          mv anki-mcp-desktop.mcpb anki-mcp-desktop-${VERSION}.mcpb
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
