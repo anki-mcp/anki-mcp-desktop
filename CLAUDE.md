@@ -180,3 +180,35 @@ This project follows [Semantic Versioning](https://semver.org/):
   - Breaking changes allowed
 - **1.0.0** - First stable release (when API is stable)
 - **x.0.0** - Major versions (breaking changes after 1.0)
+
+### Release Process
+
+**IMPORTANT**: When creating a new release, follow this checklist:
+
+1. ✅ Update version in `package.json`
+2. ✅ **Update version in `manifest.json`** ← DON'T FORGET!
+3. ✅ **Add new tools to `manifest.json` tools array** ← DON'T FORGET!
+4. ✅ Commit changes
+5. ✅ Create and push git tag: `git tag -a v0.x.0 -m "Release message"`
+6. ✅ Push tag: `git push origin v0.x.0`
+7. ✅ GitHub Actions automatically:
+   - Builds the project
+   - Runs `npm run bundle`
+   - Creates GitHub Release
+   - Attaches `.mcpb` file
+
+**DO NOT run `npm run bundle` manually** - GitHub Actions handles it automatically when you push a tag.
+
+**Manifest Update Template**:
+```json
+{
+  "version": "0.x.0",  // Match package.json version
+  "tools": [
+    // ... existing tools ...
+    {
+      "name": "newTool",
+      "description": "What it does"
+    }
+  ]
+}
+```
