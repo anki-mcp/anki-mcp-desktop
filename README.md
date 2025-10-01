@@ -260,6 +260,97 @@ Once attached, you can:
 
 The debugger will work with source maps, allowing you to debug the original TypeScript code rather than the compiled JavaScript.
 
+### Debugging with Claude Desktop
+
+You can also debug the MCP server while it runs inside Claude Desktop by enabling the Node.js debugger and attaching your IDE.
+
+#### Step 1: Configure Claude Desktop for Debugging
+
+Update your Claude Desktop config to enable debugging:
+
+**macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+**Linux**: `~/.config/Claude/claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "anki-mcp": {
+      "command": "node",
+      "args": [
+        "--inspect=9229",
+        "/Users/anatoly/Developer/git/anki-mcp-organization/anki-mcp-desktop/dist/main.js"
+      ],
+      "env": {
+        "ANKI_CONNECT_URL": "http://localhost:8765"
+      }
+    }
+  }
+}
+```
+
+**Key change**: Add `--inspect=9229` before the path to `dist/main.js`
+
+**Debug options**:
+- `--inspect=9229` - Start debugger immediately, doesn't block (recommended)
+- `--inspect-brk=9229` - Pause execution until debugger attaches (for debugging startup issues)
+
+#### Step 2: Restart Claude Desktop
+
+After saving the config, restart Claude Desktop. The MCP server will now run with debugging enabled on port 9229.
+
+#### Step 3: Attach Debugger from Your IDE
+
+##### WebStorm
+
+1. Go to **Run → Edit Configurations**
+2. Click the **+** button and select **Attach to Node.js/Chrome**
+3. Configure:
+   - **Name**: `Attach to Anki MCP (Claude Desktop)`
+   - **Host**: `localhost`
+   - **Port**: `9229`
+   - **Attach to**: `Node.js < 8` or `Chrome or Node.js > 6.3` (depending on WebStorm version)
+4. Click **OK**
+5. Click **Debug** (Shift+F9) to attach
+
+##### VS Code
+
+1. Add to `.vscode/launch.json`:
+
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Attach to Anki MCP (Claude Desktop)",
+      "port": 9229,
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true,
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"]
+    }
+  ]
+}
+```
+
+2. Open the Debug panel (Ctrl+Shift+D / Cmd+Shift+D)
+3. Select **Attach to Anki MCP (Claude Desktop)**
+4. Press F5 to attach
+
+#### Step 4: Debug in Real-Time
+
+Once attached, you can:
+- Set breakpoints in your TypeScript source files (e.g., `src/mcp/primitives/essential/tools/create-model.tool.ts`)
+- Use Claude Desktop normally - breakpoints will hit when tools are invoked
+- Step through code execution
+- Inspect variables and call stack
+- Use the debug console
+
+**Example**: Set a breakpoint in `create-model.tool.ts` at line 119, then ask Claude to create a new model. The debugger will pause at your breakpoint!
+
+**Note**: The debugger stays attached as long as Claude Desktop is running. You can detach/reattach anytime without restarting Claude Desktop.
+
 ### Build Commands
 
 ```bash

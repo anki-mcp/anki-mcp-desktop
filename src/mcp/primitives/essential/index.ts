@@ -21,6 +21,8 @@ export { RateCardTool } from './tools/rate-card.tool';
 export { ModelNamesTool } from './tools/model-names.tool';
 export { ModelFieldNamesTool } from './tools/model-field-names.tool';
 export { ModelStylingTool } from './tools/model-styling.tool';
+export { CreateModelTool } from './tools/create-model.tool';
+export { UpdateModelStylingTool } from './tools/update-model-styling.tool';
 export { AddNoteTool } from './tools/add-note.tool';
 export { FindNotesTool } from './tools/find-notes.tool';
 export { NotesInfoTool } from './tools/notes-info.tool';
@@ -45,6 +47,8 @@ import { RateCardTool } from './tools/rate-card.tool';
 import { ModelNamesTool } from './tools/model-names.tool';
 import { ModelFieldNamesTool } from './tools/model-field-names.tool';
 import { ModelStylingTool } from './tools/model-styling.tool';
+import { CreateModelTool } from './tools/create-model.tool';
+import { UpdateModelStylingTool } from './tools/update-model-styling.tool';
 import { AddNoteTool } from './tools/add-note.tool';
 import { FindNotesTool } from './tools/find-notes.tool';
 import { NotesInfoTool } from './tools/notes-info.tool';
@@ -66,6 +70,8 @@ const MCP_PRIMITIVES = [
   ModelNamesTool,
   ModelFieldNamesTool,
   ModelStylingTool,
+  CreateModelTool,
+  UpdateModelStylingTool,
   AddNoteTool,
   FindNotesTool,
   NotesInfoTool,

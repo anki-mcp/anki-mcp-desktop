@@ -228,3 +228,51 @@ export interface UpdateNoteFieldsParams {
     }>;
   };
 }
+
+/**
+ * Card template definition for model creation
+ */
+export interface CardTemplate {
+  /** Display name of the template */
+  Name: string;
+
+  /** Front side HTML template with field placeholders (e.g., "{{Front}}") */
+  Front: string;
+
+  /** Back side HTML template with field placeholders (e.g., "{{FrontSide}}<hr id=answer>{{Back}}") */
+  Back: string;
+}
+
+/**
+ * Parameters for creating a new model
+ */
+export interface CreateModelParams {
+  /** Unique name for the new model */
+  modelName: string;
+
+  /** Field names in the order they should appear */
+  inOrderFields: string[];
+
+  /** Card template definitions (at least one required) */
+  cardTemplates: CardTemplate[];
+
+  /** Optional CSS styling for cards */
+  css?: string;
+
+  /** Whether this is a cloze deletion model (default: false) */
+  isCloze?: boolean;
+}
+
+/**
+ * Parameters for updating model styling
+ */
+export interface UpdateModelStylingParams {
+  /** Model to update */
+  model: {
+    /** Name of the model to update */
+    name: string;
+
+    /** New CSS styling content */
+    css: string;
+  };
+}
