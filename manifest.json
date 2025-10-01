@@ -2,7 +2,7 @@
   "manifest_version": "0.2",
   "name": "anki-mcp-desktop",
   "display_name": "Anki MCP Server",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Model Context Protocol server for Anki spaced repetition flashcard application",
   "long_description": "Transform your Anki experience with natural language interaction - like having a private tutor. This MCP server enables AI assistants to interact with Anki, allowing them to explain concepts, make learning more engaging, provide context, and adapt to your learning style. Features include review sessions, deck management, note creation and editing, and more.\n\nRequires Anki with the AnkiConnect plugin installed.",
   "author": {
@@ -70,6 +70,14 @@
     {
       "name": "modelStyling",
       "description": "Get CSS styling information for a note type"
+    },
+    {
+      "name": "createModel",
+      "description": "Create a new note type (model) with custom fields, card templates, and CSS styling. Useful for creating specialized models like RTL (Right-to-Left) language models for Hebrew, Arabic, etc."
+    },
+    {
+      "name": "updateModelStyling",
+      "description": "Update the CSS styling for an existing note type. Changes apply to all cards using this model. Useful for adding RTL support or modifying appearance."
     }
   ],
   "prompts": [
