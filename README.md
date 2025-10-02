@@ -425,3 +425,13 @@ If you're exploring Anki MCP integrations, here are other projects in this space
 - **Scalability**: Can easily grow from basic tools to complex workflows
 
 **Use case**: If you need a solid foundation for building advanced Anki integrations or plan to extend functionality significantly, this project's architectural approach makes it easier to maintain and scale over time.
+
+## Useful Links
+
+- [Model Context Protocol Documentation](https://modelcontextprotocol.io/docs)
+- [AnkiConnect API Documentation](https://git.sr.ht/~foosoft/anki-connect)
+- [Claude Desktop Download](https://claude.ai/download)
+- [Building Desktop Extensions (Anthropic Blog)](https://www.anthropic.com/engineering/desktop-extensions)
+- [MCP Servers Repository](https://github.com/modelcontextprotocol/servers)
+- [NestJS Documentation](https://docs.nestjs.com)
+- [Anki Official Website](https://apps.ankiweb.net/)
