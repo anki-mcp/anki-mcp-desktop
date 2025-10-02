@@ -1,6 +1,6 @@
 # Anki MCP Desktop
 
-**Version: 0.1.0 (Beta)** - This project is in active development. APIs and features may change.
+**Beta** - This project is in active development. APIs and features may change.
 
 A Model Context Protocol (MCP) server that enables AI assistants to interact with Anki, the spaced repetition flashcard application.
 
