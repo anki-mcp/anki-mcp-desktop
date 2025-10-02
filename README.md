@@ -426,6 +426,12 @@ If you're exploring Anki MCP integrations, here are other projects in this space
 
 **Use case**: If you need a solid foundation for building advanced Anki integrations or plan to extend functionality significantly, this project's architectural approach makes it easier to maintain and scale over time.
 
+## Examples and Tutorials
+
+For comprehensive guides, real-world examples, and step-by-step tutorials on using this MCP server with Claude Desktop, visit:
+
+**[ankimcp.ai](https://ankimcp.ai)** - Complete documentation with practical examples and use cases
+
 ## Useful Links
 
 - [Model Context Protocol Documentation](https://modelcontextprotocol.io/docs)
