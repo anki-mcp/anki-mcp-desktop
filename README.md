@@ -6,6 +6,12 @@ A Model Context Protocol (MCP) server that enables AI assistants to interact wit
 
 Transform your Anki experience with natural language interaction - like having a private tutor. The AI assistant doesn't just present questions and answers; it can explain concepts, make the learning process more engaging and human-like, provide context, and adapt to your learning style. It can create and edit notes on the fly, turning your study sessions into dynamic conversations. More features coming soon!
 
+## Examples and Tutorials
+
+For comprehensive guides, real-world examples, and step-by-step tutorials on using this MCP server with Claude Desktop, visit:
+
+**[ankimcp.ai](https://ankimcp.ai)** - Complete documentation with practical examples and use cases
+
 ## Available Tools
 
 ### Review & Study
@@ -425,12 +431,6 @@ If you're exploring Anki MCP integrations, here are other projects in this space
 - **Scalability**: Can easily grow from basic tools to complex workflows
 
 **Use case**: If you need a solid foundation for building advanced Anki integrations or plan to extend functionality significantly, this project's architectural approach makes it easier to maintain and scale over time.
-
-## Examples and Tutorials
-
-For comprehensive guides, real-world examples, and step-by-step tutorials on using this MCP server with Claude Desktop, visit:
-
-**[ankimcp.ai](https://ankimcp.ai)** - Complete documentation with practical examples and use cases
 
 ## Useful Links
 
