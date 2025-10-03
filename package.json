@@ -8,10 +8,12 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
-    "start:dev": "nest start --watch",
-    "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:dev:stdio": "nest start --watch --entryFile main-stdio",
+    "start:dev:http": "nest start --watch --entryFile main-http",
+    "start:debug:stdio": "nest start --debug --watch --entryFile main-stdio",
+    "start:debug:http": "nest start --debug --watch --entryFile main-http",
+    "start:prod:stdio": "node dist/main-stdio",
+    "start:prod:http": "node dist/main-http",
     "lint": "eslint \"{src,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -23,12 +25,12 @@
     "test:ci": "jest --coverage --silent --maxWorkers=2",
     "test:single": "npm test -- src/mcp/primitives/essential/tools/__tests__/delete-notes.tool.spec.ts",
     "type-check": "tsc --noEmit",
-    "clean": "rm -rf dist node_modules",
+    "clean": "rm -rf dist dist-stdio dist-http node_modules",
     "inspector:stdio": "./node_modules/.bin/mcp-inspector --config mcp-inspector-config.json --server stdio-server",
-    "inspector:debug": "./node_modules/.bin/mcp-inspector --config mcp-inspector-config.json --server stdio-server-debug",
+    "inspector:stdio:debug": "./node_modules/.bin/mcp-inspector --config mcp-inspector-config.json --server stdio-server-debug",
+    "inspector:http": "./node_modules/.bin/mcp-inspector --config mcp-inspector-config.json --server http-server",
     "bundle:clean": "rm -f *.mcpb",
-    "bundle:pack": "mcpb pack",
-    "bundle": "npm run bundle:clean && npm run build && npm run bundle:pack"
+    "bundle": "npm run bundle:clean && npm run build && mcpb pack"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.18.2",

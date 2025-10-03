@@ -8,12 +8,23 @@ This is an MCP (Model Context Protocol) server that enables AI assistants to int
 
 **Version**: 0.2.0 (Beta) - This project is in active development. Breaking changes may occur in 0.x versions.
 
+**Important**: Check `.claude-draft/` directory for analysis documents, implementation plans, and project summaries created during development planning sessions.
+
 ## Essential Commands
 
 ### Development
 ```bash
-npm run build           # Build the project (required before running)
-npm run start:dev       # Start with watch mode (auto-rebuild)
+# Building
+npm run build           # Build project → dist/ (includes both entry points)
+
+# Development servers
+npm run start:dev       # Start with watch mode (compiles both entry points)
+
+# Production
+npm run start:prod:stdio   # Run STDIO mode: node dist/main-stdio.js
+npm run start:prod:http    # Run HTTP mode: node dist/main-http.js
+
+# Code quality
 npm run type-check      # Run TypeScript type checking without emitting
 npm run lint            # Run ESLint with auto-fix
 npm run format          # Format code with Prettier
@@ -48,9 +59,45 @@ After running `inspector:debug`, attach your IDE debugger to port 9229. The serv
 
 The application follows a modular NestJS architecture with MCP primitives organized into feature modules:
 
-- **`src/main.ts`** - Application bootstrap with Pino logger configured for stderr
-- **`src/app.module.ts`** - Root module importing MCP modules and configuration
+- **`src/main-stdio.ts`** - STDIO mode entry point
+- **`src/main-http.ts`** - HTTP mode entry point
+- **`src/bootstrap.ts`** - Shared utilities for logger creation
+- **`src/app.module.ts`** - Root module with forStdio() and forHttp() factory methods
 - **`src/anki-config.service.ts`** - Configuration service implementing `IAnkiConfig`
+- **`src/http/guards/origin-validation.guard.ts`** - Origin validation for HTTP mode security
+
+### Transport Modes
+
+The server supports two MCP transport modes via **separate entry points**:
+
+**STDIO Mode**:
+- Entry point: `dist/main-stdio.js`
+- For local MCP clients (Claude Desktop, MCP Inspector)
+- Standard input/output communication
+- Logger writes to stderr (fd 2)
+- Run: `npm run start:prod:stdio` or `node dist/main-stdio.js`
+
+**HTTP Mode (Streamable HTTP)**:
+- Entry point: `dist/main-http.js`
+- For remote MCP clients, web-based integrations
+- Uses MCP Streamable HTTP protocol (SSE is deprecated)
+- Logger writes to stdout (fd 1)
+- Default: `http://127.0.0.1:3000` (localhost-only)
+- MCP endpoint at root: `http://127.0.0.1:3000/`
+- Run: `npm run start:prod:http` or `node dist/main-http.js`
+
+**Key Implementation Details**:
+- Both entry points compile together in single build (`npm run build`)
+- Each has its own bootstrap logic:
+  - `src/main-stdio.ts`: `NestFactory.createApplicationContext()` + AppModule.forStdio()
+  - `src/main-http.ts`: `NestFactory.create()` + AppModule.forHttp() + guards
+- Shared utilities in `src/bootstrap.ts` (logger creation)
+- HTTP mode uses `mcpEndpoint: '/'` to mount MCP at root path
+
+**Security (HTTP Mode)**:
+- Origin header validation via `OriginValidationGuard` (prevents DNS rebinding)
+- Binds to 127.0.0.1 by default (localhost-only)
+- No authentication (OAuth support planned for future)
 
 ### MCP Primitives Organization
 
@@ -150,7 +197,8 @@ These work in both source code and tests via Jest's `moduleNameMapper`.
 
 ### Debugging Tips
 
-- All logs go to stderr (fd 2) to keep stdout clear for MCP protocol
+- **STDIO mode**: Logs go to stderr (fd 2) to keep stdout clear for MCP protocol
+- **HTTP mode**: Logs go to stdout (fd 1) for standard HTTP logging
 - Set `LOG_LEVEL=debug` environment variable for verbose logging
 - Use `npm run inspector:debug` + IDE debugger for step-through debugging
 - MCP Inspector provides a web UI for testing tools interactively
@@ -166,10 +214,12 @@ npm run bundle:pack           # Package dist/ and node_modules/ only
 ```
 
 **Key Points**:
+- MCPB bundles use **STDIO entry point** (`manifest.json` → `dist/main-stdio.js`)
 - User config keys in `manifest.json` **must use snake_case** (e.g., `anki_connect_url`), not camelCase
 - MCPB variable substitution syntax: `${user_config.key_name}`
 - The `.mcpbignore` file uses patterns like `/src/` (with leading slash) to exclude only root-level directories, not node_modules subdirectories
-- Bundle includes: `dist/`, `node_modules/`, `package.json`, `manifest.json`, `icon.png`
+- Bundle includes: `dist/` (both entry points), `node_modules/`, `package.json`, `manifest.json`, `icon.png`
+- Excluded: source files, tests, development configs
 
 ### Versioning Convention
 

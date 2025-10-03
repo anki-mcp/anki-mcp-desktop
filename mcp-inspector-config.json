@@ -3,23 +3,28 @@
     "stdio-server": {
       "type": "stdio",
       "command": "node",
-      "args": ["dist/main.js"],
+      "args": ["dist/main-stdio.js"],
       "env": {
         "MCP_SERVER_NAME": "anki-mcp-stdio",
         "MCP_SERVER_VERSION": "1.0.0"
       },
-      "note": "Anki MCP server with STDIO transport - run manually"
+      "note": "Anki MCP server with STDIO transport"
     },
     "stdio-server-debug": {
       "type": "stdio",
       "command": "node",
-      "args": ["--inspect-brk=9229", "dist/main.js"],
+      "args": ["--inspect-brk=9229", "dist/main-stdio.js"],
       "env": {
         "MCP_SERVER_NAME": "anki-mcp-stdio-debug",
         "MCP_SERVER_VERSION": "1.0.0",
         "LOG_LEVEL": "debug"
       },
       "note": "Anki MCP server with debugging enabled on port 9229"
+    },
+    "http-server": {
+      "type": "streamable-http",
+      "url": "http://127.0.0.1:3000",
+      "note": "Anki MCP server with HTTP transport - start server with: npm run start:prod:http"
     }
   }
 }

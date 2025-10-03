@@ -43,9 +43,14 @@ For comprehensive guides, real-world examples, and step-by-step tutorials on usi
 
 ## Installation
 
-### Option 1: MCPB Bundle (Recommended - One-Click Install)
+This server works in two modes:
 
-The easiest way to install this MCP server is using an MCPB bundle:
+- **Local mode (STDIO)** - For Claude Desktop on your computer (recommended for most users)
+- **Remote mode (HTTP)** - For web-based AI assistants like ChatGPT or Claude.ai
+
+### Option 1: MCPB Bundle (Recommended - Local Mode)
+
+The easiest way to install this MCP server for Claude Desktop:
 
 1. Download the latest `.mcpb` bundle from the [Releases](https://github.com/anki-mcp-organization/anki-mcp-desktop/releases) page
 2. In Claude Desktop, install the extension:
@@ -54,9 +59,38 @@ The easiest way to install this MCP server is using an MCPB bundle:
 3. Configure AnkiConnect URL if needed (defaults to `http://localhost:8765`)
 4. Restart Claude Desktop
 
-That's it! The bundle includes everything needed to run the server.
+That's it! The bundle includes everything needed to run the server locally.
 
-### Option 2: Manual Installation from Source
+### Option 2: HTTP Mode (For Remote AI Assistants)
+
+Want to use Anki with ChatGPT or Claude.ai in your browser? This mode lets you connect web-based AI tools to your local Anki.
+
+**How it works (simple explanation):**
+1. You run a small server on your computer (where Anki is installed)
+2. You use [ngrok](https://ngrok.com) to create a public URL that forwards to your local server
+3. You share that URL with ChatGPT or Claude.ai
+4. Now the AI can talk to your Anki through the internet!
+
+**Setup:**
+
+```bash
+# 1. Install from source
+npm install
+npm run build
+
+# 2. Start the HTTP server
+npm run start:prod:http
+
+# 3. In another terminal, create a tunnel with ngrok
+ngrok http 3000
+
+# 4. Copy the ngrok URL (looks like: https://abc123.ngrok.io)
+# 5. Share this URL with your AI assistant to connect
+```
+
+**Security note:** Anyone with your ngrok URL can access your Anki, so keep that URL private!
+
+### Option 3: Manual Installation from Source (Local Mode)
 
 For development or advanced usage:
 
@@ -65,7 +99,7 @@ npm install
 npm run build
 ```
 
-## Connect to Claude Desktop
+## Connect to Claude Desktop (Local Mode)
 
 You can configure the server in Claude Desktop by either:
 - Going to: Settings → Developer → Edit Config
@@ -80,7 +114,7 @@ Add the following to your Claude Desktop config:
   "mcpServers": {
     "anki-mcp": {
       "command": "node",
-      "args": ["/path/to/anki-mcp-desktop/dist/main.js"],
+      "args": ["/path/to/anki-mcp-desktop/dist/main-stdio.js"],
       "env": {
         "ANKI_CONNECT_URL": "http://localhost:8765"
       }
@@ -162,6 +196,66 @@ The `deleteNotes` tool requires explicit confirmation (`confirmDeletion: true`) 
 
 ## Development
 
+### Transport Modes
+
+This server supports two MCP transport modes via **separate entry points**:
+
+#### STDIO Mode (Default)
+- For local MCP clients like Claude Desktop
+- Uses standard input/output for communication
+- **Entry point**: `dist/main-stdio.js`
+- **Run**: `npm run start:prod:stdio` or `node dist/main-stdio.js`
+- **MCPB bundle**: Uses STDIO mode
+
+#### HTTP Mode (Streamable HTTP)
+- For remote MCP clients and web-based integrations
+- Uses MCP Streamable HTTP protocol
+- **Entry point**: `dist/main-http.js`
+- **Run**: `npm run start:prod:http` or `node dist/main-http.js`
+- **Default port**: 3000 (configurable via `PORT` env var)
+- **Default host**: `127.0.0.1` (configurable via `HOST` env var)
+- **MCP endpoint**: `http://127.0.0.1:3000/` (root path)
+
+#### Building
+
+```bash
+npm run build  # Builds once, creates dist/ with both entry points
+```
+
+Both `main-stdio.js` and `main-http.js` are in the same `dist/` directory. Choose which to run based on your needs.
+
+#### HTTP Mode Configuration
+
+**Environment Variables:**
+- `PORT` - HTTP server port (default: 3000)
+- `HOST` - Bind address (default: 127.0.0.1 for localhost-only)
+- `ALLOWED_ORIGINS` - Comma-separated list of allowed origins for CORS (default: localhost)
+- `LOG_LEVEL` - Logging level (default: info)
+
+**Security:**
+- Origin header validation (prevents DNS rebinding attacks)
+- Binds to localhost (127.0.0.1) by default
+- No authentication in current version (OAuth support planned)
+
+**Example: Running Modes**
+```bash
+# Development - STDIO mode (watch mode with auto-rebuild)
+npm run start:dev:stdio
+
+# Development - HTTP mode (watch mode with auto-rebuild)
+npm run start:dev:http
+
+# Production - STDIO mode
+npm run start:prod:stdio
+# or
+node dist/main-stdio.js
+
+# Production - HTTP mode
+npm run start:prod:http
+# or
+PORT=8080 HOST=0.0.0.0 node dist/main-http.js
+```
+
 ### Building an MCPB Bundle
 
 To create a distributable MCPB bundle:
@@ -171,18 +265,19 @@ npm run bundle
 ```
 
 This command will:
-1. Compile the TypeScript project (`npm run build`)
-2. Package everything into an `.mcpb` file (`npm run bundle:pack`)
+1. Remove old `.mcpb` files
+2. Build the TypeScript project
+3. Package `dist/` and `node_modules/` into an `.mcpb` file
 
 The output file will be named `anki-mcp-desktop-1.0.0.mcpb` (or current version) and can be distributed for one-click installation.
 
 #### What Gets Bundled
 
 The MCPB package includes:
-- Compiled JavaScript (`dist/` directory)
+- Compiled JavaScript (`dist/` directory - includes both entry points)
 - All dependencies (`node_modules/`)
 - Package metadata (`package.json`)
-- Manifest configuration (`manifest.json`)
+- Manifest configuration (`manifest.json` - configured to use `main-stdio.js`)
 - Icon (`icon.png`)
 
 Source files, tests, and development configs are automatically excluded via `.mcpbignore`.
@@ -221,7 +316,7 @@ The `mcp-inspector-config.json` already includes a debug server configuration:
     "stdio-server-debug": {
       "type": "stdio",
       "command": "node",
-      "args": ["--inspect-brk=9229", "dist/main.js"],
+      "args": ["--inspect-brk=9229", "dist/main-stdio.js"],
       "env": {
         "MCP_SERVER_NAME": "anki-mcp-stdio-debug",
         "MCP_SERVER_VERSION": "1.0.0",
@@ -285,7 +380,7 @@ Update your Claude Desktop config to enable debugging:
       "command": "node",
       "args": [
         "--inspect=9229",
-        "/Users/anatoly/Developer/git/anki-mcp-organization/anki-mcp-desktop/dist/main.js"
+        "/Users/anatoly/Developer/git/anki-mcp-organization/anki-mcp-desktop/dist/main-stdio.js"
       ],
       "env": {
         "ANKI_CONNECT_URL": "http://localhost:8765"
@@ -295,7 +390,7 @@ Update your Claude Desktop config to enable debugging:
 }
 ```
 
-**Key change**: Add `--inspect=9229` before the path to `dist/main.js`
+**Key change**: Add `--inspect=9229` before the path to `dist/main-stdio.js`
 
 **Debug options**:
 - `--inspect=9229` - Start debugger immediately, doesn't block (recommended)
@@ -360,12 +455,12 @@ Once attached, you can:
 ### Build Commands
 
 ```bash
-npm run build         # Build the project (compile TypeScript to JavaScript)
-npm run start:dev     # Start with watch mode (auto-rebuild)
-npm run type-check    # Run TypeScript type checking
-npm run lint          # Run ESLint
-npm run bundle        # Build and create MCPB bundle (one-click distribution)
-npm run bundle:pack   # Package dist/ and node_modules/ into .mcpb file
+npm run build              # Build the project (compile TypeScript to JavaScript)
+npm run start:dev:stdio    # STDIO mode with watch (auto-rebuild)
+npm run start:dev:http     # HTTP mode with watch (auto-rebuild)
+npm run type-check         # Run TypeScript type checking
+npm run lint               # Run ESLint
+npm run bundle             # Clean, build, and create MCPB bundle
 ```
 
 ### Testing Commands
