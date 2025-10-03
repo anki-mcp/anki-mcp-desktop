@@ -1,9 +1,22 @@
 import { Command } from 'commander';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 export interface CliOptions {
   port: number;
   host: string;
   ankiConnect: string;
+}
+
+function getVersion(): string {
+  try {
+    const packageJson = JSON.parse(
+      readFileSync(join(__dirname, '../package.json'), 'utf-8'),
+    );
+    return packageJson.version;
+  } catch {
+    return '0.0.0';
+  }
 }
 
 export function parseCliArgs(): CliOptions {
@@ -12,7 +25,7 @@ export function parseCliArgs(): CliOptions {
   program
     .name('ankimcp')
     .description('AnkiMCP HTTP Server - Model Context Protocol server for Anki')
-    .version('0.2.0')
+    .version(getVersion())
     .option('-p, --port <number>', 'Port to listen on', '3000')
     .option('-h, --host <address>', 'Host to bind to', '127.0.0.1')
     .option(
