@@ -74,18 +74,47 @@ Want to use Anki with ChatGPT or Claude.ai in your browser? This mode lets you c
 **Setup:**
 
 ```bash
-# 1. Install from source
+# Quick start (using npx - no installation needed)
+npx ankimcp
+
+# With custom options
+npx ankimcp --port 8080 --host 0.0.0.0
+npx ankimcp --anki-connect http://localhost:8765
+
+# Or install from source
 npm install
 npm run build
-
-# 2. Start the HTTP server
 npm run start:prod:http
+```
 
-# 3. In another terminal, create a tunnel with ngrok
+**CLI Options:**
+
+```bash
+ankimcp [options]
+
+Options:
+  -p, --port <port>              Port to listen on (default: 3000)
+  -h, --host <host>              Host to bind to (default: 127.0.0.1)
+  -a, --anki-connect <url>       AnkiConnect URL (default: http://localhost:8765)
+  --help                         Show help message
+
+Examples:
+  ankimcp                        # Use all defaults
+  ankimcp --port 8080            # Custom port
+  ankimcp --host 0.0.0.0         # Listen on all network interfaces
+```
+
+**Using with ngrok:**
+
+```bash
+# 1. Start ankimcp
+npx ankimcp
+
+# 2. In another terminal, create a tunnel
 ngrok http 3000
 
-# 4. Copy the ngrok URL (looks like: https://abc123.ngrok.io)
-# 5. Share this URL with your AI assistant to connect
+# 3. Copy the ngrok URL (looks like: https://abc123.ngrok.io)
+# 4. Share this URL with your AI assistant
 ```
 
 **Security note:** Anyone with your ngrok URL can access your Anki, so keep that URL private!

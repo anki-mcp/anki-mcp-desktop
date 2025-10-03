@@ -61,6 +61,7 @@ The application follows a modular NestJS architecture with MCP primitives organi
 
 - **`src/main-stdio.ts`** - STDIO mode entry point
 - **`src/main-http.ts`** - HTTP mode entry point
+- **`src/cli.ts`** - CLI argument parsing with commander (used by main-http.ts)
 - **`src/bootstrap.ts`** - Shared utilities for logger creation
 - **`src/app.module.ts`** - Root module with forStdio() and forHttp() factory methods
 - **`src/anki-config.service.ts`** - Configuration service implementing `IAnkiConfig`
@@ -85,6 +86,7 @@ The server supports two MCP transport modes via **separate entry points**:
 - Default: `http://127.0.0.1:3000` (localhost-only)
 - MCP endpoint at root: `http://127.0.0.1:3000/`
 - Run: `npm run start:prod:http` or `node dist/main-http.js`
+- CLI options: `--port`, `--host`, `--anki-connect` (parsed by `src/cli.ts` using commander)
 
 **Key Implementation Details**:
 - Both entry points compile together in single build (`npm run build`)
