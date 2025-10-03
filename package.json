@@ -1,10 +1,14 @@
 {
-  "name": "anki-mcp-desktop",
+  "name": "ankimcp",
   "version": "0.2.0",
-  "description": "Anki MCP Desktop - Model Context Protocol for Anki",
+  "description": "Model Context Protocol server for Anki - enables AI assistants to interact with your Anki flashcards",
   "author": "Anatoly Tarnavsky",
-  "private": true,
+  "private": false,
   "license": "MIT",
+  "main": "dist/main-http.js",
+  "bin": {
+    "ankimcp": "bin/ankimcp.js"
+  },
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -30,7 +34,10 @@
     "inspector:stdio:debug": "./node_modules/.bin/mcp-inspector --config mcp-inspector-config.json --server stdio-server-debug",
     "inspector:http": "./node_modules/.bin/mcp-inspector --config mcp-inspector-config.json --server http-server",
     "bundle:clean": "rm -f *.mcpb",
-    "bundle": "npm run bundle:clean && npm run build && mcpb pack"
+    "bundle": "npm run bundle:clean && npm run build && mcpb pack",
+    "pack:local": "npm run build && npm pack",
+    "install:local": "npm install -g ./ankimcp-*.tgz",
+    "uninstall:local": "npm uninstall -g ankimcp"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.18.2",
@@ -115,5 +122,31 @@
   },
   "engines": {
     "node": ">=20"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anki-mcp-organization/anki-mcp-desktop.git"
+  },
+  "bugs": {
+    "url": "https://github.com/anki-mcp-organization/anki-mcp-desktop/issues"
+  },
+  "homepage": "https://ankimcp.ai",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "anki",
+    "flashcards",
+    "spaced-repetition",
+    "ai",
+    "claude",
+    "chatgpt",
+    "ankiconnect"
+  ],
+  "files": [
+    "dist",
+    "bin",
+    "README.md",
+    "LICENSE",
+    "package.json"
+  ]
 }

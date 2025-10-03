@@ -463,6 +463,29 @@ npm run lint               # Run ESLint
 npm run bundle             # Clean, build, and create MCPB bundle
 ```
 
+### NPM Package Testing (Local)
+
+Test the npm package locally before publishing:
+
+```bash
+# 1. Create local package
+npm run pack:local         # Builds and creates ankimcp-*.tgz
+
+# 2. Install globally from local package
+npm run install:local      # Installs from ./ankimcp-*.tgz
+
+# 3. Test the command
+ankimcp                    # Runs HTTP server on port 3000
+
+# 4. Uninstall when done testing
+npm run uninstall:local    # Removes global installation
+```
+
+**How it works:**
+- `npm pack` creates a `.tgz` file identical to what npm publish would create
+- Installing from `.tgz` simulates what users get from `npm install -g ankimcp`
+- This lets you test the full user experience before publishing to npm
+
 ### Testing Commands
 
 ```bash
