@@ -23,7 +23,7 @@ export function parseCliArgs(): CliOptions {
   const program = new Command();
 
   program
-    .name('ankimcp')
+    .name('ankimcp-server')
     .description('AnkiMCP HTTP Server - Model Context Protocol server for Anki')
     .version(getVersion())
     .option('-p, --port <number>', 'Port to listen on', '3000')
@@ -37,13 +37,13 @@ export function parseCliArgs(): CliOptions {
       'after',
       `
 Examples:
-  $ ankimcp                                    # Use defaults
-  $ ankimcp --port 8080                        # Custom port
-  $ ankimcp --host 0.0.0.0 --port 3000         # Listen on all interfaces
-  $ ankimcp --anki-connect http://localhost:8765
+  $ ankimcp-server                                    # Use defaults
+  $ ankimcp-server --port 8080                        # Custom port
+  $ ankimcp-server --host 0.0.0.0 --port 3000         # Listen on all interfaces
+  $ ankimcp-server --anki-connect http://localhost:8765
 
 Usage with ngrok:
-  1. Start ankimcp in one terminal
+  1. Start ankimcp-server in one terminal
   2. In another terminal: ngrok http 3000
   3. Share the ngrok URL with your AI assistant
 `,
@@ -79,6 +79,6 @@ Usage with ngrok:
   1. In another terminal: ngrok http ${options.port}
   2. Share the ngrok URL with your AI assistant
 
-Run 'ankimcp --help' for more options.
+Run 'ankimcp-server --help' for more options.
 `);
 }

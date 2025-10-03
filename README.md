@@ -75,11 +75,11 @@ Want to use Anki with ChatGPT or Claude.ai in your browser? This mode lets you c
 
 ```bash
 # Quick start (using npx - no installation needed)
-npx ankimcp
+npx ankimcp-server
 
 # With custom options
-npx ankimcp --port 8080 --host 0.0.0.0
-npx ankimcp --anki-connect http://localhost:8765
+npx ankimcp-server --port 8080 --host 0.0.0.0
+npx ankimcp-server --anki-connect http://localhost:8765
 
 # Or install from source
 npm install
@@ -90,7 +90,7 @@ npm run start:prod:http
 **CLI Options:**
 
 ```bash
-ankimcp [options]
+ankimcp-server [options]
 
 Options:
   -p, --port <port>              Port to listen on (default: 3000)
@@ -99,16 +99,16 @@ Options:
   --help                         Show help message
 
 Examples:
-  ankimcp                        # Use all defaults
-  ankimcp --port 8080            # Custom port
-  ankimcp --host 0.0.0.0         # Listen on all network interfaces
+  ankimcp-server                        # Use all defaults
+  ankimcp-server --port 8080            # Custom port
+  ankimcp-server --host 0.0.0.0         # Listen on all network interfaces
 ```
 
 **Using with ngrok:**
 
 ```bash
-# 1. Start ankimcp
-npx ankimcp
+# 1. Start ankimcp-server
+npx ankimcp-server
 
 # 2. In another terminal, create a tunnel
 ngrok http 3000
@@ -499,13 +499,13 @@ Test the npm package locally before publishing:
 
 ```bash
 # 1. Create local package
-npm run pack:local         # Builds and creates ankimcp-*.tgz
+npm run pack:local         # Builds and creates ankimcp-server-*.tgz
 
 # 2. Install globally from local package
-npm run install:local      # Installs from ./ankimcp-*.tgz
+npm run install:local      # Installs from ./ankimcp-server-*.tgz
 
 # 3. Test the command
-ankimcp                    # Runs HTTP server on port 3000
+ankimcp-server             # Runs HTTP server on port 3000
 
 # 4. Uninstall when done testing
 npm run uninstall:local    # Removes global installation
