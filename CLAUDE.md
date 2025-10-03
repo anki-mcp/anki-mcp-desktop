@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is an MCP (Model Context Protocol) server that enables AI assistants to interact with Anki via the AnkiConnect plugin. Built with NestJS and the `@rekog/mcp-nest` library, it exposes Anki functionality as MCP tools, prompts, and resources.
 
-**Version**: 0.1.0 (Beta) - This project is in active development. Breaking changes may occur in 0.x versions.
+**Version**: 0.2.0 (Beta) - This project is in active development. Breaking changes may occur in 0.x versions.
 
 ## Essential Commands
 
@@ -114,7 +114,7 @@ Example: `src/mcp/primitives/essential/tools/sync.tool.ts`
 
 ### Environment Configuration
 
-Default AnkiConnect URL is `https://anki.anatoly.dev` (see `src/anki-config.service.ts:15`). Override with `ANKI_CONNECT_URL` environment variable.
+Default AnkiConnect URL is `http://localhost:8765` (see `src/anki-config.service.ts:16`). Override with `ANKI_CONNECT_URL` environment variable.
 
 ### Path Aliases
 
@@ -131,8 +131,9 @@ These work in both source code and tests via Jest's `moduleNameMapper`.
 1. Create `src/mcp/primitives/essential/tools/your-tool.tool.ts`
 2. Export it from `src/mcp/primitives/essential/index.ts`
 3. Add to `MCP_PRIMITIVES` array in the same file
-4. Create test file: `src/mcp/primitives/essential/tools/__tests__/your-tool.tool.spec.ts`
-5. Run `npm run test:tools` to verify
+4. **Update `manifest.json`** - Add the new tool to the `tools` array (don't forget this!)
+5. Create test file: `src/mcp/primitives/essential/tools/__tests__/your-tool.tool.spec.ts`
+6. Run `npm run test:tools` to verify
 
 ### Adding a New MCP Prompt
 
