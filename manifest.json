@@ -97,7 +97,9 @@
     "entry_point": "dist/main-stdio.js",
     "mcp_config": {
       "command": "node",
-      "args": ["${__dirname}/dist/main-stdio.js"],
+      "args": [
+        "${__dirname}/dist/main-stdio.js"
+      ],
       "env": {
         "ANKI_CONNECT_URL": "${user_config.anki_connect_url}",
         "ANKI_CONNECT_API_VERSION": "${user_config.anki_connect_api_version}",
@@ -137,7 +139,11 @@
     }
   },
   "compatibility": {
-    "platforms": ["darwin", "linux", "win32"],
+    "platforms": [
+      "darwin",
+      "linux",
+      "win32"
+    ],
     "node": ">=20"
   }
 }

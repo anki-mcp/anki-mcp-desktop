@@ -210,12 +210,13 @@ These work in both source code and tests via Jest's `moduleNameMapper`.
 The project can be packaged as an MCPB (Model Context Protocol Bundle) for one-click installation:
 
 ```bash
-npm run bundle                # Build and package into .mcpb file
-npm run bundle:clean          # Remove old .mcpb files
-npm run bundle:pack           # Package dist/ and node_modules/ only
+npm run mcpb:bundle           # Sync version, build, and package into .mcpb file
+npm run mcpb:clean            # Remove old .mcpb files
+npm run sync-version          # Sync version from package.json to manifest.json
 ```
 
 **Key Points**:
+- `mcpb:bundle` automatically syncs version from `package.json` to `manifest.json` before building
 - MCPB bundles use **STDIO entry point** (`manifest.json` → `dist/main-stdio.js`)
 - User config keys in `manifest.json` **must use snake_case** (e.g., `anki_connect_url`), not camelCase
 - MCPB variable substitution syntax: `${user_config.key_name}`
@@ -238,24 +239,25 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 **IMPORTANT**: When creating a new release, follow this checklist:
 
-1. ✅ Update version in `package.json`
-2. ✅ **Update version in `manifest.json`** ← DON'T FORGET!
-3. ✅ **Add new tools to `manifest.json` tools array** ← DON'T FORGET!
-4. ✅ Commit changes
-5. ✅ Create and push git tag: `git tag -a v0.x.0 -m "Release message"`
-6. ✅ Push tag: `git push origin v0.x.0`
-7. ✅ GitHub Actions automatically:
+1. ✅ Update version in `package.json` (single source of truth)
+2. ✅ **Add new tools to `manifest.json` tools array** ← DON'T FORGET!
+3. ✅ Commit changes
+4. ✅ Create and push git tag: `git tag -a v0.x.0 -m "Release message"`
+5. ✅ Push tag: `git push origin v0.x.0`
+6. ✅ GitHub Actions automatically:
+   - Syncs version from `package.json` to `manifest.json`
    - Builds the project
-   - Runs `npm run bundle`
+   - Runs `npm run mcpb:bundle`
    - Creates GitHub Release
    - Attaches `.mcpb` file
 
-**DO NOT run `npm run bundle` manually** - GitHub Actions handles it automatically when you push a tag.
+**Note**: Version is now managed only in `package.json`. The `mcpb:bundle` script automatically syncs it to `manifest.json`.
 
-**Manifest Update Template**:
+**DO NOT run `npm run mcpb:bundle` manually** - GitHub Actions handles it automatically when you push a tag.
+
+**Manifest Update Template** (only for new tools):
 ```json
 {
-  "version": "0.x.0",  // Match package.json version
   "tools": [
     // ... existing tools ...
     {

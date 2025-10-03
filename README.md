@@ -290,15 +290,16 @@ PORT=8080 HOST=0.0.0.0 node dist/main-http.js
 To create a distributable MCPB bundle:
 
 ```bash
-npm run bundle
+npm run mcpb:bundle
 ```
 
 This command will:
-1. Remove old `.mcpb` files
-2. Build the TypeScript project
-3. Package `dist/` and `node_modules/` into an `.mcpb` file
+1. Sync version from `package.json` to `manifest.json`
+2. Remove old `.mcpb` files
+3. Build the TypeScript project
+4. Package `dist/` and `node_modules/` into an `.mcpb` file
 
-The output file will be named `anki-mcp-desktop-1.0.0.mcpb` (or current version) and can be distributed for one-click installation.
+The output file will be named `anki-mcp-desktop-0.3.0.mcpb` (or current version) and can be distributed for one-click installation.
 
 #### What Gets Bundled
 
@@ -489,7 +490,7 @@ npm run start:dev:stdio    # STDIO mode with watch (auto-rebuild)
 npm run start:dev:http     # HTTP mode with watch (auto-rebuild)
 npm run type-check         # Run TypeScript type checking
 npm run lint               # Run ESLint
-npm run bundle             # Clean, build, and create MCPB bundle
+npm run mcpb:bundle        # Sync version, clean, build, and create MCPB bundle
 ```
 
 ### NPM Package Testing (Local)
