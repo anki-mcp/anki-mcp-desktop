@@ -8,7 +8,7 @@ This is an MCP (Model Context Protocol) server that enables AI assistants to int
 
 **Version**: 0.2.0 (Beta) - This project is in active development. Breaking changes may occur in 0.x versions.
 
-**Important**: Check `.claude-draft/` directory for analysis documents, implementation plans, and project summaries created during development planning sessions.
+**Important**: Check `.claude-draft/` directory for analysis documents, implementation plans, test plans, and project summaries created during development planning sessions.
 
 ## Essential Commands
 
