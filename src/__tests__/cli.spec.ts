@@ -1,4 +1,4 @@
-import { parseCliArgs, CliOptions } from './cli';
+import { parseCliArgs, CliOptions } from '../cli';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -125,7 +125,7 @@ describe('CLI Module', () => {
   describe('getVersion', () => {
     it('should read version from package.json', () => {
       // This test verifies that the version can be read from package.json
-      const packageJsonPath = path.join(__dirname, '../package.json');
+      const packageJsonPath = path.join(__dirname, '../../package.json');
       const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
 
       // Verify package.json has a version
@@ -140,9 +140,9 @@ describe('CLI Module', () => {
       const writeSpy = jest.spyOn(process.stdout, 'write').mockImplementation();
       const exitSpy = jest
         .spyOn(process, 'exit')
-        .mockImplementation((code?: number) => {
-          throw new Error(`process.exit called with ${code}`);
-        });
+        .mockImplementation((() => {
+          throw new Error(`process.exit called`);
+        }) as never);
 
       try {
         parseCliArgs();
@@ -150,7 +150,7 @@ describe('CLI Module', () => {
         // Commander exits on --version
       }
 
-      const packageJsonPath = path.join(__dirname, '../package.json');
+      const packageJsonPath = path.join(__dirname, '../../package.json');
       const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
 
       // Check that version was written to stdout
@@ -172,7 +172,7 @@ describe('CLI Module', () => {
         ankiConnect: 'http://localhost:8765',
       };
 
-      const { displayStartupBanner } = require('./cli');
+      const { displayStartupBanner } = require('../cli');
       displayStartupBanner(options);
 
       const output = consoleLogSpy.mock.calls.map((call) => call[0]).join('\n');
@@ -197,7 +197,7 @@ describe('CLI Module', () => {
         ankiConnect: 'http://192.168.1.100:8765',
       };
 
-      const { displayStartupBanner } = require('./cli');
+      const { displayStartupBanner } = require('../cli');
       displayStartupBanner(options);
 
       const output = consoleLogSpy.mock.calls.map((call) => call[0]).join('\n');
@@ -219,7 +219,7 @@ describe('CLI Module', () => {
         ankiConnect: 'http://localhost:8765',
       };
 
-      const { displayStartupBanner } = require('./cli');
+      const { displayStartupBanner } = require('../cli');
       displayStartupBanner(options);
 
       const output = consoleLogSpy.mock.calls.map((call) => call[0]).join('\n');
@@ -239,7 +239,7 @@ describe('CLI Module', () => {
         ankiConnect: 'http://localhost:8765',
       };
 
-      const { displayStartupBanner } = require('./cli');
+      const { displayStartupBanner } = require('../cli');
       displayStartupBanner(options);
 
       const output = consoleLogSpy.mock.calls.map((call) => call[0]).join('\n');
@@ -258,7 +258,7 @@ describe('CLI Module', () => {
         ankiConnect: 'http://localhost:8765',
       };
 
-      const { displayStartupBanner } = require('./cli');
+      const { displayStartupBanner } = require('../cli');
       displayStartupBanner(options);
 
       const output = consoleLogSpy.mock.calls.map((call) => call[0]).join('\n');

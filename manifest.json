@@ -78,6 +78,50 @@
     {
       "name": "updateModelStyling",
       "description": "Update the CSS styling for an existing note type. Changes apply to all cards using this model. Useful for adding RTL support or modifying appearance."
+    },
+    {
+      "name": "guiBrowse",
+      "description": "Open Anki Card Browser and search for cards. For note editing/creation workflows only, NOT for review sessions"
+    },
+    {
+      "name": "guiSelectCard",
+      "description": "Select a specific card in the Card Browser. For note editing/creation workflows only"
+    },
+    {
+      "name": "guiSelectedNotes",
+      "description": "Get IDs of notes currently selected in Card Browser. For note editing/creation workflows only"
+    },
+    {
+      "name": "guiAddCards",
+      "description": "Open Add Cards dialog with preset note details. For note editing/creation workflows only"
+    },
+    {
+      "name": "guiEditNote",
+      "description": "Open note editor for a specific note. For note editing/creation workflows only"
+    },
+    {
+      "name": "guiDeckOverview",
+      "description": "Open Deck Overview dialog for a specific deck. For deck management workflows only"
+    },
+    {
+      "name": "guiDeckBrowser",
+      "description": "Open Deck Browser dialog. For deck management workflows only"
+    },
+    {
+      "name": "guiCurrentCard",
+      "description": "Get current card info in review mode. For note editing/creation workflows only, NOT for review sessions"
+    },
+    {
+      "name": "guiShowQuestion",
+      "description": "Show question side of current card. For note editing/creation workflows only, NOT for review sessions"
+    },
+    {
+      "name": "guiShowAnswer",
+      "description": "Show answer side of current card. For note editing/creation workflows only, NOT for review sessions"
+    },
+    {
+      "name": "guiUndo",
+      "description": "Undo the last action in Anki. For note editing/creation workflows only"
     }
   ],
   "prompts": [

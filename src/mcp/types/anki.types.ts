@@ -276,3 +276,69 @@ export interface UpdateModelStylingParams {
     css: string;
   };
 }
+
+/**
+ * Information about the current card in review mode
+ */
+export interface GuiCurrentCardInfo {
+  /** HTML answer text */
+  answer: string;
+
+  /** HTML question text */
+  question: string;
+
+  /** Name of the deck containing this card */
+  deckName: string;
+
+  /** Name of the note type/model */
+  modelName: string;
+
+  /** Unique card identifier */
+  cardId: number;
+
+  /** Available rating buttons (e.g., [1, 2, 3] for Again, Hard, Good) */
+  buttons: number[];
+
+  /** Next review intervals for each button (e.g., ["<1m", "<10m", "4d"]) */
+  nextReviews: string[];
+
+  /** Card fields with values and order */
+  fields?: Record<string, { value: string; order: number }>;
+}
+
+/**
+ * Parameters for guiBrowse action
+ */
+export interface GuiBrowseParams {
+  /** Anki search query (e.g., "deck:Spanish tag:verb") */
+  query: string;
+
+  /** Optional card reordering in browser */
+  reorderCards?: {
+    /** Sort order */
+    order: 'ascending' | 'descending';
+
+    /** Column to sort by */
+    columnId: string;
+  };
+}
+
+/**
+ * Parameters for guiAddCards action
+ */
+export interface GuiAddCardsParams {
+  /** Note details to pre-fill in Add Cards dialog */
+  note: {
+    /** Deck to add the note to */
+    deckName: string;
+
+    /** Note type/model to use */
+    modelName: string;
+
+    /** Field values to pre-fill */
+    fields: Record<string, string>;
+
+    /** Optional tags to add */
+    tags?: string[];
+  };
+}

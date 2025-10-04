@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { AppModule } from './app.module';
-import { OriginValidationGuard } from './http/guards/origin-validation.guard';
+import { AppModule } from '../app.module';
+import { OriginValidationGuard } from '../http/guards/origin-validation.guard';
 import request from 'supertest';
 
 /**

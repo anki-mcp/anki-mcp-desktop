@@ -118,7 +118,13 @@ MCP primitives (tools, prompts, resources) are organized in feature modules:
 - **Resources**: `src/mcp/primitives/essential/resources/*.resource.ts` - MCP resources (e.g., `system-info`)
 - **`index.ts`** - Module definition with `McpPrimitivesAnkiEssentialModule.forRoot()`
 
-**`src/mcp/primitives/gui/`** - GUI-specific primitives (currently empty, reserved for future use)
+**`src/mcp/primitives/gui/`** - GUI-specific primitives for Anki interface operations
+- **Tools**: `src/mcp/primitives/gui/tools/*.tool.ts` - MCP tools for GUI operations
+  - Browser: `gui-browse`, `gui-select-card`, `gui-selected-notes`
+  - Dialogs: `gui-add-cards`, `gui-edit-note`, `gui-deck-overview`, `gui-deck-browser`
+  - Utilities: `gui-current-card`, `gui-show-question`, `gui-show-answer`, `gui-undo`
+- **`index.ts`** - Module definition with `McpPrimitivesAnkiGuiModule.forRoot()`
+- **IMPORTANT**: GUI tools require explicit user approval - they are for note editing/creation workflows only, NOT for review sessions
 
 ### Supporting Infrastructure
 
@@ -133,16 +139,19 @@ MCP primitives (tools, prompts, resources) are organized in feature modules:
 
 The project uses NestJS dynamic modules with dependency injection:
 
-1. `AppModule` imports `McpModule.forRoot()` with STDIO transport
-2. `McpPrimitivesAnkiEssentialModule.forRoot()` receives `ankiConfigProvider`
+1. `AppModule` imports `McpModule.forRoot()` with transport mode
+2. `McpPrimitivesAnkiEssentialModule.forRoot()` and `McpPrimitivesAnkiGuiModule.forRoot()` receive `ankiConfigProvider`
 3. All tools/prompts/resources are registered as providers and auto-discovered by `@rekog/mcp-nest`
 
 ### Testing Structure
 
-- **Unit tests**: `src/mcp/primitives/essential/tools/__tests__/*.spec.ts` - Test individual tools
+- **Unit tests**:
+  - `src/mcp/primitives/essential/tools/__tests__/*.spec.ts` - Test essential tools
+  - `src/mcp/primitives/gui/tools/__tests__/*.spec.ts` - Test GUI tools
 - **Workflow tests**: `test/workflows/*.spec.ts` - Integration tests for multi-tool workflows
 - **E2E tests**: `test/*.e2e-spec.ts` - End-to-end application tests
 - **Mocks**: `src/mcp/clients/__mocks__/` - Mock implementations for testing
+- **Test helpers**: `src/test-fixtures/test-helpers.ts` - Shared utilities like `parseToolResult()` and `createMockContext()`
 
 ## Key Implementation Details
 
@@ -180,12 +189,24 @@ These work in both source code and tests via Jest's `moduleNameMapper`.
 
 ### Adding a New MCP Tool
 
+**Essential Tools** (general Anki operations):
 1. Create `src/mcp/primitives/essential/tools/your-tool.tool.ts`
 2. Export it from `src/mcp/primitives/essential/index.ts`
 3. Add to `MCP_PRIMITIVES` array in the same file
 4. **Update `manifest.json`** - Add the new tool to the `tools` array (don't forget this!)
 5. Create test file: `src/mcp/primitives/essential/tools/__tests__/your-tool.tool.spec.ts`
 6. Run `npm run test:tools` to verify
+
+**GUI Tools** (Anki interface operations):
+1. Create `src/mcp/primitives/gui/tools/your-gui-tool.tool.ts`
+2. Export it from `src/mcp/primitives/gui/index.ts`
+3. Add to `MCP_PRIMITIVES` array in the same file
+4. **Update `manifest.json`** - Add the new tool to the `tools` array (don't forget this!)
+5. Add dual warnings in tool description:
+   - "IMPORTANT: Only use when user explicitly requests..."
+   - "This tool is for note editing/creation workflows, NOT for review sessions"
+6. Create test file: `src/mcp/primitives/gui/tools/__tests__/your-gui-tool.tool.spec.ts`
+7. Run `npm run test:tools` to verify
 
 ### Adding a New MCP Prompt
 

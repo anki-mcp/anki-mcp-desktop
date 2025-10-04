@@ -39,8 +39,13 @@ export class AppModule {
           },
         }),
 
-        // Import GUI-only primitives
-        McpPrimitivesAnkiGuiModule.forRoot(),
+        // Import GUI primitives with config
+        McpPrimitivesAnkiGuiModule.forRoot({
+          ankiConfigProvider: {
+            provide: ANKI_CONFIG,
+            useClass: AnkiConfigService,
+          },
+        }),
       ],
       providers: [AnkiConfigService],
     };
@@ -76,8 +81,13 @@ export class AppModule {
           },
         }),
 
-        // Import GUI-only primitives
-        McpPrimitivesAnkiGuiModule.forRoot(),
+        // Import GUI primitives with config
+        McpPrimitivesAnkiGuiModule.forRoot({
+          ankiConfigProvider: {
+            provide: ANKI_CONFIG,
+            useClass: AnkiConfigService,
+          },
+        }),
       ],
       providers: [AnkiConfigService],
     };

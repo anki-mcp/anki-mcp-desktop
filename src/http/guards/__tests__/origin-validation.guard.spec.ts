@@ -1,5 +1,5 @@
 import { ExecutionContext } from '@nestjs/common';
-import { OriginValidationGuard } from './origin-validation.guard';
+import { OriginValidationGuard } from '../origin-validation.guard';
 
 describe('OriginValidationGuard', () => {
   let guard: OriginValidationGuard;
