@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is an MCP (Model Context Protocol) server that enables AI assistants to interact with Anki via the AnkiConnect plugin. Built with NestJS and the `@rekog/mcp-nest` library, it exposes Anki functionality as MCP tools, prompts, and resources.
 
-**Version**: 0.2.0 (Beta) - This project is in active development. Breaking changes may occur in 0.x versions.
+**Version**: 0.3.0 (Beta) - This project is in active development. Breaking changes may occur in 0.x versions.
 
 **Important**: Check `.claude-draft/` directory for analysis documents, implementation plans, test plans, and project summaries created during development planning sessions.
 
@@ -18,7 +18,8 @@ This is an MCP (Model Context Protocol) server that enables AI assistants to int
 npm run build           # Build project → dist/ (includes both entry points)
 
 # Development servers
-npm run start:dev       # Start with watch mode (compiles both entry points)
+npm run start:dev:stdio # STDIO mode with watch (auto-rebuild)
+npm run start:dev:http  # HTTP mode with watch (auto-rebuild)
 
 # Production
 npm run start:prod:stdio   # Run STDIO mode: node dist/main-stdio.js
@@ -47,11 +48,12 @@ Test coverage thresholds are enforced at 70% for branches, functions, lines, and
 
 ### Debugging
 ```bash
-npm run inspector:stdio            # Run MCP inspector (normal mode)
-npm run inspector:debug            # Run MCP inspector with debugger on port 9229
+npm run inspector:stdio            # Run MCP inspector for STDIO mode
+npm run inspector:stdio:debug      # Run STDIO inspector with debugger on port 9229
+npm run inspector:http             # Run MCP inspector for HTTP mode
 ```
 
-After running `inspector:debug`, attach your IDE debugger to port 9229. The server pauses at startup waiting for debugger attachment.
+After running `inspector:stdio:debug`, attach your IDE debugger to port 9229. The server pauses at startup waiting for debugger attachment.
 
 ## Architecture
 
@@ -61,11 +63,12 @@ The application follows a modular NestJS architecture with MCP primitives organi
 
 - **`src/main-stdio.ts`** - STDIO mode entry point
 - **`src/main-http.ts`** - HTTP mode entry point
-- **`src/cli.ts`** - CLI argument parsing with commander (used by main-http.ts)
+- **`src/cli.ts`** - CLI argument parsing with commander (used by main-http.ts and bin/ankimcp.js)
 - **`src/bootstrap.ts`** - Shared utilities for logger creation
 - **`src/app.module.ts`** - Root module with forStdio() and forHttp() factory methods
 - **`src/anki-config.service.ts`** - Configuration service implementing `IAnkiConfig`
 - **`src/http/guards/origin-validation.guard.ts`** - Origin validation for HTTP mode security
+- **`bin/ankimcp.js`** - CLI wrapper that invokes main-http.js (used by npm global install)
 
 ### Transport Modes
 
@@ -202,8 +205,21 @@ These work in both source code and tests via Jest's `moduleNameMapper`.
 - **STDIO mode**: Logs go to stderr (fd 2) to keep stdout clear for MCP protocol
 - **HTTP mode**: Logs go to stdout (fd 1) for standard HTTP logging
 - Set `LOG_LEVEL=debug` environment variable for verbose logging
-- Use `npm run inspector:debug` + IDE debugger for step-through debugging
+- Use `npm run inspector:stdio:debug` + IDE debugger for step-through debugging
 - MCP Inspector provides a web UI for testing tools interactively
+
+### NPM Package Testing (Local)
+
+Test the npm package locally before publishing:
+
+```bash
+npm run pack:local         # Builds and creates anki-mcp-http-*.tgz
+npm run install:local      # Installs from ./anki-mcp-http-*.tgz
+ankimcp                    # Test the global command
+npm run uninstall:local    # Removes global installation
+```
+
+This simulates the full user experience of installing via `npm install -g ankimcp` by creating and installing from a local `.tgz` package.
 
 ### MCPB Bundle Distribution
 
