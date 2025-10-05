@@ -336,6 +336,8 @@ tail -f ~/Library/Logs/Claude/mcp-server-Anki\ MCP\ Server.log
 
 You can debug the MCP server using the MCP Inspector and attaching a debugger from your IDE (WebStorm, VS Code, etc.).
 
+**Note for HTTP Mode:** When testing HTTP mode (Streamable HTTP) with MCP Inspector, use "Connection Type: Via Proxy" to avoid CORS errors.
+
 #### Step 1: Configure Debug Server in MCP Inspector
 
 The `mcp-inspector-config.json` already includes a debug server configuration:
