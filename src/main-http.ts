@@ -4,7 +4,13 @@ import { createPinoLogger, createLoggerService } from './bootstrap';
 import { OriginValidationGuard } from './http/guards/origin-validation.guard';
 import { parseCliArgs, displayStartupBanner } from './cli';
 import updateNotifier from 'update-notifier';
-import packageJson from '../package.json';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
+// Read package.json at runtime to avoid affecting TypeScript rootDir detection
+const packageJson = JSON.parse(
+  readFileSync(join(__dirname, '../package.json'), 'utf-8'),
+);
 
 async function bootstrap() {
   // Check for updates (non-blocking, cached)
