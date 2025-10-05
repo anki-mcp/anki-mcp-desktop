@@ -3,8 +3,13 @@ import { AppModule } from './app.module';
 import { createPinoLogger, createLoggerService } from './bootstrap';
 import { OriginValidationGuard } from './http/guards/origin-validation.guard';
 import { parseCliArgs, displayStartupBanner } from './cli';
+import updateNotifier from 'update-notifier';
+import packageJson from '../package.json';
 
 async function bootstrap() {
+  // Check for updates (non-blocking, cached)
+  updateNotifier({ pkg: packageJson }).notify();
+
   const options = parseCliArgs();
 
   // Set environment variables from CLI options
