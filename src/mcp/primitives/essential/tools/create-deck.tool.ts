@@ -17,7 +17,8 @@ export class CreateDeckTool {
   @Tool({
     name: 'create_deck',
     description:
-      'Create a new empty Anki deck. Supports parent::child structure (e.g., "Japanese::Tokyo" creates parent deck "Japanese" and child deck "Tokyo"). Maximum 2 levels of nesting allowed. Will not overwrite existing decks. IMPORTANT: Only create the deck - do NOT automatically add notes unless explicitly requested by the user.',
+      'Create a new empty Anki deck. Supports parent::child structure (e.g., "Japanese::Tokyo" creates parent deck "Japanese" and child deck "Tokyo"). Maximum 2 levels of nesting allowed. Will not overwrite existing decks. ' +
+      'IMPORTANT: This tool ONLY creates an empty deck. DO NOT add cards or notes after creating a deck unless the user EXPLICITLY asks to add them. Wait for user instructions before adding any content.',
     parameters: z.object({
       deck_name: z
         .string()
