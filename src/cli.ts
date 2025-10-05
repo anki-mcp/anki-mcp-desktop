@@ -1,6 +1,7 @@
 import { Command } from 'commander';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import updateNotifier from 'update-notifier';
 
 export interface CliOptions {
   port: number;
@@ -8,15 +9,22 @@ export interface CliOptions {
   ankiConnect: string;
 }
 
-function getVersion(): string {
+function getPackageJson() {
   try {
-    const packageJson = JSON.parse(
+    return JSON.parse(
       readFileSync(join(__dirname, '../package.json'), 'utf-8'),
     );
-    return packageJson.version;
   } catch {
-    return '0.0.0';
+    return { version: '0.0.0', name: 'anki-mcp-http' };
   }
+}
+
+function getVersion(): string {
+  return getPackageJson().version;
+}
+
+export function checkForUpdates(): void {
+  updateNotifier({ pkg: getPackageJson() }).notify();
 }
 
 export function parseCliArgs(): CliOptions {
@@ -61,9 +69,14 @@ Usage with ngrok:
 }
 
 export function displayStartupBanner(options: CliOptions): void {
+  const version = getVersion();
+  const title = `AnkiMCP HTTP Server v${version}`;
+  const padding = Math.floor((64 - title.length) / 2);
+  const paddedTitle = ' '.repeat(padding) + title + ' '.repeat(64 - padding - title.length);
+
   console.log(`
 ╔════════════════════════════════════════════════════════════════╗
-║                    AnkiMCP HTTP Server                         ║
+║${paddedTitle}║
 ╚════════════════════════════════════════════════════════════════╝
 
 🚀 Server running on: http://${options.host}:${options.port}

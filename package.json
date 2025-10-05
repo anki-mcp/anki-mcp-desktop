@@ -36,7 +36,7 @@
     "sync-version": "node scripts/sync-version.js",
     "mcpb:clean": "rm -f *.mcpb",
     "mcpb:bundle": "npm run sync-version && npm run mcpb:clean && npm run build && mcpb pack",
-    "pack:local": "npm run build && npm pack",
+    "pack:local": "rm -f *.tgz && npm run build && npm pack",
     "install:local": "npm install -g ./anki-mcp-http-*.tgz",
     "uninstall:local": "npm uninstall -g ankimcp"
   },

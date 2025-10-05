@@ -2,19 +2,15 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { createPinoLogger, createLoggerService } from './bootstrap';
 import { OriginValidationGuard } from './http/guards/origin-validation.guard';
-import { parseCliArgs, displayStartupBanner } from './cli';
-import updateNotifier from 'update-notifier';
-import { readFileSync } from 'fs';
-import { join } from 'path';
-
-// Read package.json at runtime to avoid affecting TypeScript rootDir detection
-const packageJson = JSON.parse(
-  readFileSync(join(__dirname, '../package.json'), 'utf-8'),
-);
+import {
+  parseCliArgs,
+  displayStartupBanner,
+  checkForUpdates,
+} from './cli';
 
 async function bootstrap() {
   // Check for updates (non-blocking, cached)
-  updateNotifier({ pkg: packageJson }).notify();
+  checkForUpdates();
 
   const options = parseCliArgs();
 
