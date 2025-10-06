@@ -31,6 +31,13 @@ For comprehensive guides, real-world examples, and step-by-step tutorials on usi
 - `updateNoteFields` - Update existing note fields (CSS-aware, supports HTML)
 - `deleteNotes` - Delete notes and their cards
 
+### Media Management
+- `mediaActions` - Manage media files (audio/images)
+  - `storeMediaFile` - Upload media from base64 data, file paths, or URLs
+  - `retrieveMediaFile` - Download media as base64
+  - `getMediaFilesNames` - List media files with optional pattern filtering
+  - `deleteMediaFile` - Remove media files
+
 ### Model/Template Management
 - `modelNames` - List note types
 - `modelFieldNames` - Get fields for a note type
@@ -299,7 +306,7 @@ This command will:
 3. Build the TypeScript project
 4. Package `dist/` and `node_modules/` into an `.mcpb` file
 
-The output file will be named `anki-mcp-desktop-0.3.0.mcpb` (or current version) and can be distributed for one-click installation.
+The output file will be named based on the current version (e.g., `anki-mcp-http-0.5.0.mcpb`) and can be distributed for one-click installation.
 
 #### What Gets Bundled
 
@@ -555,7 +562,7 @@ This project follows [Semantic Versioning](https://semver.org/) with a pre-1.0 d
   - Will be released when the API is stable and tested
   - Breaking changes will require major version bumps (2.0.0, etc.)
 
-**Current Status**: `0.1.0` - Initial beta release. The project is functional but APIs may change based on feedback and testing.
+**Current Status**: `0.5.0` - Active beta development. New features include media file management and experimental unified tool patterns. APIs may change based on feedback and testing.
 
 ## Similar Projects
 

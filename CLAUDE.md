@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is an MCP (Model Context Protocol) server that enables AI assistants to interact with Anki via the AnkiConnect plugin. Built with NestJS and the `@rekog/mcp-nest` library, it exposes Anki functionality as MCP tools, prompts, and resources.
 
-**Version**: 0.4.1 (Beta) - This project is in active development. Breaking changes may occur in 0.x versions.
+**Version**: 0.5.0 (Beta) - This project is in active development. Breaking changes may occur in 0.x versions.
 
 **Important**: Check `.claude-draft/` directory for analysis documents, implementation plans, test plans, and project summaries created during development planning sessions.
 
@@ -113,7 +113,8 @@ MCP primitives (tools, prompts, resources) are organized in feature modules:
   - Review: `sync`, `get-due-cards`, `present-card`, `rate-card`
   - Decks: `list-decks`, `create-deck`
   - Notes: `add-note`, `find-notes`, `notes-info`, `update-note-fields`, `delete-notes`
-  - Models: `model-names`, `model-field-names`, `model-styling`
+  - Media: `mediaActions` (storeMediaFile, retrieveMediaFile, getMediaFilesNames, deleteMediaFile)
+  - Models: `model-names`, `model-field-names`, `model-styling`, `create-model`, `update-model-styling`
 - **Prompts**: `src/mcp/primitives/essential/prompts/*.prompt.ts` - MCP prompts (e.g., `review-session`)
 - **Resources**: `src/mcp/primitives/essential/resources/*.resource.ts` - MCP resources (e.g., `system-info`)
 - **`index.ts`** - Module definition with `McpPrimitivesAnkiEssentialModule.forRoot()`
@@ -172,6 +173,18 @@ Each tool follows this structure:
 4. Returns strongly-typed results
 
 Example: `src/mcp/primitives/essential/tools/sync.tool.ts`
+
+**Dispatcher Pattern (Experimental)**:
+The `mediaActions` tool uses a unified dispatcher pattern to consolidate related operations:
+- Single tool with `action` parameter (enum: storeMediaFile, retrieveMediaFile, getMediaFilesNames, deleteMediaFile)
+- Action implementations in separate files under `mediaActions/actions/*.action.ts`
+- Pure functions that accept params and `AnkiConnectClient`
+- Main tool dispatches to appropriate action based on `action` parameter
+- **Purpose**: Reduce tool approval fatigue (4 operations → 1 approval)
+- **Trade-off**: Less discoverable but fewer user clicks
+- Currently experimental - gathering user feedback before wider adoption
+
+Example: `src/mcp/primitives/essential/tools/mediaActions/mediaActions.tool.ts`
 
 ### Environment Configuration
 
