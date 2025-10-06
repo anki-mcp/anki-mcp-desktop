@@ -2,9 +2,9 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Tool } from '@rekog/mcp-nest';
 import type { Context } from '@rekog/mcp-nest';
 import { z } from 'zod';
-import { AnkiConnectClient } from '../../../clients/anki-connect.client';
-import { createSuccessResponse, createErrorResponse } from '../../../utils/anki.utils';
-import { NoteInfo } from '../../../types/anki.types';
+import { AnkiConnectClient } from '@/mcp/clients/anki-connect.client';
+import { createSuccessResponse, createErrorResponse } from '@/mcp/utils/anki.utils';
+import { NoteInfo } from '@/mcp/types/anki.types';
 
 /**
  * Tool for retrieving detailed information about notes

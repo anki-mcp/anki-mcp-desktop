@@ -2,6 +2,11 @@ import { parseCliArgs, CliOptions } from '../cli';
 import * as fs from 'fs';
 import * as path from 'path';
 
+// Mock update-notifier to avoid ESM issues in Jest
+jest.mock('update-notifier', () => ({
+  default: jest.fn(() => ({ notify: jest.fn() })),
+}));
+
 describe('CLI Module', () => {
   // Store original process.argv
   const originalArgv = process.argv;

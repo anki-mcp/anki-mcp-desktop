@@ -23,7 +23,11 @@
     "strict": true,
     "esModuleInterop": true,
     "isolatedModules": true,
-    "resolvePackageJsonExports": true
+    "resolvePackageJsonExports": true,
+    "paths": {
+      "@/*": ["src/*"],
+      "@test/*": ["test/*"]
+    }
   },
   "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
 }

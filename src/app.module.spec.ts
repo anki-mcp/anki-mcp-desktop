@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from './app.module';
-import { McpTransportType } from '@rekog/mcp-nest';
 import { AnkiConfigService } from './anki-config.service';
 
 describe('AppModule', () => {

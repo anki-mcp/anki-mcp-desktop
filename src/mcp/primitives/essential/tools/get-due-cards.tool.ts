@@ -2,9 +2,9 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Tool } from '@rekog/mcp-nest';
 import type { Context } from '@rekog/mcp-nest';
 import { z } from 'zod';
-import { AnkiConnectClient } from '../../../clients/anki-connect.client';
-import { AnkiCard, SimplifiedCard } from '../../../types/anki.types';
-import { extractCardContent, createSuccessResponse, createErrorResponse } from '../../../utils/anki.utils';
+import { AnkiConnectClient } from '@/mcp/clients/anki-connect.client';
+import { AnkiCard, SimplifiedCard } from '@/mcp/types/anki.types';
+import { extractCardContent, createSuccessResponse, createErrorResponse } from '@/mcp/utils/anki.utils';
 
 /**
  * Tool for retrieving cards that are due for review

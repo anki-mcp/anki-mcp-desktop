@@ -28,6 +28,7 @@ export { FindNotesTool } from './tools/find-notes.tool';
 export { NotesInfoTool } from './tools/notes-info.tool';
 export { UpdateNoteFieldsTool } from './tools/update-note-fields.tool';
 export { DeleteNotesTool } from './tools/delete-notes.tool';
+export { MediaActionsTool } from './tools/mediaActions';
 
 // Prompts
 export { ReviewSessionPrompt } from './prompts/review-session.prompt';
@@ -36,7 +37,7 @@ export { ReviewSessionPrompt } from './prompts/review-session.prompt';
 export { SystemInfoResource } from './resources/system-info.resource';
 
 // Module
-import { Module, DynamicModule, Provider, Type } from '@nestjs/common';
+import { Module, DynamicModule, Provider } from '@nestjs/common';
 import { AnkiConnectClient } from '../../clients/anki-connect.client';
 import { SyncTool } from './tools/sync.tool';
 import { ListDecksTool } from './tools/list-decks.tool';
@@ -54,6 +55,7 @@ import { FindNotesTool } from './tools/find-notes.tool';
 import { NotesInfoTool } from './tools/notes-info.tool';
 import { UpdateNoteFieldsTool } from './tools/update-note-fields.tool';
 import { DeleteNotesTool } from './tools/delete-notes.tool';
+import { MediaActionsTool } from './tools/mediaActions';
 import { ReviewSessionPrompt } from './prompts/review-session.prompt';
 import { SystemInfoResource } from './resources/system-info.resource';
 
@@ -77,6 +79,7 @@ const MCP_PRIMITIVES = [
   NotesInfoTool,
   UpdateNoteFieldsTool,
   DeleteNotesTool,
+  MediaActionsTool,
   // Prompts
   ReviewSessionPrompt,
   // Resources

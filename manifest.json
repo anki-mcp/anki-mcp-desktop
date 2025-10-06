@@ -122,6 +122,10 @@
     {
       "name": "guiUndo",
       "description": "Undo the last action in Anki. For note editing/creation workflows only"
+    },
+    {
+      "name": "mediaActions",
+      "description": "Manage Anki media files (audio/images). Actions: storeMediaFile, retrieveMediaFile, getMediaFilesNames, deleteMediaFile. Perfect for workflows like ElevenLabs TTS → Anki audio flashcards"
     }
   ],
   "prompts": [

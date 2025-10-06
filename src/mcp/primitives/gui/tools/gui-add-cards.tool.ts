@@ -2,9 +2,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Tool } from '@rekog/mcp-nest';
 import type { Context } from '@rekog/mcp-nest';
 import { z } from 'zod';
-import { AnkiConnectClient } from '../../../clients/anki-connect.client';
-import { GuiAddCardsParams } from '../../../types/anki.types';
-import { createSuccessResponse, createErrorResponse } from '../../../utils/anki.utils';
+import { AnkiConnectClient } from '@/mcp/clients/anki-connect.client';
+import { createSuccessResponse, createErrorResponse } from '@/mcp/utils/anki.utils';
 
 /**
  * Tool for opening the Add Cards dialog with preset note details
