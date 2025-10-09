@@ -562,7 +562,7 @@ This project follows [Semantic Versioning](https://semver.org/) with a pre-1.0 d
   - Will be released when the API is stable and tested
   - Breaking changes will require major version bumps (2.0.0, etc.)
 
-**Current Status**: `0.5.0` - Active beta development. New features include media file management and experimental unified tool patterns. APIs may change based on feedback and testing.
+**Current Status**: `0.6.0` - Active beta development. New features include the `twenty_rules` prompt for evidence-based flashcard creation, media file management, and improved prompt system. APIs may change based on feedback and testing.
 
 ## Similar Projects
 
