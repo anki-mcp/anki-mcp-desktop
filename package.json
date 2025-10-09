@@ -38,7 +38,7 @@
     "mcpb:bundle": "npm run sync-version && npm run mcpb:clean && npm run build && mcpb pack . \"$npm_package_name-$npm_package_version.mcpb\"",
     "pack:local": "rm -f *.tgz && npm run build && npm pack",
     "install:local": "npm install -g ./anki-mcp-http-*.tgz",
-    "uninstall:local": "npm uninstall -g ankimcp"
+    "uninstall:local": "npm uninstall -g anki-mcp-http"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.18.2",
