@@ -32,6 +32,7 @@ export { MediaActionsTool } from './tools/mediaActions';
 
 // Prompts
 export { ReviewSessionPrompt } from './prompts/review-session.prompt';
+export { TwentyRulesPrompt } from './prompts/twenty-rules.prompt';
 
 // Resources
 export { SystemInfoResource } from './resources/system-info.resource';
@@ -57,6 +58,7 @@ import { UpdateNoteFieldsTool } from './tools/update-note-fields.tool';
 import { DeleteNotesTool } from './tools/delete-notes.tool';
 import { MediaActionsTool } from './tools/mediaActions';
 import { ReviewSessionPrompt } from './prompts/review-session.prompt';
+import { TwentyRulesPrompt } from './prompts/twenty-rules.prompt';
 import { SystemInfoResource } from './resources/system-info.resource';
 
 const MCP_PRIMITIVES = [
@@ -82,6 +84,7 @@ const MCP_PRIMITIVES = [
   MediaActionsTool,
   // Prompts
   ReviewSessionPrompt,
+  TwentyRulesPrompt,
   // Resources
   SystemInfoResource,
 ];

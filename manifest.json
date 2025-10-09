@@ -2,7 +2,7 @@
   "manifest_version": "0.2",
   "name": "anki-mcp-desktop",
   "display_name": "Anki MCP Server",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Model Context Protocol server for Anki spaced repetition flashcard application",
   "long_description": "Transform your Anki experience with natural language interaction - like having a private tutor. This MCP server enables AI assistants to interact with Anki, allowing them to explain concepts, make learning more engaging, provide context, and adapt to your learning style. Features include review sessions, deck management, note creation and editing, and more.\n\nRequires Anki with the AnkiConnect plugin installed.",
   "author": {
@@ -128,18 +128,7 @@
       "description": "Manage Anki media files (audio/images). Actions: storeMediaFile, retrieveMediaFile, getMediaFilesNames, deleteMediaFile. Perfect for workflows like ElevenLabs TTS → Anki audio flashcards"
     }
   ],
-  "prompts": [
-    {
-      "name": "anki_guidelines",
-      "description": "General guidelines for using Anki tools responsibly",
-      "text": "When using Anki tools, follow these principles:\n\n## CRITICAL: User Consent and Explicit Permission\n\n**NEVER take actions without explicit user permission:**\n- Do NOT automatically create notes after creating a deck\n- Do NOT automatically populate decks with content\n- Do NOT modify, update, or delete existing notes unless explicitly asked\n- Do NOT make bulk changes without confirmation\n\n**Always ask before:**\n- Creating multiple notes at once\n- Modifying existing content\n- Deleting anything\n- Making any changes that affect the user's study data\n\n## Best Practices\n\n1. **Do exactly what the user asks** - nothing more, nothing less\n2. **Confirm before bulk operations** - Ask \"Should I create these 10 notes?\" not \"I'll create these 10 notes\"\n3. **One step at a time** - Don't chain operations without permission\n4. **Respect user workflow** - Let them guide the process\n\n## Example Scenarios\n\n❌ **BAD**: User: \"Create a Spanish deck\" → You: *creates deck AND starts adding notes*\n✅ **GOOD**: User: \"Create a Spanish deck\" → You: *creates deck only, confirms completion*\n\n❌ **BAD**: User: \"Find my Spanish notes\" → You: *finds them AND suggests updates*\n✅ **GOOD**: User: \"Find my Spanish notes\" → You: *shows results, waits for next instruction*"
-    },
-    {
-      "name": "anki_review",
-      "description": "Guidelines for conducting Anki spaced repetition review sessions",
-      "text": "You are helping a user review Anki flashcards using spaced repetition. Follow this workflow:\n\n## CRITICAL: Synchronization Requirements\n\n### At Session Start:\n1. **ALWAYS sync first** using the sync tool before getting any cards\n2. Remind user: \"I'll sync with AnkiWeb first to ensure we have your latest progress...\"\n3. Only proceed with get_due_cards after sync completes\n\n### At Session End:\n1. When user indicates they're done (e.g., \"that's all\", \"I'm done\", \"goodbye\"), ALWAYS sync\n2. Say: \"Great session! Let me sync your progress to AnkiWeb...\"\n3. Confirm sync completion before ending\n\n## Review Workflow\n\n1. **Sync First**: Use sync tool to get latest data from AnkiWeb\n2. **Ask About Deck Selection**: Ask which deck to review, use list_decks if needed\n3. **Present the Question**: Show the front of the card clearly\n4. **Wait for User's Answer**: Let them attempt to answer\n5. **Show the Answer**: Reveal the back of the card\n6. **Evaluate Performance**: Assess how well they answered\n7. **Suggest a Rating**: Based on their response, suggest 1 (Again), 2 (Hard), 3 (Good), or 4 (Easy)\n8. **IMPORTANT - Wait for Confirmation**: Present your suggested rating and ask if they agree\n9. **Submit Rating**: Only use rate_card tool AFTER user confirms or provides their rating\n10. **Continue or End**: After rating, continue with next card or end session when user is done\n11. **End Session**: When user is done, ALWAYS sync before saying goodbye\n\n## Key Principles\n- Never auto-rate without user input\n- Default to suggesting Good (3) when performance is solid\n- Be encouraging but honest in assessments\n- Accept user's self-assessment over your suggestion\n- Keep feedback concise and actionable"
-    }
-  ],
+  "prompts_generated": true,
   "server": {
     "type": "node",
     "entry_point": "dist/main-stdio.js",
