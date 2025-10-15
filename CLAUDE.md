@@ -35,25 +35,33 @@ npm run format          # Format code with Prettier
 ```bash
 npm test                           # Run all tests
 npm run test:unit                  # Unit tests only (*.spec.ts files)
-npm run test:tools                 # Tool-specific tests
+npm run test:tools                 # Essential tool tests in __tests__/
 npm run test:workflows             # Workflow integration tests in test/workflows
 npm run test:cov                   # Tests with coverage report
 npm run test:watch                 # Tests in watch mode
 npm run test:debug                 # Tests with Node debugger
 npm run test:ci                    # CI mode: silent with coverage
-npm run test:single                # Example: run single test file (modify path in script)
+npm run test:single                # Example: modify path in package.json script to run a specific test
+
+# Run a single test file (recommended):
+npm test -- path/to/test.spec.ts  # Example: npm test -- src/mcp/primitives/gui/tools/__tests__/gui-browse.tool.spec.ts
 ```
 
 Test coverage thresholds are enforced at 70% for branches, functions, lines, and statements.
 
 ### Debugging
 ```bash
+# Development with debugger attached
+npm run start:debug:stdio          # STDIO mode with debugger on port 9229
+npm run start:debug:http           # HTTP mode with debugger on port 9229
+
+# MCP Inspector (interactive testing UI)
 npm run inspector:stdio            # Run MCP inspector for STDIO mode
 npm run inspector:stdio:debug      # Run STDIO inspector with debugger on port 9229
 npm run inspector:http             # Run MCP inspector for HTTP mode
 ```
 
-After running `inspector:stdio:debug`, attach your IDE debugger to port 9229. The server pauses at startup waiting for debugger attachment.
+After running `inspector:stdio:debug` or `start:debug:*`, attach your IDE debugger to port 9229. The inspector version pauses at startup waiting for debugger attachment.
 
 ## Architecture
 
@@ -63,12 +71,12 @@ The application follows a modular NestJS architecture with MCP primitives organi
 
 - **`src/main-stdio.ts`** - STDIO mode entry point
 - **`src/main-http.ts`** - HTTP mode entry point
-- **`src/cli.ts`** - CLI argument parsing with commander (used by main-http.ts and bin/ankimcp.js)
+- **`src/cli.ts`** - CLI argument parsing with commander (--port, --host, --anki-connect flags)
 - **`src/bootstrap.ts`** - Shared utilities for logger creation
 - **`src/app.module.ts`** - Root module with forStdio() and forHttp() factory methods
 - **`src/anki-config.service.ts`** - Configuration service implementing `IAnkiConfig`
 - **`src/http/guards/origin-validation.guard.ts`** - Origin validation for HTTP mode security
-- **`bin/ankimcp.js`** - CLI wrapper that invokes main-http.js (used by npm global install)
+- **`bin/ankimcp.js`** - CLI wrapper for npm global install (runs main-http.js)
 
 ### Transport Modes
 
@@ -219,13 +227,18 @@ These work in both source code and tests via Jest's `moduleNameMapper`.
    - "IMPORTANT: Only use when user explicitly requests..."
    - "This tool is for note editing/creation workflows, NOT for review sessions"
 6. Create test file: `src/mcp/primitives/gui/tools/__tests__/your-gui-tool.tool.spec.ts`
-7. Run `npm run test:tools` to verify
+7. Run `npm test -- src/mcp/primitives/gui/tools/__tests__/your-gui-tool.tool.spec.ts` to verify
 
 ### Adding a New MCP Prompt
 
+**Essential Prompts** (general use):
 1. Create `src/mcp/primitives/essential/prompts/your-prompt.prompt.ts`
-2. Follow the same export/registration pattern as tools
-3. Prompts define reusable conversation starters for AI assistants
+2. Export it from `src/mcp/primitives/essential/index.ts`
+3. Add to `MCP_PRIMITIVES` array
+4. Prompts define reusable conversation starters for AI assistants
+
+**GUI Prompts** (if needed):
+- Follow the same pattern but in `src/mcp/primitives/gui/prompts/`
 
 ### Testing Best Practices
 
