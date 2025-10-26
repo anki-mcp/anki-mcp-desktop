@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is an MCP (Model Context Protocol) server that enables AI assistants to interact with Anki via the AnkiConnect plugin. Built with NestJS and the `@rekog/mcp-nest` library, it exposes Anki functionality as MCP tools, prompts, and resources.
 
-**Version**: 0.6.0 (Beta) - This project is in active development. Breaking changes may occur in 0.x versions.
+**Version**: 0.7.0 (Beta) - This project is in active development. Breaking changes may occur in 0.x versions.
 
 **Important**: Check `.claude-draft/` directory for analysis documents, implementation plans, test plans, and project summaries created during development planning sessions.
 
@@ -76,7 +76,7 @@ The application follows a modular NestJS architecture with MCP primitives organi
 - **`src/app.module.ts`** - Root module with forStdio() and forHttp() factory methods
 - **`src/anki-config.service.ts`** - Configuration service implementing `IAnkiConfig`
 - **`src/http/guards/origin-validation.guard.ts`** - Origin validation for HTTP mode security
-- **`bin/ankimcp.js`** - CLI wrapper for npm global install (runs main-http.js)
+- **`bin/ankimcp.js`** - CLI wrapper for npm global install (routes to main-http.js or main-stdio.js based on --stdio flag)
 
 ### Transport Modes
 
@@ -98,6 +98,7 @@ The server supports two MCP transport modes via **separate entry points**:
 - MCP endpoint at root: `http://127.0.0.1:3000/`
 - Run: `npm run start:prod:http` or `node dist/main-http.js`
 - CLI options: `--port`, `--host`, `--anki-connect` (parsed by `src/cli.ts` using commander)
+- NPM package: `npx anki-mcp-http` (HTTP mode) or `npx anki-mcp-http --stdio` (STDIO mode)
 
 **Key Implementation Details**:
 - Both entry points compile together in single build (`npm run build`)
@@ -262,11 +263,20 @@ Test the npm package locally before publishing:
 ```bash
 npm run pack:local         # Builds and creates anki-mcp-http-*.tgz
 npm run install:local      # Installs from ./anki-mcp-http-*.tgz
-ankimcp                    # Test the global command
+
+# Test both modes:
+ankimcp                    # Test HTTP mode (default)
+ankimcp --stdio            # Test STDIO mode (for MCP clients)
+
 npm run uninstall:local    # Removes global installation
 ```
 
 This simulates the full user experience of installing via `npm install -g ankimcp` by creating and installing from a local `.tgz` package.
+
+**Testing STDIO mode with MCP clients:**
+- **Cursor IDE**: Configure `~/.cursor/mcp.json` with `npx anki-mcp-http --stdio`
+- **Cline**: Configure via settings UI with `npx anki-mcp-http --stdio`
+- **Zed Editor**: Install as MCP extension (STDIO only)
 
 ### MCPB Bundle Distribution
 

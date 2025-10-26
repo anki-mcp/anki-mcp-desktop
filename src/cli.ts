@@ -32,10 +32,14 @@ export function parseCliArgs(): CliOptions {
 
   program
     .name('ankimcp')
-    .description('AnkiMCP HTTP Server - Model Context Protocol server for Anki')
+    .description('AnkiMCP Server - Model Context Protocol server for Anki')
     .version(getVersion())
-    .option('-p, --port <number>', 'Port to listen on', '3000')
-    .option('-h, --host <address>', 'Host to bind to', '127.0.0.1')
+    .option(
+      '--stdio',
+      'Run in STDIO mode (for MCP clients like Cursor, Cline, Zed)',
+    )
+    .option('-p, --port <number>', 'Port to listen on (HTTP mode)', '3000')
+    .option('-h, --host <address>', 'Host to bind to (HTTP mode)', '127.0.0.1')
     .option(
       '-a, --anki-connect <url>',
       'AnkiConnect URL',
@@ -44,13 +48,30 @@ export function parseCliArgs(): CliOptions {
     .addHelpText(
       'after',
       `
-Examples:
+Transport Modes:
+  HTTP Mode (default):  For web-based AI assistants (ChatGPT, Claude.ai)
+  STDIO Mode:           For desktop MCP clients (Cursor, Cline, Zed)
+
+Examples - HTTP Mode:
   $ ankimcp                                    # Use defaults
   $ ankimcp --port 8080                        # Custom port
   $ ankimcp --host 0.0.0.0 --port 3000         # Listen on all interfaces
   $ ankimcp --anki-connect http://localhost:8765
 
-Usage with ngrok:
+Examples - STDIO Mode:
+  $ ankimcp --stdio                            # For use with npx in MCP clients
+
+  # MCP client configuration (Cursor, Cline, Zed, etc.):
+  {
+    "mcpServers": {
+      "anki-mcp": {
+        "command": "npx",
+        "args": ["-y", "anki-mcp-http", "--stdio"]
+      }
+    }
+  }
+
+Usage with ngrok (HTTP mode only):
   1. Start ankimcp in one terminal
   2. In another terminal: ngrok http 3000
   3. Share the ngrok URL with your AI assistant
