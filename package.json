@@ -1,13 +1,14 @@
 {
   "name": "anki-mcp-http",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Model Context Protocol server for Anki - enables AI assistants to interact with your Anki flashcards",
   "author": "Anatoly Tarnavsky",
   "private": false,
   "license": "MIT",
   "main": "dist/main-http.js",
   "bin": {
-    "ankimcp": "bin/ankimcp.js"
+    "ankimcp": "bin/ankimcp.js",
+    "anki-mcp-http": "bin/ankimcp.js"
   },
   "scripts": {
     "build": "nest build",
