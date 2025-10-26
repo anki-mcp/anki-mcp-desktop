@@ -78,9 +78,9 @@ Want to use Anki with MCP clients like **Cursor IDE**, **Cline**, or **Zed Edito
 - [Zed Editor](https://zed.dev/) - Fast, modern code editor
 - Other MCP clients that support STDIO transport
 
-**Basic Configuration:**
+**Configuration - Choose one method:**
 
-Add this to your MCP client's configuration file:
+**Method 1: Using npx (recommended - no installation needed)**
 
 ```json
 {
@@ -88,6 +88,28 @@ Add this to your MCP client's configuration file:
     "anki-mcp": {
       "command": "npx",
       "args": ["-y", "anki-mcp-http", "--stdio"],
+      "env": {
+        "ANKI_CONNECT_URL": "http://localhost:8765"
+      }
+    }
+  }
+}
+```
+
+**Method 2: Using global installation**
+
+First, install globally:
+```bash
+npm install -g anki-mcp-http
+```
+
+Then configure:
+```json
+{
+  "mcpServers": {
+    "anki-mcp": {
+      "command": "anki-mcp-http",
+      "args": ["--stdio"],
       "env": {
         "ANKI_CONNECT_URL": "http://localhost:8765"
       }
@@ -113,17 +135,36 @@ Want to use Anki with ChatGPT or Claude.ai in your browser? This mode lets you c
 3. You share that URL with ChatGPT or Claude.ai
 4. Now the AI can talk to your Anki through the internet!
 
-**Setup:**
+**Setup - Choose one method:**
+
+**Method 1: Using npx (recommended - no installation needed)**
 
 ```bash
-# Quick start (using npx - no installation needed)
+# Quick start
 npx anki-mcp-http
 
 # With custom options
 npx anki-mcp-http --port 8080 --host 0.0.0.0
 npx anki-mcp-http --anki-connect http://localhost:8765
+```
 
-# Or install from source
+**Method 2: Using global installation**
+
+```bash
+# Install once
+npm install -g anki-mcp-http
+
+# Run the server
+anki-mcp-http
+
+# With custom options
+anki-mcp-http --port 8080 --host 0.0.0.0
+anki-mcp-http --anki-connect http://localhost:8765
+```
+
+**Method 3: Install from source (for development)**
+
+```bash
 npm install
 npm run build
 npm run start:prod:http
@@ -132,7 +173,7 @@ npm run start:prod:http
 **CLI Options:**
 
 ```bash
-ankimcp [options]
+anki-mcp-http [options]
 
 Options:
   --stdio                        Run in STDIO mode (for MCP clients)
@@ -141,13 +182,16 @@ Options:
   -a, --anki-connect <url>       AnkiConnect URL (default: http://localhost:8765)
   --help                         Show help message
 
-Examples - HTTP Mode:
-  ankimcp                        # Use all defaults (HTTP mode)
-  ankimcp --port 8080            # Custom port
-  ankimcp --host 0.0.0.0         # Listen on all network interfaces
+Usage with npx (no installation needed):
+  npx anki-mcp-http                        # HTTP mode
+  npx anki-mcp-http --port 8080            # Custom port
+  npx anki-mcp-http --stdio                # STDIO mode
 
-Examples - STDIO Mode:
-  ankimcp --stdio                # For use with npx in MCP clients
+Usage with global installation:
+  npm install -g anki-mcp-http             # Install once
+  anki-mcp-http                            # HTTP mode
+  anki-mcp-http --port 8080                # Custom port
+  anki-mcp-http --stdio                    # STDIO mode
 ```
 
 **Using with ngrok:**

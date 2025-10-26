@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is an MCP (Model Context Protocol) server that enables AI assistants to interact with Anki via the AnkiConnect plugin. Built with NestJS and the `@rekog/mcp-nest` library, it exposes Anki functionality as MCP tools, prompts, and resources.
 
-**Version**: 0.7.0 (Beta) - This project is in active development. Breaking changes may occur in 0.x versions.
+**Version**: 0.7.1 (Beta) - This project is in active development. Breaking changes may occur in 0.x versions.
 
 **Important**: Check `.claude-draft/` directory for analysis documents, implementation plans, test plans, and project summaries created during development planning sessions.
 
@@ -262,16 +262,20 @@ Test the npm package locally before publishing:
 
 ```bash
 npm run pack:local         # Builds and creates anki-mcp-http-*.tgz
-npm run install:local      # Installs from ./anki-mcp-http-*.tgz
+npm run install:local      # Installs from ./anki-mcp-http-*.tgz globally
 
-# Test both modes:
-ankimcp                    # Test HTTP mode (default)
-ankimcp --stdio            # Test STDIO mode (for MCP clients)
+# Test both modes with global install:
+anki-mcp-http              # Test HTTP mode (default)
+anki-mcp-http --stdio      # Test STDIO mode (for MCP clients)
+
+# Or test with npx (simulates user experience):
+npx ./anki-mcp-http-*.tgz                # Test HTTP mode via npx
+npx ./anki-mcp-http-*.tgz --stdio        # Test STDIO mode via npx
 
 npm run uninstall:local    # Removes global installation
 ```
 
-This simulates the full user experience of installing via `npm install -g ankimcp` by creating and installing from a local `.tgz` package.
+This simulates the full user experience of installing via `npm install -g anki-mcp-http` by creating and installing from a local `.tgz` package.
 
 **Testing STDIO mode with MCP clients:**
 - **Cursor IDE**: Configure `~/.cursor/mcp.json` with `npx anki-mcp-http --stdio`
