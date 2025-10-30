@@ -6,9 +6,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is an MCP (Model Context Protocol) server that enables AI assistants to interact with Anki via the AnkiConnect plugin. Built with NestJS and the `@rekog/mcp-nest` library, it exposes Anki functionality as MCP tools, prompts, and resources.
 
-**Version**: 0.7.1 (Beta) - This project is in active development. Breaking changes may occur in 0.x versions.
+**Version**: 0.8.0 (Beta) - This project is in active development. Breaking changes may occur in 0.x versions.
 
-**Important**: Check `.claude-draft/` directory for analysis documents, implementation plans, test plans, and project summaries created during development planning sessions.
+**Important**: Check `.claude-draft/` directory for analysis documents, implementation plans, test plans, and project summaries created during development planning sessions. See `.claude-draft/ngrok-integration.md` for detailed ngrok implementation documentation.
 
 ## Essential Commands
 
@@ -97,8 +97,9 @@ The server supports two MCP transport modes via **separate entry points**:
 - Default: `http://127.0.0.1:3000` (localhost-only)
 - MCP endpoint at root: `http://127.0.0.1:3000/`
 - Run: `npm run start:prod:http` or `node dist/main-http.js`
-- CLI options: `--port`, `--host`, `--anki-connect` (parsed by `src/cli.ts` using commander)
+- CLI options: `--port`, `--host`, `--anki-connect`, `--ngrok` (parsed by `src/cli.ts` using commander)
 - NPM package: `npx anki-mcp-http` (HTTP mode) or `npx anki-mcp-http --stdio` (STDIO mode)
+- Ngrok integration: `npx anki-mcp-http --ngrok` (requires global ngrok installation)
 
 **Key Implementation Details**:
 - Both entry points compile together in single build (`npm run build`)
@@ -144,6 +145,11 @@ MCP primitives (tools, prompts, resources) are organized in feature modules:
 - **`src/mcp/types/anki.types.ts`** - TypeScript types for AnkiConnect API
 - **`src/mcp/config/anki-config.interface.ts`** - Configuration interface (`IAnkiConfig`, `ANKI_CONFIG` token)
 - **`src/mcp/utils/anki.utils.ts`** - Shared utility functions
+- **`src/services/ngrok.service.ts`** - Ngrok tunnel management (HTTP mode only)
+  - Spawns global ngrok binary as child process
+  - Extracts public URL from ngrok's local API (port 4040)
+  - Handles cleanup on process exit (SIGINT, SIGTERM, uncaughtException)
+  - See `.claude-draft/ngrok-integration.md` for implementation details
 
 ### Module System
 
@@ -256,6 +262,46 @@ These work in both source code and tests via Jest's `moduleNameMapper`.
 - Use `npm run inspector:stdio:debug` + IDE debugger for step-through debugging
 - MCP Inspector provides a web UI for testing tools interactively
 
+### Ngrok Integration (HTTP Mode)
+
+The server supports integrated ngrok tunneling via the `--ngrok` flag:
+
+```bash
+# Start with ngrok tunnel
+anki-mcp-http --ngrok
+
+# With custom port
+anki-mcp-http --port 8080 --ngrok
+
+# Or with npx
+npx anki-mcp-http --ngrok
+```
+
+**Prerequisites:**
+1. Install ngrok globally: `npm install -g ngrok`
+2. Setup auth token: `ngrok config add-authtoken <your-token>`
+3. Get auth token from: https://dashboard.ngrok.com/get-started/your-authtoken
+
+**How It Works:**
+- Spawns global ngrok binary as child process (shell execution)
+- Extracts public URL from ngrok's local API (http://localhost:4040/api/tunnels)
+- Displays tunnel URL in startup banner
+- Handles cleanup on Ctrl+C (SIGINT, SIGTERM, exit signals)
+- Gracefully degrades if ngrok fails (server still runs locally)
+
+**Implementation Details:**
+- Service: `src/services/ngrok.service.ts`
+- Integration: `src/main-http.ts` bootstrap
+- CLI: `src/cli.ts` (--ngrok flag parsing)
+- Full documentation: `.claude-draft/ngrok-integration.md`
+
+**Legal/License:**
+- Uses shell execution (not embedded package)
+- No ngrok code distribution
+- Users manage their own ngrok accounts
+- Safe for commercial use
+- Future: Will add `tunnel.ankimcp.io` as alternative
+
 ### NPM Package Testing (Local)
 
 Test the npm package locally before publishing:
@@ -267,10 +313,12 @@ npm run install:local      # Installs from ./anki-mcp-http-*.tgz globally
 # Test both modes with global install:
 anki-mcp-http              # Test HTTP mode (default)
 anki-mcp-http --stdio      # Test STDIO mode (for MCP clients)
+anki-mcp-http --ngrok      # Test HTTP mode with ngrok tunnel
 
 # Or test with npx (simulates user experience):
 npx ./anki-mcp-http-*.tgz                # Test HTTP mode via npx
 npx ./anki-mcp-http-*.tgz --stdio        # Test STDIO mode via npx
+npx ./anki-mcp-http-*.tgz --ngrok        # Test ngrok integration via npx
 
 npm run uninstall:local    # Removes global installation
 ```

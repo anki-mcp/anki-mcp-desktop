@@ -7,6 +7,7 @@ export interface CliOptions {
   port: number;
   host: string;
   ankiConnect: string;
+  ngrok: boolean;
 }
 
 function getPackageJson() {
@@ -45,6 +46,10 @@ export function parseCliArgs(): CliOptions {
       'AnkiConnect URL',
       'http://localhost:8765',
     )
+    .option(
+      '--ngrok',
+      'Start ngrok tunnel (requires global ngrok installation)',
+    )
     .addHelpText(
       'after',
       `
@@ -53,13 +58,18 @@ Transport Modes:
   STDIO Mode:           For desktop MCP clients (Cursor, Cline, Zed)
 
 Examples - HTTP Mode:
-  $ ankimcp                                    # Use defaults
-  $ ankimcp --port 8080                        # Custom port
-  $ ankimcp --host 0.0.0.0 --port 3000         # Listen on all interfaces
-  $ ankimcp --anki-connect http://localhost:8765
+  $ anki-mcp-http                                    # Use defaults
+  $ anki-mcp-http --port 8080                        # Custom port
+  $ anki-mcp-http --host 0.0.0.0 --port 3000         # Listen on all interfaces
+  $ anki-mcp-http --anki-connect http://localhost:8765
+
+Examples - HTTP Mode with Ngrok:
+  $ anki-mcp-http --ngrok                            # Start with ngrok tunnel
+  $ anki-mcp-http --port 8080 --ngrok                # Custom port + ngrok
+  $ anki-mcp-http --host 0.0.0.0 --ngrok             # Public host + ngrok
 
 Examples - STDIO Mode:
-  $ ankimcp --stdio                            # For use with npx in MCP clients
+  $ anki-mcp-http --stdio                            # For use with npx in MCP clients
 
   # MCP client configuration (Cursor, Cline, Zed, etc.):
   {
@@ -71,10 +81,11 @@ Examples - STDIO Mode:
     }
   }
 
-Usage with ngrok (HTTP mode only):
-  1. Start ankimcp in one terminal
-  2. In another terminal: ngrok http 3000
-  3. Share the ngrok URL with your AI assistant
+Ngrok Setup (one-time):
+  1. Install: npm install -g ngrok
+  2. Get auth token from: https://dashboard.ngrok.com/get-started/your-authtoken
+  3. Setup: ngrok config add-authtoken <your-token>
+  4. Run: anki-mcp-http --ngrok
 `,
     );
 
@@ -86,10 +97,14 @@ Usage with ngrok (HTTP mode only):
     port: parseInt(options.port.toString(), 10),
     host: options.host,
     ankiConnect: options.ankiConnect,
+    ngrok: options.ngrok || false,
   };
 }
 
-export function displayStartupBanner(options: CliOptions): void {
+export function displayStartupBanner(
+  options: CliOptions,
+  ngrokUrl?: string,
+): void {
   const version = getVersion();
   const title = `AnkiMCP HTTP Server v${version}`;
   const padding = Math.floor((64 - title.length) / 2);
@@ -101,18 +116,26 @@ export function displayStartupBanner(options: CliOptions): void {
 ╚════════════════════════════════════════════════════════════════╝
 
 🚀 Server running on: http://${options.host}:${options.port}
-🔌 AnkiConnect URL:   ${options.ankiConnect}
+🔌 AnkiConnect URL:   ${options.ankiConnect}${ngrokUrl ? `\n🌐 Ngrok tunnel:      ${ngrokUrl}` : ''}
 
 Configuration:
   • Port:               ${options.port} (override: --port 8080)
   • Host:               ${options.host} (override: --host 0.0.0.0)
   • AnkiConnect:        ${options.ankiConnect}
-                        (override: --anki-connect http://localhost:8765)
-
+                        (override: --anki-connect http://localhost:8765)${ngrokUrl ? `\n  • Ngrok tunnel:       ${ngrokUrl}\n  • Ngrok dashboard:    http://localhost:4040` : ''}
+${
+    !ngrokUrl
+      ? `
 Usage with ngrok:
-  1. In another terminal: ngrok http ${options.port}
-  2. Share the ngrok URL with your AI assistant
-
-Run 'ankimcp --help' for more options.
+  1. Install: npm install -g ngrok
+  2. Setup: ngrok config add-authtoken <your-token>
+  3. Run: anki-mcp-http --ngrok
+`
+      : `
+Share this URL with your AI assistant:
+  ${ngrokUrl}
+`
+  }
+Run 'anki-mcp-http --help' for more options.
 `);
 }

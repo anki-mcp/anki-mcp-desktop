@@ -7,6 +7,7 @@ import {
   displayStartupBanner,
   checkForUpdates,
 } from './cli';
+import { NgrokService } from './services/ngrok.service';
 
 async function bootstrap() {
   // Check for updates (non-blocking, cached)
@@ -34,8 +35,22 @@ async function bootstrap() {
 
   await app.listen(options.port, options.host);
 
+  // Start ngrok if requested
+  let ngrokUrl: string | undefined;
+  if (options.ngrok) {
+    try {
+      const ngrokService = new NgrokService();
+      const tunnelInfo = await ngrokService.start(options.port);
+      ngrokUrl = tunnelInfo.publicUrl;
+    } catch (err) {
+      console.error('\n❌ Failed to start ngrok:');
+      console.error(err instanceof Error ? err.message : String(err));
+      console.error('\nServer is still running locally without tunnel.\n');
+    }
+  }
+
   // Show startup information
-  displayStartupBanner(options);
+  displayStartupBanner(options, ngrokUrl);
 }
 
 bootstrap().catch((err) => {

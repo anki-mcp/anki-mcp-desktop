@@ -131,9 +131,11 @@ Want to use Anki with ChatGPT or Claude.ai in your browser? This mode lets you c
 
 **How it works (simple explanation):**
 1. You run a small server on your computer (where Anki is installed)
-2. You use [ngrok](https://ngrok.com) to create a public URL that forwards to your local server
-3. You share that URL with ChatGPT or Claude.ai
+2. Use the built-in `--ngrok` flag to automatically create a public tunnel URL
+3. Share that URL with ChatGPT or Claude.ai
 4. Now the AI can talk to your Anki through the internet!
+
+**New in v0.8.0:** Integrated ngrok support with the `--ngrok` flag - no need to run ngrok separately!
 
 **Setup - Choose one method:**
 
@@ -142,6 +144,9 @@ Want to use Anki with ChatGPT or Claude.ai in your browser? This mode lets you c
 ```bash
 # Quick start
 npx anki-mcp-http
+
+# With ngrok tunnel (recommended for web-based AI)
+npx anki-mcp-http --ngrok
 
 # With custom options
 npx anki-mcp-http --port 8080 --host 0.0.0.0
@@ -156,6 +161,9 @@ npm install -g anki-mcp-http
 
 # Run the server
 anki-mcp-http
+
+# With ngrok tunnel (recommended for web-based AI)
+anki-mcp-http --ngrok
 
 # With custom options
 anki-mcp-http --port 8080 --host 0.0.0.0
@@ -180,32 +188,58 @@ Options:
   -p, --port <port>              Port to listen on (HTTP mode, default: 3000)
   -h, --host <host>              Host to bind to (HTTP mode, default: 127.0.0.1)
   -a, --anki-connect <url>       AnkiConnect URL (default: http://localhost:8765)
+  --ngrok                        Start ngrok tunnel (requires global ngrok installation)
   --help                         Show help message
 
 Usage with npx (no installation needed):
   npx anki-mcp-http                        # HTTP mode
   npx anki-mcp-http --port 8080            # Custom port
   npx anki-mcp-http --stdio                # STDIO mode
+  npx anki-mcp-http --ngrok                # HTTP mode with ngrok tunnel
 
 Usage with global installation:
   npm install -g anki-mcp-http             # Install once
   anki-mcp-http                            # HTTP mode
   anki-mcp-http --port 8080                # Custom port
   anki-mcp-http --stdio                    # STDIO mode
+  anki-mcp-http --ngrok                    # HTTP mode with ngrok tunnel
 ```
 
 **Using with ngrok:**
 
-```bash
-# 1. Start ankimcp
-npx anki-mcp-http
+**Method 1: Integrated (Recommended - One Command)**
 
-# 2. In another terminal, create a tunnel
+```bash
+# One-time setup (if you haven't already):
+npm install -g ngrok
+ngrok config add-authtoken <your-token>  # Get token from https://dashboard.ngrok.com
+
+# Start server with ngrok tunnel in one command:
+anki-mcp-http --ngrok
+
+# The tunnel URL will be displayed in the startup banner
+# Example output:
+# 🌐 Ngrok tunnel: https://abc123.ngrok-free.app
+```
+
+**Method 2: Manual (Two Terminals)**
+
+```bash
+# Terminal 1: Start the server
+anki-mcp-http
+
+# Terminal 2: Create tunnel
 ngrok http 3000
 
-# 3. Copy the ngrok URL (looks like: https://abc123.ngrok.io)
-# 4. Share this URL with your AI assistant
+# Copy the ngrok URL (looks like: https://abc123.ngrok-free.app)
+# Share this URL with your AI assistant
 ```
+
+**Benefits of `--ngrok` flag:**
+- ✅ One command instead of two terminals
+- ✅ Automatic cleanup when you press Ctrl+C
+- ✅ URL displayed directly in the startup banner
+- ✅ Works with custom ports: `anki-mcp-http --port 8080 --ngrok`
 
 **Security note:** Anyone with your ngrok URL can access your Anki, so keep that URL private!
 
@@ -645,7 +679,7 @@ This project follows [Semantic Versioning](https://semver.org/) with a pre-1.0 d
   - Will be released when the API is stable and tested
   - Breaking changes will require major version bumps (2.0.0, etc.)
 
-**Current Status**: `0.6.0` - Active beta development. New features include the `twenty_rules` prompt for evidence-based flashcard creation, media file management, and improved prompt system. APIs may change based on feedback and testing.
+**Current Status**: `0.8.0` - Active beta development. New features include integrated ngrok tunneling (`--ngrok` flag), the `twenty_rules` prompt for evidence-based flashcard creation, media file management, and improved prompt system. APIs may change based on feedback and testing.
 
 ## Similar Projects
 
