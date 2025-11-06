@@ -59,7 +59,7 @@ This server works in two modes:
 
 The easiest way to install this MCP server for Claude Desktop:
 
-1. Download the latest `.mcpb` bundle from the [Releases](https://github.com/anki-mcp-organization/anki-mcp-desktop/releases) page
+1. Download the latest `.mcpb` bundle from the [Releases](https://github.com/anki-mcp/anki-mcp-desktop/releases) page
 2. In Claude Desktop, install the extension:
    - **Method 1**: Go to Settings → Extensions, then drag and drop the `.mcpb` file
    - **Method 2**: Go to Settings → Developer → Extensions → Install Extension, then select the `.mcpb` file
