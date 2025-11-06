@@ -3,6 +3,12 @@
 [![Tests](https://github.com/anki-mcp/anki-mcp-desktop/actions/workflows/test.yml/badge.svg)](https://github.com/anki-mcp/anki-mcp-desktop/actions/workflows/test.yml)
 [![npm version](https://badge.fury.io/js/anki-mcp-http.svg)](https://www.npmjs.com/package/anki-mcp-http)
 
+<div align="center">
+  <img src="./docs/images/ankimcp.png" alt="Anki + MCP Integration" width="600" />
+
+  <p><strong>Seamlessly integrate <a href="https://apps.ankiweb.net">Anki</a> with AI assistants through the <a href="https://modelcontextprotocol.io">Model Context Protocol</a></strong></p>
+</div>
+
 **Beta** - This project is in active development. APIs and features may change.
 
 A Model Context Protocol (MCP) server that enables AI assistants to interact with Anki, the spaced repetition flashcard application.
@@ -718,3 +724,15 @@ If you're exploring Anki MCP integrations, here are other projects in this space
 - [MCP Servers Repository](https://github.com/modelcontextprotocol/servers)
 - [NestJS Documentation](https://docs.nestjs.com)
 - [Anki Official Website](https://apps.ankiweb.net/)
+
+## License & Attribution
+
+This project is licensed under the MIT License.
+
+### Third-Party Attributions
+
+- **Anki®** is a registered trademark of Ankitects Pty Ltd. This project is an unofficial third-party tool and is not affiliated with, endorsed by, or sponsored by Ankitects Pty Ltd. The Anki logo is used under the alternative license for referencing Anki with a link to [https://apps.ankiweb.net](https://apps.ankiweb.net). For the official Anki application, visit [https://apps.ankiweb.net](https://apps.ankiweb.net).
+
+- **Model Context Protocol (MCP)** is an open standard by Anthropic. The MCP logo is from the official [MCP documentation repository](https://github.com/modelcontextprotocol/docs) and is used under the MIT License. For more information about MCP, visit [https://modelcontextprotocol.io](https://modelcontextprotocol.io).
+
+- This is an independent project that bridges Anki and MCP technologies. All trademarks, service marks, trade names, product names, and logos are the property of their respective owners.
