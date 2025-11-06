@@ -26,6 +26,7 @@ describe('CLI Module', () => {
         port: 3000,
         host: '127.0.0.1',
         ankiConnect: 'http://localhost:8765',
+        ngrok: false,
       });
     });
 
@@ -106,6 +107,7 @@ describe('CLI Module', () => {
         port: 4000,
         host: '0.0.0.0',
         ankiConnect: 'http://custom-host:9999',
+        ngrok: false,
       });
     });
 
@@ -222,6 +224,7 @@ describe('CLI Module', () => {
         port: 3000,
         host: '127.0.0.1',
         ankiConnect: 'http://localhost:8765',
+        ngrok: false,
       };
 
       const { displayStartupBanner } = require('../cli');
@@ -230,7 +233,7 @@ describe('CLI Module', () => {
       const output = consoleLogSpy.mock.calls.map((call) => call[0]).join('\n');
 
       expect(output).toContain('ngrok');
-      expect(output).toContain('ngrok http 3000');
+      expect(output).toContain('anki-mcp-http --ngrok');
 
       consoleLogSpy.mockRestore();
     });
@@ -242,6 +245,7 @@ describe('CLI Module', () => {
         port: 8080,
         host: '127.0.0.1',
         ankiConnect: 'http://localhost:8765',
+        ngrok: false,
       };
 
       const { displayStartupBanner } = require('../cli');
@@ -249,7 +253,7 @@ describe('CLI Module', () => {
 
       const output = consoleLogSpy.mock.calls.map((call) => call[0]).join('\n');
 
-      expect(output).toContain('ngrok http 8080');
+      expect(output).toContain('anki-mcp-http --ngrok');
 
       consoleLogSpy.mockRestore();
     });
@@ -261,6 +265,7 @@ describe('CLI Module', () => {
         port: 3000,
         host: '127.0.0.1',
         ankiConnect: 'http://localhost:8765',
+        ngrok: false,
       };
 
       const { displayStartupBanner } = require('../cli');
@@ -268,7 +273,7 @@ describe('CLI Module', () => {
 
       const output = consoleLogSpy.mock.calls.map((call) => call[0]).join('\n');
 
-      expect(output).toContain('ankimcp --help');
+      expect(output).toContain('anki-mcp-http --help');
 
       consoleLogSpy.mockRestore();
     });
