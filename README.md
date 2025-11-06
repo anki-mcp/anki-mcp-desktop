@@ -1,5 +1,8 @@
 # Anki MCP Desktop
 
+[![Tests](https://github.com/anki-mcp/anki-mcp-desktop/actions/workflows/test.yml/badge.svg)](https://github.com/anki-mcp/anki-mcp-desktop/actions/workflows/test.yml)
+[![npm version](https://badge.fury.io/js/anki-mcp-http.svg)](https://www.npmjs.com/package/anki-mcp-http)
+
 **Beta** - This project is in active development. APIs and features may change.
 
 A Model Context Protocol (MCP) server that enables AI assistants to interact with Anki, the spaced repetition flashcard application.
