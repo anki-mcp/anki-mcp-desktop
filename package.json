@@ -112,7 +112,10 @@
       "!src/**/__tests__/**",
       "!src/**/__mocks__/**",
       "!src/test-fixtures/**",
-      "!src/main.ts"
+      "!src/main.ts",
+      "!src/main-stdio.ts",
+      "!src/main-http.ts",
+      "!src/**/index.ts"
     ],
     "coverageDirectory": "coverage",
     "testEnvironment": "node",

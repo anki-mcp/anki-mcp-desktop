@@ -10,6 +10,8 @@ This is an MCP (Model Context Protocol) server that enables AI assistants to int
 
 **Important**: Check `.claude-draft/` directory for analysis documents, implementation plans, test plans, and project summaries created during development planning sessions. See `.claude-draft/ngrok-integration.md` for detailed ngrok implementation documentation.
 
+**NPM Package**: Published as `anki-mcp-http` on npm registry for global installation.
+
 ## Essential Commands
 
 ### Development
@@ -49,6 +51,8 @@ npm test -- path/to/test.spec.ts  # Example: npm test -- src/mcp/primitives/gui/
 
 Test coverage thresholds are enforced at 70% for branches, functions, lines, and statements.
 
+**Pre-push Hook**: Automatically runs lint, type-check, and tests before pushing (via Husky).
+
 ### Debugging
 ```bash
 # Development with debugger attached
@@ -77,6 +81,7 @@ The application follows a modular NestJS architecture with MCP primitives organi
 - **`src/anki-config.service.ts`** - Configuration service implementing `IAnkiConfig`
 - **`src/http/guards/origin-validation.guard.ts`** - Origin validation for HTTP mode security
 - **`bin/ankimcp.js`** - CLI wrapper for npm global install (routes to main-http.js or main-stdio.js based on --stdio flag)
+  - Exposed as both `ankimcp` and `anki-mcp-http` commands when installed globally
 
 ### Transport Modes
 
@@ -163,7 +168,10 @@ The project uses NestJS dynamic modules with dependency injection:
 
 - **Unit tests**:
   - `src/mcp/primitives/essential/tools/__tests__/*.spec.ts` - Test essential tools
+  - `src/mcp/primitives/essential/prompts/__tests__/*.spec.ts` - Test essential prompts
+  - `src/mcp/primitives/essential/resources/__tests__/*.spec.ts` - Test essential resources
   - `src/mcp/primitives/gui/tools/__tests__/*.spec.ts` - Test GUI tools
+  - `src/mcp/clients/__tests__/*.spec.ts` - Test client implementations
 - **Workflow tests**: `test/workflows/*.spec.ts` - Integration tests for multi-tool workflows
 - **E2E tests**: `test/*.e2e-spec.ts` - End-to-end application tests
 - **Mocks**: `src/mcp/clients/__mocks__/` - Mock implementations for testing
