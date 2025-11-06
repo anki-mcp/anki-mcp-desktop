@@ -1,9 +1,13 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Tool } from '@rekog/mcp-nest';
-import type { Context } from '@rekog/mcp-nest';
-import { z } from 'zod';
-import { AnkiConnectClient } from '@/mcp/clients/anki-connect.client';
-import { getRatingDescription, createSuccessResponse, createErrorResponse } from '@/mcp/utils/anki.utils';
+import { Injectable, Logger } from "@nestjs/common";
+import { Tool } from "@rekog/mcp-nest";
+import type { Context } from "@rekog/mcp-nest";
+import { z } from "zod";
+import { AnkiConnectClient } from "@/mcp/clients/anki-connect.client";
+import {
+  getRatingDescription,
+  createSuccessResponse,
+  createErrorResponse,
+} from "@/mcp/utils/anki.utils";
 
 /**
  * Tool for rating a card and updating Anki's scheduling
@@ -15,18 +19,18 @@ export class RateCardTool {
   constructor(private readonly ankiClient: AnkiConnectClient) {}
 
   @Tool({
-    name: 'rate_card',
+    name: "rate_card",
     description:
-      'Submit a rating for a card to update Anki\'s spaced repetition scheduling. Use this ONLY after the user confirms or modifies your suggested rating. Do not rate automatically without user input.',
+      "Submit a rating for a card to update Anki's spaced repetition scheduling. Use this ONLY after the user confirms or modifies your suggested rating. Do not rate automatically without user input.",
     parameters: z.object({
-      card_id: z
-        .number()
-        .describe('The ID of the card to rate'),
+      card_id: z.number().describe("The ID of the card to rate"),
       rating: z
         .number()
         .min(1)
         .max(4)
-        .describe('The rating for the card (use the user\'s choice, not your suggestion): 1=Again (failed), 2=Hard, 3=Good, 4=Easy'),
+        .describe(
+          "The rating for the card (use the user's choice, not your suggestion): 1=Again (failed), 2=Hard, 3=Good, 4=Easy",
+        ),
     }),
   })
   async rateCard(
@@ -37,8 +41,10 @@ export class RateCardTool {
       // Validate rating
       if (!Number.isInteger(rating) || rating < 1 || rating > 4) {
         return createErrorResponse(
-          new Error('Invalid rating. Must be 1 (Again), 2 (Hard), 3 (Good), or 4 (Easy)'),
-          { cardId: card_id, attemptedRating: rating }
+          new Error(
+            "Invalid rating. Must be 1 (Again), 2 (Hard), 3 (Good), or 4 (Easy)",
+          ),
+          { cardId: card_id, attemptedRating: rating },
         );
       }
 
@@ -47,13 +53,21 @@ export class RateCardTool {
 
       // Convert rating to ease for AnkiConnect
       // AnkiConnect's answerCards expects ease values 1-4
-      const answers = [{
-        cardId: card_id,
-        ease: rating
-      }];
+      const answers = [
+        {
+          cardId: card_id,
+          ease: rating,
+        },
+      ];
 
       // Submit the rating to Anki
-      const result = await this.ankiClient.invoke<boolean>('answerCards', { answers });
+      const result = await this.ankiClient.invoke<boolean>("answerCards", {
+        answers,
+      });
+
+      if (!result) {
+        throw new Error(`Failed to rate card ${card_id}`);
+      }
 
       const ratingDesc = getRatingDescription(rating);
 
@@ -61,8 +75,8 @@ export class RateCardTool {
       await context.reportProgress({ progress: 75, total: 100 });
 
       // Get updated card info after rating
-      const cardsInfo = await this.ankiClient.invoke<any[]>('cardsInfo', {
-        cards: [card_id]
+      const cardsInfo = await this.ankiClient.invoke<any[]>("cardsInfo", {
+        cards: [card_id],
       });
 
       let nextReview = null;
@@ -91,7 +105,7 @@ export class RateCardTool {
       return createErrorResponse(error, {
         cardId: card_id,
         attemptedRating: rating,
-        hint: 'Make sure Anki is running and the card exists',
+        hint: "Make sure Anki is running and the card exists",
       });
     }
   }

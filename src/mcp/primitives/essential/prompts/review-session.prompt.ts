@@ -1,12 +1,13 @@
-import { Injectable, Scope } from '@nestjs/common';
-import { Prompt } from '@rekog/mcp-nest';
-import { z } from 'zod';
+import { Injectable, Scope } from "@nestjs/common";
+import { Prompt } from "@rekog/mcp-nest";
+import { z } from "zod";
 
 @Injectable({ scope: Scope.REQUEST })
 export class ReviewSessionPrompt {
   @Prompt({
-    name: 'anki_review',
-    description: 'Guidelines for conducting Anki spaced repetition review sessions',
+    name: "anki_review",
+    description:
+      "Guidelines for conducting Anki spaced repetition review sessions",
     parameters: z.object({}),
   })
   getAnkiReviewPrompt() {
@@ -79,12 +80,13 @@ Assistant: [Uses rate_card with rating: 2]
 - Keep feedback concise and actionable`;
 
     return {
-      description: 'Guidelines for conducting Anki spaced repetition review sessions',
+      description:
+        "Guidelines for conducting Anki spaced repetition review sessions",
       messages: [
         {
-          role: 'user',
+          role: "user",
           content: {
-            type: 'text',
+            type: "text",
             text: promptText,
           },
         },

@@ -1,6 +1,6 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { createPinoLogger, createLoggerService } from './bootstrap';
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+import { createPinoLogger, createLoggerService } from "./bootstrap";
 
 async function bootstrap() {
   // Create logger that writes to stderr (fd 2) for STDIO mode
@@ -13,13 +13,13 @@ async function bootstrap() {
     bufferLogs: true,
   });
 
-  pinoLogger.info('MCP STDIO server started successfully');
+  pinoLogger.info("MCP STDIO server started successfully");
 
   // Keep the application running
   await new Promise(() => {});
 }
 
 bootstrap().catch((err) => {
-  console.error('Failed to start MCP STDIO server:', err);
+  console.error("Failed to start MCP STDIO server:", err);
   process.exit(1);
 });

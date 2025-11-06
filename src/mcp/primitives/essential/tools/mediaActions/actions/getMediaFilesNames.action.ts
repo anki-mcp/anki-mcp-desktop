@@ -1,4 +1,4 @@
-import { AnkiConnectClient } from '@/mcp/clients/anki-connect.client';
+import { AnkiConnectClient } from "@/mcp/clients/anki-connect.client";
 
 /**
  * Parameters for getMediaFilesNames action
@@ -36,7 +36,10 @@ export async function getMediaFilesNames(
   }
 
   // Call AnkiConnect
-  const result = await client.invoke<string[]>('getMediaFilesNames', ankiParams);
+  const result = await client.invoke<string[]>(
+    "getMediaFilesNames",
+    ankiParams,
+  );
 
   const message = pattern
     ? `Found ${result.length} media file(s) matching pattern "${pattern}"`

@@ -1,9 +1,9 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { AppModule } from './app.module';
-import { AnkiConfigService } from './anki-config.service';
+import { Test, TestingModule } from "@nestjs/testing";
+import { AppModule } from "./app.module";
+import { AnkiConfigService } from "./anki-config.service";
 
-describe('AppModule', () => {
-  describe('forStdio', () => {
+describe("AppModule", () => {
+  describe("forStdio", () => {
     let module: TestingModule;
 
     beforeEach(async () => {
@@ -18,19 +18,18 @@ describe('AppModule', () => {
       }
     });
 
-    it('should create module with STDIO transport', () => {
+    it("should create module with STDIO transport", () => {
       expect(module).toBeDefined();
     });
 
-    it('should provide AnkiConfigService', () => {
-      const ankiConfigService = module.get<AnkiConfigService>(
-        AnkiConfigService,
-      );
+    it("should provide AnkiConfigService", () => {
+      const ankiConfigService =
+        module.get<AnkiConfigService>(AnkiConfigService);
       expect(ankiConfigService).toBeDefined();
       expect(ankiConfigService).toBeInstanceOf(AnkiConfigService);
     });
 
-    it('should have STDIO transport configuration', () => {
+    it("should have STDIO transport configuration", () => {
       const dynamicModule = AppModule.forStdio();
 
       expect(dynamicModule.module).toBe(AppModule);
@@ -38,19 +37,19 @@ describe('AppModule', () => {
       expect(Array.isArray(dynamicModule.imports)).toBe(true);
     });
 
-    it('should include ConfigModule', async () => {
+    it("should include ConfigModule", async () => {
       // ConfigModule is global, so it should be available
       expect(module).toBeDefined();
     });
 
-    it('should include MCP primitives modules', () => {
+    it("should include MCP primitives modules", () => {
       const dynamicModule = AppModule.forStdio();
 
       // Should have 4 imports: ConfigModule, McpModule, Essential, GUI
       expect(dynamicModule.imports?.length).toBe(4);
     });
 
-    it('should register providers', () => {
+    it("should register providers", () => {
       const dynamicModule = AppModule.forStdio();
 
       expect(dynamicModule.providers).toBeDefined();
@@ -58,7 +57,7 @@ describe('AppModule', () => {
     });
   });
 
-  describe('forHttp', () => {
+  describe("forHttp", () => {
     let module: TestingModule;
 
     beforeEach(async () => {
@@ -73,19 +72,18 @@ describe('AppModule', () => {
       }
     });
 
-    it('should create module with HTTP transport', () => {
+    it("should create module with HTTP transport", () => {
       expect(module).toBeDefined();
     });
 
-    it('should provide AnkiConfigService', () => {
-      const ankiConfigService = module.get<AnkiConfigService>(
-        AnkiConfigService,
-      );
+    it("should provide AnkiConfigService", () => {
+      const ankiConfigService =
+        module.get<AnkiConfigService>(AnkiConfigService);
       expect(ankiConfigService).toBeDefined();
       expect(ankiConfigService).toBeInstanceOf(AnkiConfigService);
     });
 
-    it('should have STREAMABLE_HTTP transport configuration', () => {
+    it("should have STREAMABLE_HTTP transport configuration", () => {
       const dynamicModule = AppModule.forHttp();
 
       expect(dynamicModule.module).toBe(AppModule);
@@ -93,26 +91,26 @@ describe('AppModule', () => {
       expect(Array.isArray(dynamicModule.imports)).toBe(true);
     });
 
-    it('should include ConfigModule', async () => {
+    it("should include ConfigModule", async () => {
       // ConfigModule is global, so it should be available
       expect(module).toBeDefined();
     });
 
-    it('should include MCP primitives modules', () => {
+    it("should include MCP primitives modules", () => {
       const dynamicModule = AppModule.forHttp();
 
       // Should have 4 imports: ConfigModule, McpModule, Essential, GUI
       expect(dynamicModule.imports?.length).toBe(4);
     });
 
-    it('should register providers', () => {
+    it("should register providers", () => {
       const dynamicModule = AppModule.forHttp();
 
       expect(dynamicModule.providers).toBeDefined();
       expect(dynamicModule.providers).toContain(AnkiConfigService);
     });
 
-    it('should configure mcpEndpoint as root path', () => {
+    it("should configure mcpEndpoint as root path", () => {
       const dynamicModule = AppModule.forHttp();
 
       // We can't directly inspect the McpModule config, but we can verify
@@ -121,8 +119,8 @@ describe('AppModule', () => {
     });
   });
 
-  describe('forStdio vs forHttp', () => {
-    it('should create different configurations for STDIO and HTTP', () => {
+  describe("forStdio vs forHttp", () => {
+    it("should create different configurations for STDIO and HTTP", () => {
       const stdioModule = AppModule.forStdio();
       const httpModule = AppModule.forHttp();
 
@@ -140,7 +138,7 @@ describe('AppModule', () => {
       expect(httpModule.providers).toContain(AnkiConfigService);
     });
 
-    it('should both include essential primitives', () => {
+    it("should both include essential primitives", () => {
       const stdioModule = AppModule.forStdio();
       const httpModule = AppModule.forHttp();
 
@@ -149,7 +147,7 @@ describe('AppModule', () => {
       expect(httpModule.imports?.length).toBe(4);
     });
 
-    it('should both include GUI primitives', () => {
+    it("should both include GUI primitives", () => {
       const stdioModule = AppModule.forStdio();
       const httpModule = AppModule.forHttp();
 
@@ -159,7 +157,7 @@ describe('AppModule', () => {
     });
   });
 
-  describe('environment configuration', () => {
+  describe("environment configuration", () => {
     const originalEnv = process.env;
 
     beforeEach(() => {
@@ -170,8 +168,8 @@ describe('AppModule', () => {
       process.env = originalEnv;
     });
 
-    it('should use MCP_SERVER_NAME from environment for STDIO', () => {
-      process.env.MCP_SERVER_NAME = 'test-server-stdio';
+    it("should use MCP_SERVER_NAME from environment for STDIO", () => {
+      process.env.MCP_SERVER_NAME = "test-server-stdio";
 
       const dynamicModule = AppModule.forStdio();
 
@@ -179,8 +177,8 @@ describe('AppModule', () => {
       // The actual value is used internally by McpModule
     });
 
-    it('should use MCP_SERVER_NAME from environment for HTTP', () => {
-      process.env.MCP_SERVER_NAME = 'test-server-http';
+    it("should use MCP_SERVER_NAME from environment for HTTP", () => {
+      process.env.MCP_SERVER_NAME = "test-server-http";
 
       const dynamicModule = AppModule.forHttp();
 
@@ -188,8 +186,8 @@ describe('AppModule', () => {
       // The actual value is used internally by McpModule
     });
 
-    it('should use MCP_SERVER_VERSION from environment for STDIO', () => {
-      process.env.MCP_SERVER_VERSION = '2.0.0';
+    it("should use MCP_SERVER_VERSION from environment for STDIO", () => {
+      process.env.MCP_SERVER_VERSION = "2.0.0";
 
       const dynamicModule = AppModule.forStdio();
 
@@ -197,8 +195,8 @@ describe('AppModule', () => {
       // The actual value is used internally by McpModule
     });
 
-    it('should use MCP_SERVER_VERSION from environment for HTTP', () => {
-      process.env.MCP_SERVER_VERSION = '2.0.0';
+    it("should use MCP_SERVER_VERSION from environment for HTTP", () => {
+      process.env.MCP_SERVER_VERSION = "2.0.0";
 
       const dynamicModule = AppModule.forHttp();
 
@@ -206,7 +204,7 @@ describe('AppModule', () => {
       // The actual value is used internally by McpModule
     });
 
-    it('should fall back to default server name when not in environment', () => {
+    it("should fall back to default server name when not in environment", () => {
       delete process.env.MCP_SERVER_NAME;
 
       const dynamicModule = AppModule.forStdio();
@@ -215,7 +213,7 @@ describe('AppModule', () => {
       // Default 'anki-mcp-desktop' is used internally
     });
 
-    it('should fall back to default version when not in environment', () => {
+    it("should fall back to default version when not in environment", () => {
       delete process.env.MCP_SERVER_VERSION;
 
       const dynamicModule = AppModule.forHttp();
@@ -225,8 +223,8 @@ describe('AppModule', () => {
     });
   });
 
-  describe('regression tests', () => {
-    it('should maintain backward compatibility for STDIO mode', async () => {
+  describe("regression tests", () => {
+    it("should maintain backward compatibility for STDIO mode", async () => {
       // This ensures existing STDIO functionality still works
       const module = await Test.createTestingModule({
         imports: [AppModule.forStdio()],
@@ -234,15 +232,14 @@ describe('AppModule', () => {
 
       expect(module).toBeDefined();
 
-      const ankiConfigService = module.get<AnkiConfigService>(
-        AnkiConfigService,
-      );
+      const ankiConfigService =
+        module.get<AnkiConfigService>(AnkiConfigService);
       expect(ankiConfigService).toBeDefined();
 
       await module.close();
     });
 
-    it('should not break existing module structure', () => {
+    it("should not break existing module structure", () => {
       const stdioModule = AppModule.forStdio();
       const httpModule = AppModule.forHttp();
 

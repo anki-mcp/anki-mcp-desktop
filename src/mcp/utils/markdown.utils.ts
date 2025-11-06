@@ -1,7 +1,7 @@
-import { unified } from 'unified';
-import remarkParse from 'remark-parse';
-import { visit } from 'unist-util-visit';
-import type { Root, RootContent } from 'mdast';
+import { unified } from "unified";
+import remarkParse from "remark-parse";
+import { visit } from "unist-util-visit";
+import type { Root, RootContent } from "mdast";
 
 /**
  * Parsed sections from a markdown document.
@@ -16,29 +16,33 @@ export interface MarkdownSections {
  * Handles text nodes, inline code, and recursively processes children.
  */
 function nodeToString(node: RootContent): string {
-  if (node.type === 'text') {
+  if (node.type === "text") {
     return node.value;
   }
-  if (node.type === 'inlineCode') {
+  if (node.type === "inlineCode") {
     return `\`${node.value}\``;
   }
-  if ('children' in node && Array.isArray(node.children)) {
-    return node.children.map((child) => nodeToString(child as RootContent)).join('');
+  if ("children" in node && Array.isArray(node.children)) {
+    return node.children
+      .map((child) => nodeToString(child as RootContent))
+      .join("");
   }
-  if ('value' in node && typeof node.value === 'string') {
+  if ("value" in node && typeof node.value === "string") {
     return node.value;
   }
-  return '';
+  return "";
 }
 
 /**
  * Extracts text content from a heading node.
  */
 function extractHeadingText(node: RootContent): string {
-  if ('children' in node && Array.isArray(node.children)) {
-    return node.children.map((child) => nodeToString(child as RootContent)).join('');
+  if ("children" in node && Array.isArray(node.children)) {
+    return node.children
+      .map((child) => nodeToString(child as RootContent))
+      .join("");
   }
-  return '';
+  return "";
 }
 
 /**
@@ -72,10 +76,10 @@ export function parseMarkdownSections(markdown: string): MarkdownSections {
   let currentContent: string[] = [];
 
   visit(tree, (node) => {
-    if (node.type === 'heading' && node.depth === 1) {
+    if (node.type === "heading" && node.depth === 1) {
       // Save previous section if exists
       if (currentHeading) {
-        sections[currentHeading] = currentContent.join('\n').trim();
+        sections[currentHeading] = currentContent.join("\n").trim();
       }
 
       // Start new section
@@ -92,7 +96,7 @@ export function parseMarkdownSections(markdown: string): MarkdownSections {
 
   // Save last section
   if (currentHeading) {
-    sections[currentHeading] = currentContent.join('\n').trim();
+    sections[currentHeading] = currentContent.join("\n").trim();
   }
 
   return sections;

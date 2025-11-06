@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { IAnkiConfig } from './mcp/config/anki-config.interface';
-import { sanitizeMcpbConfigValue } from './mcp/utils/mcpb-workarounds';
+import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { IAnkiConfig } from "./mcp/config/anki-config.interface";
+import { sanitizeMcpbConfigValue } from "./mcp/utils/mcpb-workarounds";
 
 /**
  * Configuration service implementing IAnkiConfig for the STDIO MCP server
@@ -12,28 +12,28 @@ export class AnkiConfigService implements IAnkiConfig {
 
   get ankiConnectUrl(): string {
     return this.configService.get<string>(
-      'ANKI_CONNECT_URL',
-      'http://localhost:8765',
+      "ANKI_CONNECT_URL",
+      "http://localhost:8765",
     );
   }
 
   get ankiConnectApiVersion(): number {
     const version = this.configService.get<string>(
-      'ANKI_CONNECT_API_VERSION',
-      '6',
+      "ANKI_CONNECT_API_VERSION",
+      "6",
     );
     return parseInt(version, 10);
   }
 
   get ankiConnectApiKey(): string | undefined {
-    const apiKey = this.configService.get<string>('ANKI_CONNECT_API_KEY');
+    const apiKey = this.configService.get<string>("ANKI_CONNECT_API_KEY");
     return sanitizeMcpbConfigValue(apiKey);
   }
 
   get ankiConnectTimeout(): number {
     const timeout = this.configService.get<string>(
-      'ANKI_CONNECT_TIMEOUT',
-      '5000',
+      "ANKI_CONNECT_TIMEOUT",
+      "5000",
     );
     return parseInt(timeout, 10);
   }

@@ -1,9 +1,12 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Tool } from '@rekog/mcp-nest';
-import type { Context } from '@rekog/mcp-nest';
-import { z } from 'zod';
-import { AnkiConnectClient } from '@/mcp/clients/anki-connect.client';
-import { createSuccessResponse, createErrorResponse } from '@/mcp/utils/anki.utils';
+import { Injectable, Logger } from "@nestjs/common";
+import { Tool } from "@rekog/mcp-nest";
+import type { Context } from "@rekog/mcp-nest";
+import { z } from "zod";
+import { AnkiConnectClient } from "@/mcp/clients/anki-connect.client";
+import {
+  createSuccessResponse,
+  createErrorResponse,
+} from "@/mcp/utils/anki.utils";
 
 /**
  * Tool for opening the Deck Overview dialog for a specific deck
@@ -15,16 +18,16 @@ export class GuiDeckOverviewTool {
   constructor(private readonly ankiClient: AnkiConnectClient) {}
 
   @Tool({
-    name: 'guiDeckOverview',
+    name: "guiDeckOverview",
     description:
-      'Open Anki Deck Overview dialog for a specific deck. Shows deck statistics and study options. Returns true if succeeded. ' +
-      'IMPORTANT: Only use when user explicitly requests opening deck overview. ' +
-      'This tool is for deck management and note organization workflows, NOT for review sessions.',
+      "Open Anki Deck Overview dialog for a specific deck. Shows deck statistics and study options. Returns true if succeeded. " +
+      "IMPORTANT: Only use when user explicitly requests opening deck overview. " +
+      "This tool is for deck management and note organization workflows, NOT for review sessions.",
     parameters: z.object({
       name: z
         .string()
         .min(1)
-        .describe('Deck name to open (get from list_decks)'),
+        .describe("Deck name to open (get from list_decks)"),
     }),
   })
   async guiDeckOverview({ name }: { name: string }, context: Context) {
@@ -33,7 +36,9 @@ export class GuiDeckOverviewTool {
       await context.reportProgress({ progress: 50, total: 100 });
 
       // Call AnkiConnect guiDeckOverview action
-      const success = await this.ankiClient.invoke<boolean>('guiDeckOverview', { name });
+      const success = await this.ankiClient.invoke<boolean>("guiDeckOverview", {
+        name,
+      });
 
       await context.reportProgress({ progress: 100, total: 100 });
 
@@ -43,7 +48,7 @@ export class GuiDeckOverviewTool {
           new Error(`Failed to open Deck Overview for deck "${name}"`),
           {
             deckName: name,
-            hint: 'Deck not found or Anki GUI is not responding. Use list_decks to see available decks.',
+            hint: "Deck not found or Anki GUI is not responding. Use list_decks to see available decks.",
           },
         );
       }
@@ -54,23 +59,26 @@ export class GuiDeckOverviewTool {
         success: true,
         deckName: name,
         message: `Deck Overview opened for deck "${name}"`,
-        hint: 'The deck statistics and study options are now visible in the Anki GUI.',
+        hint: "The deck statistics and study options are now visible in the Anki GUI.",
       });
     } catch (error) {
-      this.logger.error('Failed to open Deck Overview', error);
+      this.logger.error("Failed to open Deck Overview", error);
 
       if (error instanceof Error) {
-        if (error.message.includes('not found') || error.message.includes('invalid')) {
+        if (
+          error.message.includes("not found") ||
+          error.message.includes("invalid")
+        ) {
           return createErrorResponse(error, {
             deckName: name,
-            hint: 'Deck not found. Use list_decks to see available decks.',
+            hint: "Deck not found. Use list_decks to see available decks.",
           });
         }
       }
 
       return createErrorResponse(error, {
         deckName: name,
-        hint: 'Make sure Anki is running and the deck name is correct',
+        hint: "Make sure Anki is running and the deck name is correct",
       });
     }
   }

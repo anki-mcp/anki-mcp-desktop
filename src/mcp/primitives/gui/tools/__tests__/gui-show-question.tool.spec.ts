@@ -1,13 +1,16 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { GuiShowQuestionTool } from '../gui-show-question.tool';
-import { AnkiConnectClient } from '../../../../clients/anki-connect.client';
-import { parseToolResult, createMockContext } from '../../../../../test-fixtures/test-helpers';
+import { Test, TestingModule } from "@nestjs/testing";
+import { GuiShowQuestionTool } from "../gui-show-question.tool";
+import { AnkiConnectClient } from "../../../../clients/anki-connect.client";
+import {
+  parseToolResult,
+  createMockContext,
+} from "../../../../../test-fixtures/test-helpers";
 
 const mockAnkiClient = {
   invoke: jest.fn(),
 };
 
-describe('GuiShowQuestionTool', () => {
+describe("GuiShowQuestionTool", () => {
   let tool: GuiShowQuestionTool;
   let mockContext: any;
 
@@ -27,12 +30,12 @@ describe('GuiShowQuestionTool', () => {
     jest.clearAllMocks();
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(tool).toBeDefined();
   });
 
-  describe('guiShowQuestion', () => {
-    it('should successfully show question when in review', async () => {
+  describe("guiShowQuestion", () => {
+    it("should successfully show question when in review", async () => {
       mockAnkiClient.invoke.mockResolvedValue(true);
 
       const rawResult = await tool.guiShowQuestion({}, mockContext);
@@ -40,12 +43,12 @@ describe('GuiShowQuestionTool', () => {
 
       expect(result.success).toBe(true);
       expect(result.inReview).toBe(true);
-      expect(result.message).toContain('Question side is now displayed');
-      expect(mockAnkiClient.invoke).toHaveBeenCalledWith('guiShowQuestion');
+      expect(result.message).toContain("Question side is now displayed");
+      expect(mockAnkiClient.invoke).toHaveBeenCalledWith("guiShowQuestion");
       expect(mockContext.reportProgress).toHaveBeenCalledTimes(2);
     });
 
-    it('should handle not in review mode (returns false)', async () => {
+    it("should handle not in review mode (returns false)", async () => {
       mockAnkiClient.invoke.mockResolvedValue(false);
 
       const rawResult = await tool.guiShowQuestion({}, mockContext);
@@ -53,18 +56,18 @@ describe('GuiShowQuestionTool', () => {
 
       expect(result.success).toBe(true);
       expect(result.inReview).toBe(false);
-      expect(result.message).toContain('Not in review mode');
+      expect(result.message).toContain("Not in review mode");
     });
 
-    it('should handle errors', async () => {
-      const error = new Error('GUI error');
+    it("should handle errors", async () => {
+      const error = new Error("GUI error");
       mockAnkiClient.invoke.mockRejectedValue(error);
 
       const rawResult = await tool.guiShowQuestion({}, mockContext);
       const result = parseToolResult(rawResult);
 
       expect(result.success).toBe(false);
-      expect(result.error).toContain('GUI error');
+      expect(result.error).toContain("GUI error");
     });
   });
 });

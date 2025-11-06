@@ -1,8 +1,8 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
-import ky, { KyInstance, HTTPError } from 'ky';
-import { ANKI_CONFIG } from '../config/anki-config.interface';
-import type { IAnkiConfig } from '../config/anki-config.interface';
-import { AnkiConnectRequest, AnkiConnectResponse } from '../types/anki.types';
+import { Inject, Injectable, Logger } from "@nestjs/common";
+import ky, { KyInstance, HTTPError } from "ky";
+import { ANKI_CONFIG } from "../config/anki-config.interface";
+import type { IAnkiConfig } from "../config/anki-config.interface";
+import { AnkiConnectRequest, AnkiConnectResponse } from "../types/anki.types";
 
 /**
  * Error class for AnkiConnect-specific errors
@@ -14,7 +14,7 @@ export class AnkiConnectError extends Error {
     public readonly originalError?: string,
   ) {
     super(message);
-    this.name = 'AnkiConnectError';
+    this.name = "AnkiConnectError";
   }
 }
 
@@ -37,11 +37,11 @@ export class AnkiConnectClient {
       prefixUrl: config.ankiConnectUrl,
       timeout: config.ankiConnectTimeout,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       retry: {
         limit: 2,
-        methods: ['POST'],
+        methods: ["POST"],
         statusCodes: [408, 413, 429, 500, 502, 503, 504],
         backoffLimit: 3000,
       },
@@ -89,7 +89,7 @@ export class AnkiConnectClient {
       this.logger.log(`Invoking AnkiConnect action: ${action}`);
 
       const response = await this.client
-        .post('', {
+        .post("", {
           json: request,
         })
         .json<AnkiConnectResponse<T>>();
@@ -110,7 +110,7 @@ export class AnkiConnectClient {
       if (error instanceof HTTPError) {
         if (error.response.status === 403) {
           throw new AnkiConnectError(
-            'Permission denied. Please check AnkiConnect configuration and API key.',
+            "Permission denied. Please check AnkiConnect configuration and API key.",
             action,
           );
         }
@@ -121,9 +121,9 @@ export class AnkiConnectClient {
       }
 
       // Handle connection errors
-      if (error instanceof Error && error.message.includes('fetch')) {
+      if (error instanceof Error && error.message.includes("fetch")) {
         throw new AnkiConnectError(
-          'Cannot connect to Anki. Please ensure Anki is running and AnkiConnect plugin is installed.',
+          "Cannot connect to Anki. Please ensure Anki is running and AnkiConnect plugin is installed.",
           action,
         );
       }

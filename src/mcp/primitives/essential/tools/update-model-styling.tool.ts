@@ -1,9 +1,12 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Tool } from '@rekog/mcp-nest';
-import type { Context } from '@rekog/mcp-nest';
-import { z } from 'zod';
-import { AnkiConnectClient } from '@/mcp/clients/anki-connect.client';
-import { createSuccessResponse, createErrorResponse } from '@/mcp/utils/anki.utils';
+import { Injectable, Logger } from "@nestjs/common";
+import { Tool } from "@rekog/mcp-nest";
+import type { Context } from "@rekog/mcp-nest";
+import { z } from "zod";
+import { AnkiConnectClient } from "@/mcp/clients/anki-connect.client";
+import {
+  createSuccessResponse,
+  createErrorResponse,
+} from "@/mcp/utils/anki.utils";
 
 /**
  * Tool for updating CSS styling of an existing model
@@ -15,12 +18,12 @@ export class UpdateModelStylingTool {
   constructor(private readonly ankiClient: AnkiConnectClient) {}
 
   @Tool({
-    name: 'updateModelStyling',
+    name: "updateModelStyling",
     description:
-      'Update the CSS styling for an existing note type (model). ' +
-      'This changes how cards of this type are rendered in Anki. ' +
-      'Useful for adding RTL (Right-to-Left) support, changing fonts, colors, or layout. ' +
-      'Changes apply to all cards using this model.',
+      "Update the CSS styling for an existing note type (model). " +
+      "This changes how cards of this type are rendered in Anki. " +
+      "Useful for adding RTL (Right-to-Left) support, changing fonts, colors, or layout. " +
+      "Changes apply to all cards using this model.",
     parameters: z.object({
       modelName: z
         .string()
@@ -31,7 +34,7 @@ export class UpdateModelStylingTool {
         .min(1)
         .describe(
           'New CSS styling content. For RTL languages, include "direction: rtl;" in .card class. ' +
-          'This will completely replace the existing CSS.',
+            "This will completely replace the existing CSS.",
         ),
     }),
   })
@@ -46,10 +49,13 @@ export class UpdateModelStylingTool {
       // Get current styling for comparison
       let oldStyling: { css: string } | null = null;
       try {
-        oldStyling = await this.ankiClient.invoke<{ css: string }>('modelStyling', {
-          modelName,
-        });
-      } catch (error) {
+        oldStyling = await this.ankiClient.invoke<{ css: string }>(
+          "modelStyling",
+          {
+            modelName,
+          },
+        );
+      } catch (_error) {
         // Model might not exist, we'll catch this in the update call
         this.logger.warn(`Could not fetch old styling for ${modelName}`);
       }
@@ -57,7 +63,7 @@ export class UpdateModelStylingTool {
       await context.reportProgress({ progress: 40, total: 100 });
 
       // Update the styling
-      await this.ankiClient.invoke('updateModelStyling', {
+      await this.ankiClient.invoke("updateModelStyling", {
         model: {
           name: modelName,
           css,
@@ -72,11 +78,12 @@ export class UpdateModelStylingTool {
 
       // Analyze CSS for useful info
       const cssLength = css.length;
-      const hasRtl = css.includes('direction: rtl') || css.includes('direction:rtl');
-      const hasCardClass = css.includes('.card');
-      const hasFrontClass = css.includes('.front');
-      const hasBackClass = css.includes('.back');
-      const hasClozeClass = css.includes('.cloze');
+      const hasRtl =
+        css.includes("direction: rtl") || css.includes("direction:rtl");
+      const hasCardClass = css.includes(".card");
+      const hasFrontClass = css.includes(".front");
+      const hasBackClass = css.includes(".back");
+      const hasClozeClass = css.includes(".cloze");
 
       const response: any = {
         success: true,
@@ -99,24 +106,28 @@ export class UpdateModelStylingTool {
 
       return createSuccessResponse(response);
     } catch (error) {
-      this.logger.error(`Failed to update styling for model ${modelName}`, error);
+      this.logger.error(
+        `Failed to update styling for model ${modelName}`,
+        error,
+      );
 
       // Check for model not found error
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       if (
-        errorMessage.includes('not found') ||
-        errorMessage.includes('does not exist') ||
-        errorMessage.includes('model not found')
+        errorMessage.includes("not found") ||
+        errorMessage.includes("does not exist") ||
+        errorMessage.includes("model not found")
       ) {
         return createErrorResponse(error, {
           modelName,
-          hint: 'Model not found. Use modelNames tool to see available models.',
+          hint: "Model not found. Use modelNames tool to see available models.",
         });
       }
 
       return createErrorResponse(error, {
         modelName,
-        hint: 'Make sure Anki is running and the model name is correct.',
+        hint: "Make sure Anki is running and the model name is correct.",
       });
     }
   }

@@ -1,12 +1,12 @@
-import { DynamicModule, Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { McpModule, McpTransportType } from '@rekog/mcp-nest';
+import { DynamicModule, Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
+import { McpModule, McpTransportType } from "@rekog/mcp-nest";
 import {
   McpPrimitivesAnkiEssentialModule,
   ANKI_CONFIG,
-} from './mcp/primitives/essential';
-import { McpPrimitivesAnkiGuiModule } from './mcp/primitives/gui';
-import { AnkiConfigService } from './anki-config.service';
+} from "./mcp/primitives/essential";
+import { McpPrimitivesAnkiGuiModule } from "./mcp/primitives/gui";
+import { AnkiConfigService } from "./anki-config.service";
 
 @Module({})
 export class AppModule {
@@ -21,13 +21,13 @@ export class AppModule {
         ConfigModule.forRoot({
           isGlobal: true,
           cache: true,
-          envFilePath: ['.env.local', '.env'],
+          envFilePath: [".env.local", ".env"],
         }),
 
         // MCP Module with STDIO transport
         McpModule.forRoot({
-          name: process.env.MCP_SERVER_NAME || 'anki-mcp-desktop',
-          version: process.env.MCP_SERVER_VERSION || '1.0.0',
+          name: process.env.MCP_SERVER_NAME || "anki-mcp-desktop",
+          version: process.env.MCP_SERVER_VERSION || "1.0.0",
           transport: McpTransportType.STDIO,
         }),
 
@@ -62,15 +62,15 @@ export class AppModule {
         ConfigModule.forRoot({
           isGlobal: true,
           cache: true,
-          envFilePath: ['.env.local', '.env'],
+          envFilePath: [".env.local", ".env"],
         }),
 
         // MCP Module with Streamable HTTP transport
         McpModule.forRoot({
-          name: process.env.MCP_SERVER_NAME || 'anki-mcp-desktop',
-          version: process.env.MCP_SERVER_VERSION || '1.0.0',
+          name: process.env.MCP_SERVER_NAME || "anki-mcp-desktop",
+          version: process.env.MCP_SERVER_VERSION || "1.0.0",
           transport: McpTransportType.STREAMABLE_HTTP,
-          mcpEndpoint: '/',
+          mcpEndpoint: "/",
         }),
 
         // Import MCP primitives with config

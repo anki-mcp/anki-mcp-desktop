@@ -24,13 +24,15 @@
  * sanitizeMcpbConfigValue("") // returns undefined
  * sanitizeMcpbConfigValue(undefined) // returns undefined
  */
-export function sanitizeMcpbConfigValue(value: string | undefined): string | undefined {
-  if (!value || value.trim() === '') {
+export function sanitizeMcpbConfigValue(
+  value: string | undefined,
+): string | undefined {
+  if (!value || value.trim() === "") {
     return undefined;
   }
 
   // Check if value is a literal MCPB variable that wasn't substituted
-  if (value.startsWith('${') && value.endsWith('}')) {
+  if (value.startsWith("${") && value.endsWith("}")) {
     return undefined;
   }
 

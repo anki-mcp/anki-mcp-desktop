@@ -1,13 +1,9 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { createPinoLogger, createLoggerService } from './bootstrap';
-import { OriginValidationGuard } from './http/guards/origin-validation.guard';
-import {
-  parseCliArgs,
-  displayStartupBanner,
-  checkForUpdates,
-} from './cli';
-import { NgrokService } from './services/ngrok.service';
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+import { createPinoLogger, createLoggerService } from "./bootstrap";
+import { OriginValidationGuard } from "./http/guards/origin-validation.guard";
+import { parseCliArgs, displayStartupBanner, checkForUpdates } from "./cli";
+import { NgrokService } from "./services/ngrok.service";
 
 async function bootstrap() {
   // Check for updates (non-blocking, cached)
@@ -43,9 +39,9 @@ async function bootstrap() {
       const tunnelInfo = await ngrokService.start(options.port);
       ngrokUrl = tunnelInfo.publicUrl;
     } catch (err) {
-      console.error('\n❌ Failed to start ngrok:');
+      console.error("\n❌ Failed to start ngrok:");
       console.error(err instanceof Error ? err.message : String(err));
-      console.error('\nServer is still running locally without tunnel.\n');
+      console.error("\nServer is still running locally without tunnel.\n");
     }
   }
 
@@ -54,6 +50,6 @@ async function bootstrap() {
 }
 
 bootstrap().catch((err) => {
-  console.error('Failed to start MCP HTTP server:', err);
+  console.error("Failed to start MCP HTTP server:", err);
   process.exit(1);
 });

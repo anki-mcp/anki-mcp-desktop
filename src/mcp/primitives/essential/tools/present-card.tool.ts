@@ -1,10 +1,15 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Tool } from '@rekog/mcp-nest';
-import type { Context } from '@rekog/mcp-nest';
-import { z } from 'zod';
-import { AnkiConnectClient } from '@/mcp/clients/anki-connect.client';
-import { AnkiCard, CardPresentation } from '@/mcp/types/anki.types';
-import { extractCardContent, getCardType, createSuccessResponse, createErrorResponse } from '@/mcp/utils/anki.utils';
+import { Injectable, Logger } from "@nestjs/common";
+import { Tool } from "@rekog/mcp-nest";
+import type { Context } from "@rekog/mcp-nest";
+import { z } from "zod";
+import { AnkiConnectClient } from "@/mcp/clients/anki-connect.client";
+import { AnkiCard, CardPresentation } from "@/mcp/types/anki.types";
+import {
+  extractCardContent,
+  getCardType,
+  createSuccessResponse,
+  createErrorResponse,
+} from "@/mcp/utils/anki.utils";
 
 /**
  * Tool for retrieving and formatting a single card's data
@@ -16,17 +21,15 @@ export class PresentCardTool {
   constructor(private readonly ankiClient: AnkiConnectClient) {}
 
   @Tool({
-    name: 'present_card',
+    name: "present_card",
     description:
       'Retrieve a card\'s content for review. WORKFLOW: 1) Show question, 2) Wait for user answer, 3) Show answer with show_answer=true, 4) Evaluate and suggest rating (1-4), 5) Wait for user confirmation ("ok"/"next" = accept, or they provide different rating), 6) Only then use rate_card',
     parameters: z.object({
-      card_id: z
-        .number()
-        .describe('The ID of the card to retrieve'),
+      card_id: z.number().describe("The ID of the card to retrieve"),
       show_answer: z
         .boolean()
         .default(false)
-        .describe('Whether to include the answer/back content in the response'),
+        .describe("Whether to include the answer/back content in the response"),
     }),
   })
   async presentCard(
@@ -36,19 +39,21 @@ export class PresentCardTool {
     try {
       const showAnswer = show_answer || false;
 
-      this.logger.log(`Retrieving card ${card_id} for presentation (show_answer: ${showAnswer})`);
+      this.logger.log(
+        `Retrieving card ${card_id} for presentation (show_answer: ${showAnswer})`,
+      );
       await context.reportProgress({ progress: 25, total: 100 });
 
       // Get detailed card information
-      const cardsInfo = await this.ankiClient.invoke<AnkiCard[]>('cardsInfo', {
-        cards: [card_id]
+      const cardsInfo = await this.ankiClient.invoke<AnkiCard[]>("cardsInfo", {
+        cards: [card_id],
       });
 
       if (!cardsInfo || cardsInfo.length === 0) {
         this.logger.warn(`Card not found: ${card_id}`);
         return createErrorResponse(
           new Error(`Card with ID ${card_id} not found`),
-          { cardId: card_id }
+          { cardId: card_id },
         );
       }
 
@@ -61,7 +66,7 @@ export class PresentCardTool {
       // Build the presentation object
       const presentation: CardPresentation = {
         cardId: card.cardId,
-        front: front || card.question || '',
+        front: front || card.question || "",
         deckName: card.deckName,
         modelName: card.modelName,
         tags: card.tags || [],
@@ -75,7 +80,7 @@ export class PresentCardTool {
 
       // Only include answer if requested
       if (showAnswer) {
-        presentation.back = back || card.answer || '';
+        presentation.back = back || card.answer || "";
       }
 
       await context.reportProgress({ progress: 100, total: 100 });
@@ -87,9 +92,11 @@ export class PresentCardTool {
       };
 
       if (!showAnswer) {
-        response.instruction = 'Question shown. Wait for user\'s answer, then use show_answer=true';
+        response.instruction =
+          "Question shown. Wait for user's answer, then use show_answer=true";
       } else {
-        response.instruction = 'Answer revealed. Evaluate response and suggest rating, then wait for user confirmation';
+        response.instruction =
+          "Answer revealed. Evaluate response and suggest rating, then wait for user confirmation";
       }
 
       return createSuccessResponse(response);

@@ -1,10 +1,13 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Tool } from '@rekog/mcp-nest';
-import type { Context } from '@rekog/mcp-nest';
-import { z } from 'zod';
-import { AnkiConnectClient } from '@/mcp/clients/anki-connect.client';
-import { NoteOptions } from '@/mcp/types/anki.types';
-import { createSuccessResponse, createErrorResponse } from '@/mcp/utils/anki.utils';
+import { Injectable, Logger } from "@nestjs/common";
+import { Tool } from "@rekog/mcp-nest";
+import type { Context } from "@rekog/mcp-nest";
+import { z } from "zod";
+import { AnkiConnectClient } from "@/mcp/clients/anki-connect.client";
+import { NoteOptions } from "@/mcp/types/anki.types";
+import {
+  createSuccessResponse,
+  createErrorResponse,
+} from "@/mcp/utils/anki.utils";
 
 /**
  * Tool for adding new notes to Anki
@@ -16,53 +19,52 @@ export class AddNoteTool {
   constructor(private readonly ankiClient: AnkiConnectClient) {}
 
   @Tool({
-    name: 'addNote',
+    name: "addNote",
     description:
-      'Add a new note to Anki. Use modelNames to see available note types and modelFieldNames to see required fields. Returns the note ID on success. IMPORTANT: Only create notes that were explicitly requested by the user.',
+      "Add a new note to Anki. Use modelNames to see available note types and modelFieldNames to see required fields. Returns the note ID on success. IMPORTANT: Only create notes that were explicitly requested by the user.",
     parameters: z.object({
-      deckName: z
-        .string()
-        .min(1)
-        .describe('The deck to add the note to'),
+      deckName: z.string().min(1).describe("The deck to add the note to"),
       modelName: z
         .string()
         .min(1)
         .describe('The note type/model to use (e.g., "Basic", "Cloze")'),
       fields: z
         .record(z.string())
-        .describe('Field values as key-value pairs (e.g., {"Front": "question", "Back": "answer"})'),
+        .describe(
+          'Field values as key-value pairs (e.g., {"Front": "question", "Back": "answer"})',
+        ),
       tags: z
         .array(z.string())
         .optional()
-        .describe('Optional tags to add to the note'),
+        .describe("Optional tags to add to the note"),
       allowDuplicate: z
         .boolean()
         .optional()
         .default(false)
-        .describe('Whether to allow adding duplicate notes'),
+        .describe("Whether to allow adding duplicate notes"),
       duplicateScope: z
-        .enum(['deck', 'collection'])
+        .enum(["deck", "collection"])
         .optional()
-        .describe('Scope for duplicate checking'),
+        .describe("Scope for duplicate checking"),
       duplicateScopeOptions: z
         .object({
           deckName: z
             .string()
             .optional()
-            .describe('Specific deck to check for duplicates'),
+            .describe("Specific deck to check for duplicates"),
           checkChildren: z
             .boolean()
             .optional()
             .default(false)
-            .describe('Check child decks for duplicates'),
+            .describe("Check child decks for duplicates"),
           checkAllModels: z
             .boolean()
             .optional()
             .default(false)
-            .describe('Check across all note types'),
+            .describe("Check across all note types"),
         })
         .optional()
-        .describe('Advanced duplicate checking options'),
+        .describe("Advanced duplicate checking options"),
     }),
   })
   async addNote(
@@ -80,7 +82,7 @@ export class AddNoteTool {
       fields: Record<string, string>;
       tags?: string[];
       allowDuplicate?: boolean;
-      duplicateScope?: 'deck' | 'collection';
+      duplicateScope?: "deck" | "collection";
       duplicateScopeOptions?: {
         deckName?: string;
         checkChildren?: boolean;
@@ -91,19 +93,25 @@ export class AddNoteTool {
   ) {
     try {
       // Validate fields are not empty
-      const emptyFields = Object.entries(fields).filter(([_, value]) => !value || value.trim() === '');
+      const emptyFields = Object.entries(fields).filter(
+        ([_, value]) => !value || value.trim() === "",
+      );
       if (emptyFields.length > 0) {
         return createErrorResponse(
-          new Error(`Fields cannot be empty: ${emptyFields.map(([key]) => key).join(', ')}`),
+          new Error(
+            `Fields cannot be empty: ${emptyFields.map(([key]) => key).join(", ")}`,
+          ),
           {
             deckName,
             modelName,
             emptyFields: emptyFields.map(([key]) => key),
-          }
+          },
         );
       }
 
-      this.logger.log(`Adding note to deck "${deckName}" with model "${modelName}"`);
+      this.logger.log(
+        `Adding note to deck "${deckName}" with model "${modelName}"`,
+      );
       await context.reportProgress({ progress: 25, total: 100 });
 
       // Build the note parameters for AnkiConnect
@@ -144,25 +152,25 @@ export class AddNoteTool {
       await context.reportProgress({ progress: 50, total: 100 });
 
       // Add the note using AnkiConnect
-      const noteId = await this.ankiClient.invoke<number | null>('addNote', {
+      const noteId = await this.ankiClient.invoke<number | null>("addNote", {
         note: noteParams,
       });
 
       await context.reportProgress({ progress: 75, total: 100 });
 
       if (!noteId) {
-        this.logger.warn('Note creation failed - possibly a duplicate');
+        this.logger.warn("Note creation failed - possibly a duplicate");
         await context.reportProgress({ progress: 100, total: 100 });
 
         return createErrorResponse(
-          new Error('Failed to create note - it may be a duplicate'),
+          new Error("Failed to create note - it may be a duplicate"),
           {
             deckName,
             modelName,
             hint: allowDuplicate
-              ? 'The note could not be created. Check if the model and deck names are correct.'
-              : 'The note appears to be a duplicate. Set allowDuplicate to true if you want to add it anyway.',
-          }
+              ? "The note could not be created. Check if the model and deck names are correct."
+              : "The note appears to be a duplicate. Set allowDuplicate to true if you want to add it anyway.",
+          },
         );
       }
 
@@ -181,34 +189,34 @@ export class AddNoteTool {
         details: {
           fieldsAdded: fieldCount,
           tagsAdded: tagCount,
-          duplicateCheckScope: duplicateScope || 'default',
+          duplicateCheckScope: duplicateScope || "default",
         },
       });
     } catch (error) {
-      this.logger.error('Failed to add note', error);
+      this.logger.error("Failed to add note", error);
 
       // Check for specific error types
       if (error instanceof Error) {
-        if (error.message.includes('model')) {
+        if (error.message.includes("model")) {
           return createErrorResponse(error, {
             deckName,
             modelName,
-            hint: 'Model not found. Use modelNames tool to see available models.',
+            hint: "Model not found. Use modelNames tool to see available models.",
           });
         }
-        if (error.message.includes('deck')) {
+        if (error.message.includes("deck")) {
           return createErrorResponse(error, {
             deckName,
             modelName,
-            hint: 'Deck not found. Use list_decks tool to see available decks or createDeck to create a new one.',
+            hint: "Deck not found. Use list_decks tool to see available decks or createDeck to create a new one.",
           });
         }
-        if (error.message.includes('field')) {
+        if (error.message.includes("field")) {
           return createErrorResponse(error, {
             deckName,
             modelName,
             providedFields: Object.keys(fields),
-            hint: 'Field mismatch. Use modelFieldNames tool to see required fields for this model.',
+            hint: "Field mismatch. Use modelFieldNames tool to see required fields for this model.",
           });
         }
       }
@@ -216,7 +224,7 @@ export class AddNoteTool {
       return createErrorResponse(error, {
         deckName,
         modelName,
-        hint: 'Make sure Anki is running and the deck/model names are correct',
+        hint: "Make sure Anki is running and the deck/model names are correct",
       });
     }
   }

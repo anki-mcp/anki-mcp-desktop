@@ -1,13 +1,16 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { GuiUndoTool } from '../gui-undo.tool';
-import { AnkiConnectClient } from '../../../../clients/anki-connect.client';
-import { parseToolResult, createMockContext } from '../../../../../test-fixtures/test-helpers';
+import { Test, TestingModule } from "@nestjs/testing";
+import { GuiUndoTool } from "../gui-undo.tool";
+import { AnkiConnectClient } from "../../../../clients/anki-connect.client";
+import {
+  parseToolResult,
+  createMockContext,
+} from "../../../../../test-fixtures/test-helpers";
 
 const mockAnkiClient = {
   invoke: jest.fn(),
 };
 
-describe('GuiUndoTool', () => {
+describe("GuiUndoTool", () => {
   let tool: GuiUndoTool;
   let mockContext: any;
 
@@ -27,12 +30,12 @@ describe('GuiUndoTool', () => {
     jest.clearAllMocks();
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(tool).toBeDefined();
   });
 
-  describe('guiUndo', () => {
-    it('should successfully undo last action', async () => {
+  describe("guiUndo", () => {
+    it("should successfully undo last action", async () => {
       mockAnkiClient.invoke.mockResolvedValue(true);
 
       const rawResult = await tool.guiUndo({}, mockContext);
@@ -40,12 +43,12 @@ describe('GuiUndoTool', () => {
 
       expect(result.success).toBe(true);
       expect(result.undone).toBe(true);
-      expect(result.message).toContain('Last action undone successfully');
-      expect(mockAnkiClient.invoke).toHaveBeenCalledWith('guiUndo');
+      expect(result.message).toContain("Last action undone successfully");
+      expect(mockAnkiClient.invoke).toHaveBeenCalledWith("guiUndo");
       expect(mockContext.reportProgress).toHaveBeenCalledTimes(2);
     });
 
-    it('should handle nothing to undo (returns false)', async () => {
+    it("should handle nothing to undo (returns false)", async () => {
       mockAnkiClient.invoke.mockResolvedValue(false);
 
       const rawResult = await tool.guiUndo({}, mockContext);
@@ -53,18 +56,18 @@ describe('GuiUndoTool', () => {
 
       expect(result.success).toBe(true);
       expect(result.undone).toBe(false);
-      expect(result.message).toContain('Nothing to undo');
+      expect(result.message).toContain("Nothing to undo");
     });
 
-    it('should handle errors', async () => {
-      const error = new Error('Undo failed');
+    it("should handle errors", async () => {
+      const error = new Error("Undo failed");
       mockAnkiClient.invoke.mockRejectedValue(error);
 
       const rawResult = await tool.guiUndo({}, mockContext);
       const result = parseToolResult(rawResult);
 
       expect(result.success).toBe(false);
-      expect(result.error).toContain('Undo failed');
+      expect(result.error).toContain("Undo failed");
     });
   });
 });

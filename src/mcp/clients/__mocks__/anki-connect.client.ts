@@ -10,6 +10,6 @@ export class AnkiConnectError extends Error {
     public readonly originalError?: string,
   ) {
     super(message);
-    this.name = 'AnkiConnectError';
+    this.name = "AnkiConnectError";
   }
 }

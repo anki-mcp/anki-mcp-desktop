@@ -1,5 +1,11 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo "🧪 Running tests before push..."
-npm test
+echo "🔍 Running linter..."
+npm run lint || exit 1
+
+echo "🔧 Running type check..."
+npm run type-check || exit 1
+
+echo "🧪 Running tests..."
+npm test || exit 1

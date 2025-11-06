@@ -1,10 +1,13 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Tool } from '@rekog/mcp-nest';
-import type { Context } from '@rekog/mcp-nest';
-import { z } from 'zod';
-import { AnkiConnectClient } from '@/mcp/clients/anki-connect.client';
-import { createSuccessResponse, createErrorResponse } from '@/mcp/utils/anki.utils';
-import type { CardTemplate } from '@/mcp/types/anki.types';
+import { Injectable, Logger } from "@nestjs/common";
+import { Tool } from "@rekog/mcp-nest";
+import type { Context } from "@rekog/mcp-nest";
+import { z } from "zod";
+import { AnkiConnectClient } from "@/mcp/clients/anki-connect.client";
+import {
+  createSuccessResponse,
+  createErrorResponse,
+} from "@/mcp/utils/anki.utils";
+import type { CardTemplate } from "@/mcp/types/anki.types";
 
 /**
  * Tool for creating a new Anki model/note type
@@ -16,20 +19,24 @@ export class CreateModelTool {
   constructor(private readonly ankiClient: AnkiConnectClient) {}
 
   @Tool({
-    name: 'createModel',
+    name: "createModel",
     description:
-      'Create a new note type (model) in Anki with custom fields, card templates, and styling. ' +
-      'Useful for creating specialized models like RTL (Right-to-Left) language models for Hebrew, Arabic, etc. ' +
-      'Each model defines the structure of notes and how cards are generated from them.',
+      "Create a new note type (model) in Anki with custom fields, card templates, and styling. " +
+      "Useful for creating specialized models like RTL (Right-to-Left) language models for Hebrew, Arabic, etc. " +
+      "Each model defines the structure of notes and how cards are generated from them.",
     parameters: z.object({
       modelName: z
         .string()
         .min(1)
-        .describe('Unique name for the new model (e.g., "Basic RTL", "Advanced Vocabulary")'),
+        .describe(
+          'Unique name for the new model (e.g., "Basic RTL", "Advanced Vocabulary")',
+        ),
       inOrderFields: z
         .array(z.string().min(1))
         .min(1)
-        .describe('Field names in order (e.g., ["Front", "Back"]). At least one field required.'),
+        .describe(
+          'Field names in order (e.g., ["Front", "Back"]). At least one field required.',
+        ),
       cardTemplates: z
         .array(
           z.object({
@@ -37,7 +44,9 @@ export class CreateModelTool {
             Front: z
               .string()
               .min(1)
-              .describe('Front template HTML with field placeholders (e.g., "{{Front}}")'),
+              .describe(
+                'Front template HTML with field placeholders (e.g., "{{Front}}")',
+              ),
             Back: z
               .string()
               .min(1)
@@ -47,7 +56,9 @@ export class CreateModelTool {
           }),
         )
         .min(1)
-        .describe('Card templates (at least one required). Each template generates one card per note.'),
+        .describe(
+          "Card templates (at least one required). Each template generates one card per note.",
+        ),
       css: z
         .string()
         .optional()
@@ -58,7 +69,7 @@ export class CreateModelTool {
         .boolean()
         .optional()
         .default(false)
-        .describe('Create as cloze deletion model (default: false)'),
+        .describe("Create as cloze deletion model (default: false)"),
     }),
   })
   async createModel(
@@ -78,7 +89,9 @@ export class CreateModelTool {
     context: Context,
   ) {
     try {
-      this.logger.log(`Creating model: ${modelName} with ${inOrderFields.length} fields`);
+      this.logger.log(
+        `Creating model: ${modelName} with ${inOrderFields.length} fields`,
+      );
       await context.reportProgress({ progress: 10, total: 100 });
 
       // Validate field references in templates (warning only, not error)
@@ -94,13 +107,13 @@ export class CreateModelTool {
           const fieldName = ref.slice(2, -2).trim();
           // Skip special Anki fields
           if (
-            fieldName === 'FrontSide' ||
-            fieldName === 'Tags' ||
-            fieldName === 'Type' ||
-            fieldName === 'Deck' ||
-            fieldName === 'Subdeck' ||
-            fieldName === 'Card' ||
-            fieldName.startsWith('cloze:')
+            fieldName === "FrontSide" ||
+            fieldName === "Tags" ||
+            fieldName === "Type" ||
+            fieldName === "Deck" ||
+            fieldName === "Subdeck" ||
+            fieldName === "Card" ||
+            fieldName.startsWith("cloze:")
           ) {
             continue;
           }
@@ -116,7 +129,7 @@ export class CreateModelTool {
       await context.reportProgress({ progress: 30, total: 100 });
 
       // Create the model
-      const result = await this.ankiClient.invoke<any>('createModel', {
+      const result = await this.ankiClient.invoke<any>("createModel", {
         modelName,
         inOrderFields,
         cardTemplates,
@@ -144,7 +157,8 @@ export class CreateModelTool {
 
       if (warnings.length > 0) {
         response.warnings = warnings;
-        response.message += '. Note: Some warnings were detected (see warnings field).';
+        response.message +=
+          ". Note: Some warnings were detected (see warnings field).";
       }
 
       return createSuccessResponse(response);
@@ -152,17 +166,21 @@ export class CreateModelTool {
       this.logger.error(`Failed to create model ${modelName}`, error);
 
       // Check for duplicate model name error
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      if (errorMessage.includes('already exists') || errorMessage.includes('duplicate')) {
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      if (
+        errorMessage.includes("already exists") ||
+        errorMessage.includes("duplicate")
+      ) {
         return createErrorResponse(error, {
           modelName,
-          hint: 'A model with this name already exists. Use a different name or use modelNames tool to see existing models.',
+          hint: "A model with this name already exists. Use a different name or use modelNames tool to see existing models.",
         });
       }
 
       return createErrorResponse(error, {
         modelName,
-        hint: 'Make sure Anki is running and all parameters are valid.',
+        hint: "Make sure Anki is running and all parameters are valid.",
       });
     }
   }

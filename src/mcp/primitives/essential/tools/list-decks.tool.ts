@@ -1,10 +1,13 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Tool } from '@rekog/mcp-nest';
-import type { Context } from '@rekog/mcp-nest';
-import { z } from 'zod';
-import { AnkiConnectClient } from '@/mcp/clients/anki-connect.client';
-import { DeckInfo, DeckStats } from '@/mcp/types/anki.types';
-import { createSuccessResponse, createErrorResponse } from '@/mcp/utils/anki.utils';
+import { Injectable, Logger } from "@nestjs/common";
+import { Tool } from "@rekog/mcp-nest";
+import type { Context } from "@rekog/mcp-nest";
+import { z } from "zod";
+import { AnkiConnectClient } from "@/mcp/clients/anki-connect.client";
+import { DeckInfo, DeckStats } from "@/mcp/types/anki.types";
+import {
+  createSuccessResponse,
+  createErrorResponse,
+} from "@/mcp/utils/anki.utils";
 
 /**
  * Tool for listing all available Anki decks
@@ -16,14 +19,14 @@ export class ListDecksTool {
   constructor(private readonly ankiClient: AnkiConnectClient) {}
 
   @Tool({
-    name: 'list_decks',
+    name: "list_decks",
     description:
-      'List all available Anki decks, optionally with statistics. Remember to sync first at the start of a review session for latest data.',
+      "List all available Anki decks, optionally with statistics. Remember to sync first at the start of a review session for latest data.",
     parameters: z.object({
       include_stats: z
         .boolean()
         .default(false)
-        .describe('Include card count statistics for each deck'),
+        .describe("Include card count statistics for each deck"),
     }),
   })
   async listDecks(
@@ -36,14 +39,14 @@ export class ListDecksTool {
       await context.reportProgress({ progress: 10, total: 100 });
 
       // Get list of deck names
-      const deckNames = await this.ankiClient.invoke<string[]>('deckNames');
+      const deckNames = await this.ankiClient.invoke<string[]>("deckNames");
 
       if (!deckNames || deckNames.length === 0) {
-        this.logger.log('No decks found');
+        this.logger.log("No decks found");
         await context.reportProgress({ progress: 100, total: 100 });
         return createSuccessResponse({
           success: true,
-          message: 'No decks found in Anki',
+          message: "No decks found in Anki",
           decks: [],
         });
       }
@@ -56,7 +59,9 @@ export class ListDecksTool {
       if (includeStats) {
         // Get deck statistics for all decks using the correct action name
         // getDeckStats requires an array of deck names
-        const deckStatsResponse = await this.ankiClient.invoke<Record<string, any>>('getDeckStats', {
+        const deckStatsResponse = await this.ankiClient.invoke<
+          Record<string, any>
+        >("getDeckStats", {
           decks: deckNames,
         });
 
@@ -64,7 +69,7 @@ export class ListDecksTool {
         // The response is keyed by deck ID, not name
         const statsArray = Object.values(deckStatsResponse);
 
-        decks = deckNames.map(name => {
+        decks = deckNames.map((name) => {
           // Find the stats for this deck by name
           const stats = statsArray.find((s: any) => s.name === name);
           if (stats) {
@@ -99,7 +104,7 @@ export class ListDecksTool {
         );
       } else {
         // Just return deck names without stats
-        decks = deckNames.map(name => ({ name }));
+        decks = deckNames.map((name) => ({ name }));
       }
 
       await context.reportProgress({ progress: 100, total: 100 });
@@ -117,7 +122,7 @@ export class ListDecksTool {
 
       return createSuccessResponse(response);
     } catch (error) {
-      this.logger.error('Failed to list decks', error);
+      this.logger.error("Failed to list decks", error);
       return createErrorResponse(error);
     }
   }

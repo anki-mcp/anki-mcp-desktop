@@ -1,4 +1,4 @@
-import { AnkiConnectClient } from '@/mcp/clients/anki-connect.client';
+import { AnkiConnectClient } from "@/mcp/clients/anki-connect.client";
 
 /**
  * Parameters for storeMediaFile action
@@ -42,22 +42,24 @@ export async function storeMediaFile(
 
   // Validate that at least one source is provided
   if (!data && !path && !url) {
-    throw new Error('Must provide either data, path, or url parameter');
+    throw new Error("Must provide either data, path, or url parameter");
   }
 
   // Validate that only one source is provided
   const sources = [data, path, url].filter(Boolean);
   if (sources.length > 1) {
-    throw new Error('Cannot provide multiple sources (data, path, url). Choose one.');
+    throw new Error(
+      "Cannot provide multiple sources (data, path, url). Choose one.",
+    );
   }
 
   // Validate filename
-  if (!filename || filename.trim() === '') {
-    throw new Error('Filename cannot be empty');
+  if (!filename || filename.trim() === "") {
+    throw new Error("Filename cannot be empty");
   }
 
   // Check if filename starts with underscore (prevents Anki from removing unused media)
-  const prefixedWithUnderscore = filename.startsWith('_');
+  const prefixedWithUnderscore = filename.startsWith("_");
 
   // Build AnkiConnect params
   const ankiParams: Record<string, any> = {
@@ -74,11 +76,11 @@ export async function storeMediaFile(
   }
 
   // Call AnkiConnect
-  const result = await client.invoke<string>('storeMediaFile', ankiParams);
+  const result = await client.invoke<string>("storeMediaFile", ankiParams);
 
   // AnkiConnect returns the filename on success, or null on failure
   if (!result) {
-    throw new Error('Failed to store media file');
+    throw new Error("Failed to store media file");
   }
 
   return {

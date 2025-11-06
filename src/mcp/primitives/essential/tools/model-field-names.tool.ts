@@ -1,9 +1,12 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Tool } from '@rekog/mcp-nest';
-import type { Context } from '@rekog/mcp-nest';
-import { z } from 'zod';
-import { AnkiConnectClient } from '@/mcp/clients/anki-connect.client';
-import { createSuccessResponse, createErrorResponse } from '@/mcp/utils/anki.utils';
+import { Injectable, Logger } from "@nestjs/common";
+import { Tool } from "@rekog/mcp-nest";
+import type { Context } from "@rekog/mcp-nest";
+import { z } from "zod";
+import { AnkiConnectClient } from "@/mcp/clients/anki-connect.client";
+import {
+  createSuccessResponse,
+  createErrorResponse,
+} from "@/mcp/utils/anki.utils";
 
 /**
  * Tool for retrieving field names for a specific model/note type
@@ -15,14 +18,14 @@ export class ModelFieldNamesTool {
   constructor(private readonly ankiClient: AnkiConnectClient) {}
 
   @Tool({
-    name: 'modelFieldNames',
+    name: "modelFieldNames",
     description:
-      'Get the field names for a specific note type (model). Use this to know what fields are required when creating notes of this type.',
+      "Get the field names for a specific note type (model). Use this to know what fields are required when creating notes of this type.",
     parameters: z.object({
       modelName: z
         .string()
         .min(1)
-        .describe('The name of the model/note type to get fields for'),
+        .describe("The name of the model/note type to get fields for"),
     }),
   })
   async modelFieldNames(
@@ -34,9 +37,12 @@ export class ModelFieldNamesTool {
       await context.reportProgress({ progress: 25, total: 100 });
 
       // Get field names for the specified model
-      const fieldNames = await this.ankiClient.invoke<string[]>('modelFieldNames', {
-        modelName: modelName,
-      });
+      const fieldNames = await this.ankiClient.invoke<string[]>(
+        "modelFieldNames",
+        {
+          modelName: modelName,
+        },
+      );
 
       await context.reportProgress({ progress: 75, total: 100 });
 
@@ -47,8 +53,8 @@ export class ModelFieldNamesTool {
           new Error(`Model "${modelName}" not found`),
           {
             modelName: modelName,
-            hint: 'Use modelNames tool to see available models',
-          }
+            hint: "Use modelNames tool to see available models",
+          },
         );
       }
 
@@ -65,26 +71,34 @@ export class ModelFieldNamesTool {
       }
 
       await context.reportProgress({ progress: 100, total: 100 });
-      this.logger.log(`Found ${fieldNames.length} fields for model ${modelName}`);
+      this.logger.log(
+        `Found ${fieldNames.length} fields for model ${modelName}`,
+      );
 
       // Provide example based on common model types
       let exampleFields: Record<string, string> | undefined;
       const lowerModelName = modelName.toLowerCase();
 
-      if (lowerModelName.includes('basic') && !lowerModelName.includes('reversed')) {
+      if (
+        lowerModelName.includes("basic") &&
+        !lowerModelName.includes("reversed")
+      ) {
         exampleFields = {
-          Front: 'Question or prompt text',
-          Back: 'Answer or response text',
+          Front: "Question or prompt text",
+          Back: "Answer or response text",
         };
-      } else if (lowerModelName.includes('basic') && lowerModelName.includes('reversed')) {
+      } else if (
+        lowerModelName.includes("basic") &&
+        lowerModelName.includes("reversed")
+      ) {
         exampleFields = {
-          Front: 'First side of the card',
-          Back: 'Second side of the card',
+          Front: "First side of the card",
+          Back: "Second side of the card",
         };
-      } else if (lowerModelName.includes('cloze')) {
+      } else if (lowerModelName.includes("cloze")) {
         exampleFields = {
-          Text: 'The {{c1::hidden}} text will be replaced with [...] on the card',
-          Extra: 'Additional information or hints',
+          Text: "The {{c1::hidden}} text will be replaced with [...] on the card",
+          Extra: "Additional information or hints",
         };
       }
 
@@ -93,20 +107,24 @@ export class ModelFieldNamesTool {
         modelName: modelName,
         fieldNames: fieldNames,
         total: fieldNames.length,
-        message: `Model "${modelName}" has ${fieldNames.length} field${fieldNames.length !== 1 ? 's' : ''}`,
+        message: `Model "${modelName}" has ${fieldNames.length} field${fieldNames.length !== 1 ? "s" : ""}`,
       };
 
       if (exampleFields) {
         response.example = exampleFields;
-        response.hint = 'Use these field names as keys when creating notes with addNote tool';
+        response.hint =
+          "Use these field names as keys when creating notes with addNote tool";
       }
 
       return createSuccessResponse(response);
     } catch (error) {
-      this.logger.error(`Failed to retrieve field names for model ${modelName}`, error);
+      this.logger.error(
+        `Failed to retrieve field names for model ${modelName}`,
+        error,
+      );
       return createErrorResponse(error, {
         modelName: modelName,
-        hint: 'Make sure the model name is correct and Anki is running',
+        hint: "Make sure the model name is correct and Anki is running",
       });
     }
   }

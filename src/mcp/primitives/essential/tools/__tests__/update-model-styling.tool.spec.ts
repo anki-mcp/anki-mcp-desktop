@@ -1,12 +1,15 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { UpdateModelStylingTool } from '../update-model-styling.tool';
-import { AnkiConnectClient } from '../../../../clients/anki-connect.client';
-import { parseToolResult, createMockContext } from '../../../../../test-fixtures/test-helpers';
+import { Test, TestingModule } from "@nestjs/testing";
+import { UpdateModelStylingTool } from "../update-model-styling.tool";
+import { AnkiConnectClient } from "../../../../clients/anki-connect.client";
+import {
+  parseToolResult,
+  createMockContext,
+} from "../../../../../test-fixtures/test-helpers";
 
 // Mock the AnkiConnectClient
-jest.mock('../../../../clients/anki-connect.client');
+jest.mock("../../../../clients/anki-connect.client");
 
-describe('UpdateModelStylingTool', () => {
+describe("UpdateModelStylingTool", () => {
   let tool: UpdateModelStylingTool;
   let ankiClient: jest.Mocked<AnkiConnectClient>;
   let mockContext: any;
@@ -17,7 +20,9 @@ describe('UpdateModelStylingTool', () => {
     }).compile();
 
     tool = module.get<UpdateModelStylingTool>(UpdateModelStylingTool);
-    ankiClient = module.get(AnkiConnectClient) as jest.Mocked<AnkiConnectClient>;
+    ankiClient = module.get(
+      AnkiConnectClient,
+    ) as jest.Mocked<AnkiConnectClient>;
 
     // Setup mock context
     mockContext = createMockContext();
@@ -26,11 +31,11 @@ describe('UpdateModelStylingTool', () => {
     jest.clearAllMocks();
   });
 
-  describe('updateModelStyling', () => {
-    it('should update model styling successfully', async () => {
+  describe("updateModelStyling", () => {
+    it("should update model styling successfully", async () => {
       // Arrange
-      const oldCss = '.card { font-size: 16px; }';
-      const newCss = '.card { font-size: 20px; color: blue; }';
+      const oldCss = ".card { font-size: 16px; }";
+      const newCss = ".card { font-size: 20px; color: blue; }";
 
       ankiClient.invoke
         .mockResolvedValueOnce({ css: oldCss }) // modelStyling call
@@ -38,32 +43,36 @@ describe('UpdateModelStylingTool', () => {
 
       // Act
       const rawResult = await tool.updateModelStyling(
-        { modelName: 'Basic', css: newCss },
+        { modelName: "Basic", css: newCss },
         mockContext,
       );
       const result = parseToolResult(rawResult);
 
       // Assert
       expect(ankiClient.invoke).toHaveBeenCalledTimes(2);
-      expect(ankiClient.invoke).toHaveBeenNthCalledWith(1, 'modelStyling', {
-        modelName: 'Basic',
+      expect(ankiClient.invoke).toHaveBeenNthCalledWith(1, "modelStyling", {
+        modelName: "Basic",
       });
-      expect(ankiClient.invoke).toHaveBeenNthCalledWith(2, 'updateModelStyling', {
-        model: {
-          name: 'Basic',
-          css: newCss,
+      expect(ankiClient.invoke).toHaveBeenNthCalledWith(
+        2,
+        "updateModelStyling",
+        {
+          model: {
+            name: "Basic",
+            css: newCss,
+          },
         },
-      });
+      );
 
       expect(result.success).toBe(true);
-      expect(result.modelName).toBe('Basic');
+      expect(result.modelName).toBe("Basic");
       expect(result.cssLength).toBe(newCss.length);
       expect(result.oldCssLength).toBe(oldCss.length);
       expect(result.cssLengthChange).toBe(newCss.length - oldCss.length);
       expect(mockContext.reportProgress).toHaveBeenCalled();
     });
 
-    it('should detect RTL support in CSS', async () => {
+    it("should detect RTL support in CSS", async () => {
       // Arrange
       const rtlCss = `.card {
   font-family: arial;
@@ -73,12 +82,12 @@ describe('UpdateModelStylingTool', () => {
 }`;
 
       ankiClient.invoke
-        .mockResolvedValueOnce({ css: '.card {}' })
+        .mockResolvedValueOnce({ css: ".card {}" })
         .mockResolvedValueOnce(null);
 
       // Act
       const rawResult = await tool.updateModelStyling(
-        { modelName: 'Basic RTL', css: rtlCss },
+        { modelName: "Basic RTL", css: rtlCss },
         mockContext,
       );
       const result = parseToolResult(rawResult);
@@ -89,17 +98,17 @@ describe('UpdateModelStylingTool', () => {
       expect(result.cssInfo.hasCardStyling).toBe(true);
     });
 
-    it('should detect RTL support without spaces', async () => {
+    it("should detect RTL support without spaces", async () => {
       // Arrange
-      const rtlCss = '.card{direction:rtl;}';
+      const rtlCss = ".card{direction:rtl;}";
 
       ankiClient.invoke
-        .mockResolvedValueOnce({ css: '.card {}' })
+        .mockResolvedValueOnce({ css: ".card {}" })
         .mockResolvedValueOnce(null);
 
       // Act
       const rawResult = await tool.updateModelStyling(
-        { modelName: 'Test', css: rtlCss },
+        { modelName: "Test", css: rtlCss },
         mockContext,
       );
       const result = parseToolResult(rawResult);
@@ -109,7 +118,7 @@ describe('UpdateModelStylingTool', () => {
       expect(result.cssInfo.hasRtlSupport).toBe(true);
     });
 
-    it('should analyze CSS classes', async () => {
+    it("should analyze CSS classes", async () => {
       // Arrange
       const complexCss = `.card { font-size: 20px; }
 .front { color: blue; }
@@ -117,12 +126,12 @@ describe('UpdateModelStylingTool', () => {
 .cloze { font-weight: bold; }`;
 
       ankiClient.invoke
-        .mockResolvedValueOnce({ css: '.card {}' })
+        .mockResolvedValueOnce({ css: ".card {}" })
         .mockResolvedValueOnce(null);
 
       // Act
       const rawResult = await tool.updateModelStyling(
-        { modelName: 'Test', css: complexCss },
+        { modelName: "Test", css: complexCss },
         mockContext,
       );
       const result = parseToolResult(rawResult);
@@ -136,40 +145,40 @@ describe('UpdateModelStylingTool', () => {
       expect(result.cssInfo.hasRtlSupport).toBe(false);
     });
 
-    it('should work even if old styling cannot be fetched', async () => {
+    it("should work even if old styling cannot be fetched", async () => {
       // Arrange
-      const newCss = '.card { font-size: 20px; }';
+      const newCss = ".card { font-size: 20px; }";
 
       ankiClient.invoke
-        .mockRejectedValueOnce(new Error('Could not fetch old styling'))
+        .mockRejectedValueOnce(new Error("Could not fetch old styling"))
         .mockResolvedValueOnce(null);
 
       // Act
       const rawResult = await tool.updateModelStyling(
-        { modelName: 'Basic', css: newCss },
+        { modelName: "Basic", css: newCss },
         mockContext,
       );
       const result = parseToolResult(rawResult);
 
       // Assert
       expect(result.success).toBe(true);
-      expect(result.modelName).toBe('Basic');
+      expect(result.modelName).toBe("Basic");
       expect(result.cssLength).toBe(newCss.length);
       expect(result.oldCssLength).toBeUndefined();
       expect(result.cssLengthChange).toBeUndefined();
     });
 
-    it('should handle model not found error', async () => {
+    it("should handle model not found error", async () => {
       // Arrange
-      const newCss = '.card { font-size: 20px; }';
+      const newCss = ".card { font-size: 20px; }";
 
       ankiClient.invoke
-        .mockResolvedValueOnce({ css: '.card {}' })
-        .mockRejectedValueOnce(new Error('model not found'));
+        .mockResolvedValueOnce({ css: ".card {}" })
+        .mockRejectedValueOnce(new Error("model not found"));
 
       // Act
       const rawResult = await tool.updateModelStyling(
-        { modelName: 'NonExistent', css: newCss },
+        { modelName: "NonExistent", css: newCss },
         mockContext,
       );
       const result = parseToolResult(rawResult);
@@ -177,20 +186,20 @@ describe('UpdateModelStylingTool', () => {
       // Assert
       expect(result.success).toBe(false);
       expect(result.error).toBeDefined();
-      expect(result.hint).toContain('Model not found');
+      expect(result.hint).toContain("Model not found");
     });
 
-    it('should handle AnkiConnect errors', async () => {
+    it("should handle AnkiConnect errors", async () => {
       // Arrange
-      const newCss = '.card { font-size: 20px; }';
+      const newCss = ".card { font-size: 20px; }";
 
       ankiClient.invoke
-        .mockResolvedValueOnce({ css: '.card {}' })
-        .mockRejectedValueOnce(new Error('Anki is not running'));
+        .mockResolvedValueOnce({ css: ".card {}" })
+        .mockRejectedValueOnce(new Error("Anki is not running"));
 
       // Act
       const rawResult = await tool.updateModelStyling(
-        { modelName: 'Basic', css: newCss },
+        { modelName: "Basic", css: newCss },
         mockContext,
       );
       const result = parseToolResult(rawResult);
@@ -198,20 +207,20 @@ describe('UpdateModelStylingTool', () => {
       // Assert
       expect(result.success).toBe(false);
       expect(result.error).toBeDefined();
-      expect(result.hint).toContain('Anki is running');
+      expect(result.hint).toContain("Anki is running");
     });
 
-    it('should handle empty CSS gracefully', async () => {
+    it("should handle empty CSS gracefully", async () => {
       // Arrange
-      const emptyCss = '';
+      const emptyCss = "";
 
       ankiClient.invoke
-        .mockResolvedValueOnce({ css: '.card { font-size: 20px; }' })
+        .mockResolvedValueOnce({ css: ".card { font-size: 20px; }" })
         .mockResolvedValueOnce(null);
 
       // Act
       const rawResult = await tool.updateModelStyling(
-        { modelName: 'Basic', css: emptyCss },
+        { modelName: "Basic", css: emptyCss },
         mockContext,
       );
       const result = parseToolResult(rawResult);
@@ -222,7 +231,7 @@ describe('UpdateModelStylingTool', () => {
       expect(result.cssInfo.hasCardStyling).toBe(false);
     });
 
-    it('should handle CSS with special characters and unicode', async () => {
+    it("should handle CSS with special characters and unicode", async () => {
       // Arrange
       const unicodeCss = `.card {
   font-family: "Arial Hebrew", "Noto Sans Hebrew";
@@ -231,12 +240,12 @@ describe('UpdateModelStylingTool', () => {
 }`;
 
       ankiClient.invoke
-        .mockResolvedValueOnce({ css: '.card {}' })
+        .mockResolvedValueOnce({ css: ".card {}" })
         .mockResolvedValueOnce(null);
 
       // Act
       const rawResult = await tool.updateModelStyling(
-        { modelName: 'Hebrew', css: unicodeCss },
+        { modelName: "Hebrew", css: unicodeCss },
         mockContext,
       );
       const result = parseToolResult(rawResult);

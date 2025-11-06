@@ -30,4 +30,4 @@ export interface IAnkiConfig {
 /**
  * Token for dependency injection
  */
-export const ANKI_CONFIG = Symbol('ANKI_CONFIG');
+export const ANKI_CONFIG = Symbol("ANKI_CONFIG");

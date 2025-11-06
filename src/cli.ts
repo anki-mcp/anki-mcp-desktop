@@ -1,7 +1,7 @@
-import { Command } from 'commander';
-import { readFileSync } from 'fs';
-import { join } from 'path';
-import updateNotifier from 'update-notifier';
+import { Command } from "commander";
+import { readFileSync } from "fs";
+import { join } from "path";
+import updateNotifier from "update-notifier";
 
 export interface CliOptions {
   port: number;
@@ -13,10 +13,10 @@ export interface CliOptions {
 function getPackageJson() {
   try {
     return JSON.parse(
-      readFileSync(join(__dirname, '../package.json'), 'utf-8'),
+      readFileSync(join(__dirname, "../package.json"), "utf-8"),
     );
   } catch {
-    return { version: '0.0.0', name: 'anki-mcp-http' };
+    return { version: "0.0.0", name: "anki-mcp-http" };
   }
 }
 
@@ -32,26 +32,26 @@ export function parseCliArgs(): CliOptions {
   const program = new Command();
 
   program
-    .name('ankimcp')
-    .description('AnkiMCP Server - Model Context Protocol server for Anki')
+    .name("ankimcp")
+    .description("AnkiMCP Server - Model Context Protocol server for Anki")
     .version(getVersion())
     .option(
-      '--stdio',
-      'Run in STDIO mode (for MCP clients like Cursor, Cline, Zed)',
+      "--stdio",
+      "Run in STDIO mode (for MCP clients like Cursor, Cline, Zed)",
     )
-    .option('-p, --port <number>', 'Port to listen on (HTTP mode)', '3000')
-    .option('-h, --host <address>', 'Host to bind to (HTTP mode)', '127.0.0.1')
+    .option("-p, --port <number>", "Port to listen on (HTTP mode)", "3000")
+    .option("-h, --host <address>", "Host to bind to (HTTP mode)", "127.0.0.1")
     .option(
-      '-a, --anki-connect <url>',
-      'AnkiConnect URL',
-      'http://localhost:8765',
+      "-a, --anki-connect <url>",
+      "AnkiConnect URL",
+      "http://localhost:8765",
     )
     .option(
-      '--ngrok',
-      'Start ngrok tunnel (requires global ngrok installation)',
+      "--ngrok",
+      "Start ngrok tunnel (requires global ngrok installation)",
     )
     .addHelpText(
-      'after',
+      "after",
       `
 Transport Modes:
   HTTP Mode (default):  For web-based AI assistants (ChatGPT, Claude.ai)
@@ -108,7 +108,8 @@ export function displayStartupBanner(
   const version = getVersion();
   const title = `AnkiMCP HTTP Server v${version}`;
   const padding = Math.floor((64 - title.length) / 2);
-  const paddedTitle = ' '.repeat(padding) + title + ' '.repeat(64 - padding - title.length);
+  const paddedTitle =
+    " ".repeat(padding) + title + " ".repeat(64 - padding - title.length);
 
   console.log(`
 ╔════════════════════════════════════════════════════════════════╗
@@ -116,26 +117,26 @@ export function displayStartupBanner(
 ╚════════════════════════════════════════════════════════════════╝
 
 🚀 Server running on: http://${options.host}:${options.port}
-🔌 AnkiConnect URL:   ${options.ankiConnect}${ngrokUrl ? `\n🌐 Ngrok tunnel:      ${ngrokUrl}` : ''}
+🔌 AnkiConnect URL:   ${options.ankiConnect}${ngrokUrl ? `\n🌐 Ngrok tunnel:      ${ngrokUrl}` : ""}
 
 Configuration:
   • Port:               ${options.port} (override: --port 8080)
   • Host:               ${options.host} (override: --host 0.0.0.0)
   • AnkiConnect:        ${options.ankiConnect}
-                        (override: --anki-connect http://localhost:8765)${ngrokUrl ? `\n  • Ngrok tunnel:       ${ngrokUrl}\n  • Ngrok dashboard:    http://localhost:4040` : ''}
+                        (override: --anki-connect http://localhost:8765)${ngrokUrl ? `\n  • Ngrok tunnel:       ${ngrokUrl}\n  • Ngrok dashboard:    http://localhost:4040` : ""}
 ${
-    !ngrokUrl
-      ? `
+  !ngrokUrl
+    ? `
 Usage with ngrok:
   1. Install: npm install -g ngrok
   2. Setup: ngrok config add-authtoken <your-token>
   3. Run: anki-mcp-http --ngrok
 `
-      : `
+    : `
 Share this URL with your AI assistant:
   ${ngrokUrl}
 `
-  }
+}
 Run 'anki-mcp-http --help' for more options.
 `);
 }

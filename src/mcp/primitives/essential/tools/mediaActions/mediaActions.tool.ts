@@ -1,25 +1,28 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Tool } from '@rekog/mcp-nest';
-import type { Context } from '@rekog/mcp-nest';
-import { z } from 'zod';
-import { AnkiConnectClient } from '@/mcp/clients/anki-connect.client';
-import { createSuccessResponse, createErrorResponse } from '@/mcp/utils/anki.utils';
+import { Injectable, Logger } from "@nestjs/common";
+import { Tool } from "@rekog/mcp-nest";
+import type { Context } from "@rekog/mcp-nest";
+import { z } from "zod";
+import { AnkiConnectClient } from "@/mcp/clients/anki-connect.client";
+import {
+  createSuccessResponse,
+  createErrorResponse,
+} from "@/mcp/utils/anki.utils";
 import {
   storeMediaFile,
   type StoreMediaFileResult,
-} from './actions/storeMediaFile.action';
+} from "./actions/storeMediaFile.action";
 import {
   retrieveMediaFile,
   type RetrieveMediaFileResult,
-} from './actions/retrieveMediaFile.action';
+} from "./actions/retrieveMediaFile.action";
 import {
   getMediaFilesNames,
   type GetMediaFilesNamesResult,
-} from './actions/getMediaFilesNames.action';
+} from "./actions/getMediaFilesNames.action";
 import {
   deleteMediaFile,
   type DeleteMediaFileResult,
-} from './actions/deleteMediaFile.action';
+} from "./actions/deleteMediaFile.action";
 
 /**
  * Unified media actions tool for managing Anki media files
@@ -32,7 +35,7 @@ export class MediaActionsTool {
   constructor(private readonly ankiClient: AnkiConnectClient) {}
 
   @Tool({
-    name: 'mediaActions',
+    name: "mediaActions",
     description: `Manage Anki media files (audio/images). Supports four actions:
 - storeMediaFile: Upload media to Anki (supports base64 data, file paths, or URLs)
 - retrieveMediaFile: Download media from Anki as base64
@@ -42,29 +45,38 @@ export class MediaActionsTool {
 Perfect for workflows like ElevenLabs TTS → Anki audio flashcards.`,
     parameters: z.object({
       action: z
-        .enum(['storeMediaFile', 'retrieveMediaFile', 'getMediaFilesNames', 'deleteMediaFile'])
-        .describe('The media action to perform'),
+        .enum([
+          "storeMediaFile",
+          "retrieveMediaFile",
+          "getMediaFilesNames",
+          "deleteMediaFile",
+        ])
+        .describe("The media action to perform"),
       filename: z
         .string()
         .optional()
-        .describe('Filename (required for storeMediaFile, retrieveMediaFile, deleteMediaFile)'),
+        .describe(
+          "Filename (required for storeMediaFile, retrieveMediaFile, deleteMediaFile)",
+        ),
       data: z
         .string()
         .optional()
-        .describe('[storeMediaFile only] Base64-encoded file content'),
+        .describe("[storeMediaFile only] Base64-encoded file content"),
       path: z
         .string()
         .optional()
-        .describe('[storeMediaFile only] Absolute file path'),
+        .describe("[storeMediaFile only] Absolute file path"),
       url: z
         .string()
         .optional()
-        .describe('[storeMediaFile only] URL to download file from'),
+        .describe("[storeMediaFile only] URL to download file from"),
       deleteExisting: z
         .boolean()
         .optional()
         .default(true)
-        .describe('[storeMediaFile only] Overwrite existing file (default: true)'),
+        .describe(
+          "[storeMediaFile only] Overwrite existing file (default: true)",
+        ),
       pattern: z
         .string()
         .optional()
@@ -73,7 +85,11 @@ Perfect for workflows like ElevenLabs TTS → Anki audio flashcards.`,
   })
   async execute(
     params: {
-      action: 'storeMediaFile' | 'retrieveMediaFile' | 'getMediaFilesNames' | 'deleteMediaFile';
+      action:
+        | "storeMediaFile"
+        | "retrieveMediaFile"
+        | "getMediaFilesNames"
+        | "deleteMediaFile";
       filename?: string;
       data?: string;
       path?: string;
@@ -94,9 +110,9 @@ Perfect for workflows like ElevenLabs TTS → Anki audio flashcards.`,
 
       // Dispatch to appropriate action handler
       switch (params.action) {
-        case 'storeMediaFile':
+        case "storeMediaFile":
           if (!params.filename) {
-            throw new Error('filename is required for storeMediaFile action');
+            throw new Error("filename is required for storeMediaFile action");
           }
           await context.reportProgress({ progress: 25, total: 100 });
           result = await storeMediaFile(
@@ -112,9 +128,11 @@ Perfect for workflows like ElevenLabs TTS → Anki audio flashcards.`,
           await context.reportProgress({ progress: 100, total: 100 });
           break;
 
-        case 'retrieveMediaFile':
+        case "retrieveMediaFile":
           if (!params.filename) {
-            throw new Error('filename is required for retrieveMediaFile action');
+            throw new Error(
+              "filename is required for retrieveMediaFile action",
+            );
           }
           await context.reportProgress({ progress: 50, total: 100 });
           result = await retrieveMediaFile(
@@ -124,7 +142,7 @@ Perfect for workflows like ElevenLabs TTS → Anki audio flashcards.`,
           await context.reportProgress({ progress: 100, total: 100 });
           break;
 
-        case 'getMediaFilesNames':
+        case "getMediaFilesNames":
           await context.reportProgress({ progress: 50, total: 100 });
           result = await getMediaFilesNames(
             { pattern: params.pattern },
@@ -133,9 +151,9 @@ Perfect for workflows like ElevenLabs TTS → Anki audio flashcards.`,
           await context.reportProgress({ progress: 100, total: 100 });
           break;
 
-        case 'deleteMediaFile':
+        case "deleteMediaFile":
           if (!params.filename) {
-            throw new Error('filename is required for deleteMediaFile action');
+            throw new Error("filename is required for deleteMediaFile action");
           }
           await context.reportProgress({ progress: 50, total: 100 });
           result = await deleteMediaFile(
@@ -145,10 +163,11 @@ Perfect for workflows like ElevenLabs TTS → Anki audio flashcards.`,
           await context.reportProgress({ progress: 100, total: 100 });
           break;
 
-        default:
+        default: {
           // TypeScript exhaustiveness check
           const _exhaustive: never = params.action;
           throw new Error(`Unknown action: ${_exhaustive}`);
+        }
       }
 
       this.logger.log(`Successfully executed ${params.action}`);
@@ -157,7 +176,7 @@ Perfect for workflows like ElevenLabs TTS → Anki audio flashcards.`,
       this.logger.error(`Failed to execute ${params.action}`, error);
       return createErrorResponse(error, {
         action: params.action,
-        hint: 'Make sure Anki is running and the media file/path is valid',
+        hint: "Make sure Anki is running and the media file/path is valid",
       });
     }
   }

@@ -1,5 +1,5 @@
-import { spawn, ChildProcess } from 'child_process';
-import http from 'http';
+import { spawn, ChildProcess } from "child_process";
+import http from "http";
 
 export interface NgrokTunnelInfo {
   publicUrl: string;
@@ -20,16 +20,16 @@ export class NgrokService {
     // Check if ngrok is installed
     if (!(await this.isNgrokInstalled())) {
       throw new Error(
-        'ngrok is not installed.\n' +
-          'Install it with: npm install -g ngrok\n' +
-          'Or download from: https://ngrok.com/download\n' +
-          'Then setup auth: ngrok config add-authtoken <your-token>',
+        "ngrok is not installed.\n" +
+          "Install it with: npm install -g ngrok\n" +
+          "Or download from: https://ngrok.com/download\n" +
+          "Then setup auth: ngrok config add-authtoken <your-token>",
       );
     }
 
     // Start ngrok process
-    this.process = spawn('ngrok', ['http', port.toString()], {
-      stdio: 'pipe', // Capture output for debugging if needed
+    this.process = spawn("ngrok", ["http", port.toString()], {
+      stdio: "pipe", // Capture output for debugging if needed
     });
 
     // Register cleanup handlers (only once)
@@ -39,11 +39,11 @@ export class NgrokService {
     }
 
     // Handle process errors
-    this.process.on('error', (err) => {
+    this.process.on("error", (err) => {
       throw new Error(`Failed to start ngrok: ${err.message}`);
     });
 
-    this.process.on('exit', (code, signal) => {
+    this.process.on("exit", (code, _signal) => {
       if (code !== 0 && code !== null) {
         console.error(`ngrok exited with code ${code}`);
       }
@@ -55,7 +55,7 @@ export class NgrokService {
 
     return {
       publicUrl,
-      apiUrl: 'http://localhost:4040',
+      apiUrl: "http://localhost:4040",
     };
   }
 
@@ -64,9 +64,9 @@ export class NgrokService {
    */
   private async isNgrokInstalled(): Promise<boolean> {
     return new Promise((resolve) => {
-      const check = spawn('which', ['ngrok']);
-      check.on('close', (code) => resolve(code === 0));
-      check.on('error', () => resolve(false));
+      const check = spawn("which", ["ngrok"]);
+      check.on("close", (code) => resolve(code === 0));
+      check.on("error", () => resolve(false));
     });
   }
 
@@ -84,9 +84,9 @@ export class NgrokService {
       }
     }
     throw new Error(
-      'ngrok failed to start in time.\n' +
-        'Make sure you have configured your auth token:\n' +
-        'ngrok config add-authtoken <your-token>',
+      "ngrok failed to start in time.\n" +
+        "Make sure you have configured your auth token:\n" +
+        "ngrok config add-authtoken <your-token>",
     );
   }
 
@@ -97,28 +97,30 @@ export class NgrokService {
   private async getTunnelUrl(): Promise<string> {
     return new Promise((resolve, reject) => {
       http
-        .get('http://localhost:4040/api/tunnels', (res) => {
-          let data = '';
-          res.on('data', (chunk) => (data += chunk));
-          res.on('end', () => {
+        .get("http://localhost:4040/api/tunnels", (res) => {
+          let data = "";
+          res.on("data", (chunk) => (data += chunk));
+          res.on("end", () => {
             try {
               const response = JSON.parse(data);
               const tunnel = response.tunnels?.find(
-                (t: any) => t.proto === 'https',
+                (t: any) => t.proto === "https",
               );
               const publicUrl = tunnel?.public_url;
 
               if (publicUrl) {
                 resolve(publicUrl);
               } else {
-                reject(new Error('No HTTPS tunnel found in ngrok API response'));
+                reject(
+                  new Error("No HTTPS tunnel found in ngrok API response"),
+                );
               }
             } catch (err) {
               reject(new Error(`Failed to parse ngrok API response: ${err}`));
             }
           });
         })
-        .on('error', (err) => {
+        .on("error", (err) => {
           reject(new Error(`Failed to connect to ngrok API: ${err.message}`));
         });
     });
@@ -130,26 +132,26 @@ export class NgrokService {
    */
   private registerCleanupHandlers(): void {
     // Handle Ctrl+C
-    process.on('SIGINT', () => {
-      console.log('\n\n🛑 Shutting down ngrok tunnel...');
+    process.on("SIGINT", () => {
+      console.log("\n\n🛑 Shutting down ngrok tunnel...");
       this.cleanup();
       process.exit(0);
     });
 
     // Handle kill command
-    process.on('SIGTERM', () => {
+    process.on("SIGTERM", () => {
       this.cleanup();
       process.exit(0);
     });
 
     // Handle normal exit
-    process.on('exit', () => {
+    process.on("exit", () => {
       this.cleanup();
     });
 
     // Handle uncaught exceptions
-    process.on('uncaughtException', (err) => {
-      console.error('Uncaught exception:', err);
+    process.on("uncaughtException", (err) => {
+      console.error("Uncaught exception:", err);
       this.cleanup();
       process.exit(1);
     });
@@ -160,7 +162,7 @@ export class NgrokService {
    */
   private cleanup(): void {
     if (this.process && !this.process.killed) {
-      this.process.kill('SIGTERM'); // Graceful shutdown
+      this.process.kill("SIGTERM"); // Graceful shutdown
       this.process = null;
     }
   }
@@ -169,6 +171,6 @@ export class NgrokService {
    * Get ngrok web interface URL
    */
   getWebInterfaceUrl(): string {
-    return 'http://localhost:4040';
+    return "http://localhost:4040";
   }
 }

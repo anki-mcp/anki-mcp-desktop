@@ -1,5 +1,5 @@
-import { LoggerService } from '@nestjs/common';
-import { pino } from 'pino';
+import { LoggerService } from "@nestjs/common";
+import { pino } from "pino";
 
 /**
  * Creates a Pino logger configured for the specified transport mode
@@ -9,14 +9,14 @@ import { pino } from 'pino';
  */
 export function createPinoLogger(destination: 1 | 2) {
   return pino({
-    level: process.env.LOG_LEVEL || 'info',
+    level: process.env.LOG_LEVEL || "info",
     transport: {
-      target: 'pino-pretty',
+      target: "pino-pretty",
       options: {
         destination,
         colorize: true,
-        translateTime: 'HH:MM:ss Z',
-        ignore: 'pid,hostname',
+        translateTime: "HH:MM:ss Z",
+        ignore: "pid,hostname",
       },
     },
   });

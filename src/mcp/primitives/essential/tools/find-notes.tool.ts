@@ -1,9 +1,12 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Tool } from '@rekog/mcp-nest';
-import type { Context } from '@rekog/mcp-nest';
-import { z } from 'zod';
-import { AnkiConnectClient } from '@/mcp/clients/anki-connect.client';
-import { createSuccessResponse, createErrorResponse } from '@/mcp/utils/anki.utils';
+import { Injectable, Logger } from "@nestjs/common";
+import { Tool } from "@rekog/mcp-nest";
+import type { Context } from "@rekog/mcp-nest";
+import { z } from "zod";
+import { AnkiConnectClient } from "@/mcp/clients/anki-connect.client";
+import {
+  createSuccessResponse,
+  createErrorResponse,
+} from "@/mcp/utils/anki.utils";
 
 /**
  * Tool for searching notes using Anki's query syntax
@@ -15,9 +18,9 @@ export class FindNotesTool {
   constructor(private readonly ankiClient: AnkiConnectClient) {}
 
   @Tool({
-    name: 'findNotes',
+    name: "findNotes",
     description:
-      'Search for notes using Anki query syntax. Returns an array of note IDs matching the query. ' +
+      "Search for notes using Anki query syntax. Returns an array of note IDs matching the query. " +
       'Examples: "deck:Spanish", "tag:verb", "is:due", "front:hello", "added:1" (cards added today), ' +
       '"prop:due<=2" (cards due within 2 days), "flag:1" (red flag), "is:suspended"',
     parameters: z.object({
@@ -26,28 +29,25 @@ export class FindNotesTool {
         .min(1)
         .describe(
           'Anki search query. Use Anki query syntax like "deck:DeckName", "tag:tagname", ' +
-          '"is:due", "is:new", "is:review", "front:text", "back:text", or combine with spaces for AND, ' +
-          'OR for alternatives. Empty string returns all notes.'
+            '"is:due", "is:new", "is:review", "front:text", "back:text", or combine with spaces for AND, ' +
+            "OR for alternatives. Empty string returns all notes.",
         ),
     }),
   })
-  async findNotes(
-    { query }: { query: string },
-    context: Context,
-  ) {
+  async findNotes({ query }: { query: string }, context: Context) {
     try {
       this.logger.log(`Searching for notes with query: "${query}"`);
       await context.reportProgress({ progress: 25, total: 100 });
 
       // Call AnkiConnect findNotes action
-      const noteIds = await this.ankiClient.invoke<number[]>('findNotes', {
+      const noteIds = await this.ankiClient.invoke<number[]>("findNotes", {
         query: query,
       });
 
       await context.reportProgress({ progress: 75, total: 100 });
 
       if (!noteIds || noteIds.length === 0) {
-        this.logger.log('No notes found matching the query');
+        this.logger.log("No notes found matching the query");
         await context.reportProgress({ progress: 100, total: 100 });
 
         return createSuccessResponse({
@@ -55,8 +55,8 @@ export class FindNotesTool {
           noteIds: [],
           count: 0,
           query: query,
-          message: 'No notes found matching the search criteria',
-          hint: 'Try a broader search query or check your deck/tag names',
+          message: "No notes found matching the search criteria",
+          hint: "Try a broader search query or check your deck/tag names",
         });
       }
 
@@ -68,20 +68,21 @@ export class FindNotesTool {
         noteIds: noteIds,
         count: noteIds.length,
         query: query,
-        message: `Found ${noteIds.length} note${noteIds.length === 1 ? '' : 's'} matching the query`,
-        hint: noteIds.length > 100
-          ? 'Large result set. Consider using notesInfo with smaller batches for detailed information.'
-          : 'Use notesInfo tool to get detailed information about these notes',
+        message: `Found ${noteIds.length} note${noteIds.length === 1 ? "" : "s"} matching the query`,
+        hint:
+          noteIds.length > 100
+            ? "Large result set. Consider using notesInfo with smaller batches for detailed information."
+            : "Use notesInfo tool to get detailed information about these notes",
       });
     } catch (error) {
-      this.logger.error('Failed to search for notes', error);
+      this.logger.error("Failed to search for notes", error);
 
       // Check for specific error types
       if (error instanceof Error) {
-        if (error.message.includes('query')) {
+        if (error.message.includes("query")) {
           return createErrorResponse(error, {
             query,
-            hint: 'Invalid query syntax. Check Anki documentation for valid search syntax.',
+            hint: "Invalid query syntax. Check Anki documentation for valid search syntax.",
             examples: [
               '"deck:DeckName" - all notes in a deck',
               '"tag:important" - notes with specific tag',
@@ -95,7 +96,7 @@ export class FindNotesTool {
 
       return createErrorResponse(error, {
         query,
-        hint: 'Make sure Anki is running and the query syntax is valid',
+        hint: "Make sure Anki is running and the query syntax is valid",
       });
     }
   }

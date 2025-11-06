@@ -1,4 +1,4 @@
-import { AnkiConnectClient } from '@/mcp/clients/anki-connect.client';
+import { AnkiConnectClient } from "@/mcp/clients/anki-connect.client";
 
 /**
  * Parameters for deleteMediaFile action
@@ -27,12 +27,12 @@ export async function deleteMediaFile(
   const { filename } = params;
 
   // Validate filename
-  if (!filename || filename.trim() === '') {
-    throw new Error('Filename cannot be empty');
+  if (!filename || filename.trim() === "") {
+    throw new Error("Filename cannot be empty");
   }
 
   // Call AnkiConnect
-  await client.invoke<void>('deleteMediaFile', {
+  await client.invoke<void>("deleteMediaFile", {
     filename,
   });
 

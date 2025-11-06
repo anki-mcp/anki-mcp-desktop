@@ -9,7 +9,7 @@ export enum CardType {
   New = 0,
   Learning = 1,
   Review = 2,
-  Relearning = 3
+  Relearning = 3,
 }
 
 /**
@@ -128,7 +128,7 @@ export interface NoteOptions {
   allowDuplicate?: boolean;
 
   /** Scope for duplicate checking: "deck" checks only target deck, "collection" checks entire collection */
-  duplicateScope?: 'deck' | 'collection';
+  duplicateScope?: "deck" | "collection";
 
   /** Advanced options for duplicate scope checking */
   duplicateScopeOptions?: {
@@ -316,7 +316,7 @@ export interface GuiBrowseParams {
   /** Optional card reordering in browser */
   reorderCards?: {
     /** Sort order */
-    order: 'ascending' | 'descending';
+    order: "ascending" | "descending";
 
     /** Column to sort by */
     columnId: string;
