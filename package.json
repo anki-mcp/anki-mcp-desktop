@@ -136,10 +136,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/anki-mcp-organization/anki-mcp-desktop.git"
+    "url": "https://github.com/anki-mcp/anki-mcp-desktop.git"
   },
   "bugs": {
-    "url": "https://github.com/anki-mcp-organization/anki-mcp-desktop/issues"
+    "url": "https://github.com/anki-mcp/anki-mcp-desktop/issues"
   },
   "homepage": "https://ankimcp.ai",
   "keywords": [

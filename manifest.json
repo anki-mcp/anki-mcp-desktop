@@ -11,8 +11,8 @@
     "url": "https://ankimcp.ai"
   },
   "homepage": "https://ankimcp.io",
-  "documentation": "https://github.com/anki-mcp-organization/anki-mcp-desktop#readme",
-  "support": "https://github.com/anki-mcp-organization/anki-mcp-desktop/issues",
+  "documentation": "https://github.com/anki-mcp/anki-mcp-desktop#readme",
+  "support": "https://github.com/anki-mcp/anki-mcp-desktop/issues",
   "icon": "icon.png",
   "tools": [
     {

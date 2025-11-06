@@ -536,7 +536,7 @@ Update your Claude Desktop config to enable debugging:
       "command": "node",
       "args": [
         "--inspect=9229",
-        "/Users/anatoly/Developer/git/anki-mcp-organization/anki-mcp-desktop/dist/main-stdio.js"
+        "<path_to_project>/anki-mcp-desktop/dist/main-stdio.js"
       ],
       "env": {
         "ANKI_CONNECT_URL": "http://localhost:8765"
