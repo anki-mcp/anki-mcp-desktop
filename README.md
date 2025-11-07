@@ -47,6 +47,13 @@ For comprehensive guides, real-world examples, and step-by-step tutorials on usi
   - `getMediaFilesNames` - List media files with optional pattern filtering
   - `deleteMediaFile` - Remove media files
 
+**💡 Best Practice for Images:**
+- ✅ **Use file paths** (e.g., `/Users/you/image.png`) - Fast and efficient
+- ✅ **Use URLs** (e.g., `https://example.com/image.jpg`) - Direct download
+- ❌ **Avoid base64** - Extremely slow and token-inefficient
+
+Just tell Claude where the image is, and it will handle the upload automatically using the most efficient method.
+
 ### Model/Template Management
 - `modelNames` - List note types
 - `modelFieldNames` - Get fields for a note type
