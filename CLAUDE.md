@@ -8,6 +8,8 @@ This is an MCP (Model Context Protocol) server that enables AI assistants to int
 
 **Version**: 0.8.0 (Beta) - This project is in active development. Breaking changes may occur in 0.x versions.
 
+**License**: AGPL-3.0-or-later - Changed from MIT to enable future integration of Anki source code. See README.md for details.
+
 **Important**: Check `.claude-draft/` directory for analysis documents, implementation plans, test plans, and project summaries created during development planning sessions. See `.claude-draft/ngrok-integration.md` for detailed ngrok implementation documentation.
 
 **NPM Package**: Published as `anki-mcp-http` on npm registry for global installation.

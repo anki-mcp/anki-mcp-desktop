@@ -4,7 +4,7 @@
   "description": "Model Context Protocol server for Anki - enables AI assistants to interact with your Anki flashcards",
   "author": "Anatoly Tarnavsky",
   "private": false,
-  "license": "MIT",
+  "license": "AGPL-3.0-or-later",
   "main": "dist/main-http.js",
   "bin": {
     "ankimcp": "bin/ankimcp.js",
