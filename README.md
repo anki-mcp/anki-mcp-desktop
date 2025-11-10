@@ -1,5 +1,16 @@
 # Anki MCP Server
 
+> **⚠️ IMPORTANT: Project Renamed (v0.8.2+)**
+>
+> This project has been renamed and moved:
+> - **Package**: `anki-mcp-http` → `@ankimcp/anki-mcp-server`
+> - **Commands**: `anki-mcp-http` → `ankimcp` or `anki-mcp-server`
+> - **Repository**: `anki-mcp/anki-mcp-desktop` → `ankimcp/anki-mcp-server`
+>
+> The old `anki-mcp-http` package continues to be published for backward compatibility but is deprecated. Please migrate to the new package.
+>
+> **[Read more about this change →](https://ankimcp.ai/blog/organization-and-naming-update/)**
+
 [![Tests](https://github.com/ankimcp/anki-mcp-server/actions/workflows/test.yml/badge.svg)](https://github.com/ankimcp/anki-mcp-server/actions/workflows/test.yml)
 [![npm version](https://badge.fury.io/js/@ankimcp%2Fanki-mcp-server.svg)](https://www.npmjs.com/package/@ankimcp/anki-mcp-server)
 
