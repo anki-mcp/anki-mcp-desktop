@@ -10,9 +10,15 @@ This is an MCP (Model Context Protocol) server that enables AI assistants to int
 
 **License**: AGPL-3.0-or-later - Changed from MIT to enable future integration of Anki source code. See README.md for details.
 
-**Important**: Check `.claude-draft/` directory for analysis documents, implementation plans, test plans, and project summaries created during development planning sessions. See `.claude-draft/ngrok-integration.md` for detailed ngrok implementation documentation.
+**Important**: Check `.claude-draft/` directory for analysis documents, implementation plans, test plans, and project summaries created during development planning sessions:
+- `PROJECT_SUMMARY.md` - Overall project architecture and design decisions
+- `TEST_PLAN.md` - Testing strategy and implementation guidelines
+- `HTTP_MODE_ANALYSIS.md` - HTTP transport mode technical details
+- `architecture-tunnel.md` - Ngrok tunnel integration architecture
+- `gui-tools-implementation-plan.md` - GUI tools design and planning
+- `MODEL_ACTIONS_IMPLEMENTATION_PLAN.md` - Model creation/modification tools
 
-**NPM Package**: Published as `anki-mcp-http` on npm registry for global installation.
+**NPM Package**: Published as `@ankimcp/anki-mcp-server` on npm registry for global installation.
 
 ## Essential Commands
 
@@ -83,7 +89,7 @@ The application follows a modular NestJS architecture with MCP primitives organi
 - **`src/anki-config.service.ts`** - Configuration service implementing `IAnkiConfig`
 - **`src/http/guards/origin-validation.guard.ts`** - Origin validation for HTTP mode security
 - **`bin/ankimcp.js`** - CLI wrapper for npm global install (routes to main-http.js or main-stdio.js based on --stdio flag)
-  - Exposed as both `ankimcp` and `anki-mcp-http` commands when installed globally
+  - Exposed as both `ankimcp` and `@ankimcp/anki-mcp-server` commands when installed globally
 
 ### Transport Modes
 
@@ -105,8 +111,8 @@ The server supports two MCP transport modes via **separate entry points**:
 - MCP endpoint at root: `http://127.0.0.1:3000/`
 - Run: `npm run start:prod:http` or `node dist/main-http.js`
 - CLI options: `--port`, `--host`, `--anki-connect`, `--ngrok` (parsed by `src/cli.ts` using commander)
-- NPM package: `npx anki-mcp-http` (HTTP mode) or `npx anki-mcp-http --stdio` (STDIO mode)
-- Ngrok integration: `npx anki-mcp-http --ngrok` (requires global ngrok installation)
+- NPM package: `npx @ankimcp/anki-mcp-server` (HTTP mode) or `npx @ankimcp/anki-mcp-server --stdio` (STDIO mode)
+- Ngrok integration: `npx @ankimcp/anki-mcp-server --ngrok` (requires global ngrok installation)
 
 **Key Implementation Details**:
 - Both entry points compile together in single build (`npm run build`)
@@ -278,13 +284,13 @@ The server supports integrated ngrok tunneling via the `--ngrok` flag:
 
 ```bash
 # Start with ngrok tunnel
-anki-mcp-http --ngrok
+@ankimcp/anki-mcp-server --ngrok
 
 # With custom port
-anki-mcp-http --port 8080 --ngrok
+@ankimcp/anki-mcp-server --port 8080 --ngrok
 
 # Or with npx
-npx anki-mcp-http --ngrok
+npx @ankimcp/anki-mcp-server --ngrok
 ```
 
 **Prerequisites:**
@@ -303,7 +309,7 @@ npx anki-mcp-http --ngrok
 - Service: `src/services/ngrok.service.ts`
 - Integration: `src/main-http.ts` bootstrap
 - CLI: `src/cli.ts` (--ngrok flag parsing)
-- Full documentation: `.claude-draft/ngrok-integration.md`
+- Full documentation: `.claude-draft/architecture-tunnel.md`
 
 **Legal/License:**
 - Uses shell execution (not embedded package)
@@ -317,27 +323,27 @@ npx anki-mcp-http --ngrok
 Test the npm package locally before publishing:
 
 ```bash
-npm run pack:local         # Builds and creates anki-mcp-http-*.tgz
-npm run install:local      # Installs from ./anki-mcp-http-*.tgz globally
+npm run pack:local         # Builds and creates @ankimcp/anki-mcp-server-*.tgz
+npm run install:local      # Installs from ./@ankimcp/anki-mcp-server-*.tgz globally
 
 # Test both modes with global install:
-anki-mcp-http              # Test HTTP mode (default)
-anki-mcp-http --stdio      # Test STDIO mode (for MCP clients)
-anki-mcp-http --ngrok      # Test HTTP mode with ngrok tunnel
+@ankimcp/anki-mcp-server              # Test HTTP mode (default)
+@ankimcp/anki-mcp-server --stdio      # Test STDIO mode (for MCP clients)
+@ankimcp/anki-mcp-server --ngrok      # Test HTTP mode with ngrok tunnel
 
 # Or test with npx (simulates user experience):
-npx ./anki-mcp-http-*.tgz                # Test HTTP mode via npx
-npx ./anki-mcp-http-*.tgz --stdio        # Test STDIO mode via npx
-npx ./anki-mcp-http-*.tgz --ngrok        # Test ngrok integration via npx
+npx ./@ankimcp/anki-mcp-server-*.tgz                # Test HTTP mode via npx
+npx ./@ankimcp/anki-mcp-server-*.tgz --stdio        # Test STDIO mode via npx
+npx ./@ankimcp/anki-mcp-server-*.tgz --ngrok        # Test ngrok integration via npx
 
 npm run uninstall:local    # Removes global installation
 ```
 
-This simulates the full user experience of installing via `npm install -g anki-mcp-http` by creating and installing from a local `.tgz` package.
+This simulates the full user experience of installing via `npm install -g @ankimcp/anki-mcp-server` by creating and installing from a local `.tgz` package.
 
 **Testing STDIO mode with MCP clients:**
-- **Cursor IDE**: Configure `~/.cursor/mcp.json` with `npx anki-mcp-http --stdio`
-- **Cline**: Configure via settings UI with `npx anki-mcp-http --stdio`
+- **Cursor IDE**: Configure `~/.cursor/mcp.json` with `npx @ankimcp/anki-mcp-server --stdio`
+- **Cline**: Configure via settings UI with `npx @ankimcp/anki-mcp-server --stdio`
 - **Zed Editor**: Install as MCP extension (STDIO only)
 
 ### MCPB Bundle Distribution

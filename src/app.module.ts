@@ -26,7 +26,7 @@ export class AppModule {
 
         // MCP Module with STDIO transport
         McpModule.forRoot({
-          name: process.env.MCP_SERVER_NAME || "anki-mcp-desktop",
+          name: process.env.MCP_SERVER_NAME || "anki-mcp-server",
           version: process.env.MCP_SERVER_VERSION || "1.0.0",
           transport: McpTransportType.STDIO,
         }),
@@ -67,7 +67,7 @@ export class AppModule {
 
         // MCP Module with Streamable HTTP transport
         McpModule.forRoot({
-          name: process.env.MCP_SERVER_NAME || "anki-mcp-desktop",
+          name: process.env.MCP_SERVER_NAME || "anki-mcp-server",
           version: process.env.MCP_SERVER_VERSION || "1.0.0",
           transport: McpTransportType.STREAMABLE_HTTP,
           mcpEndpoint: "/",

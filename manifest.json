@@ -1,6 +1,6 @@
 {
   "manifest_version": "0.2",
-  "name": "anki-mcp-desktop",
+  "name": "anki-mcp-server",
   "display_name": "Anki MCP Server",
   "version": "0.8.0",
   "license": "AGPL-3.0-or-later",
@@ -12,8 +12,8 @@
     "url": "https://ankimcp.ai"
   },
   "homepage": "https://ankimcp.io",
-  "documentation": "https://github.com/anki-mcp/anki-mcp-desktop#readme",
-  "support": "https://github.com/anki-mcp/anki-mcp-desktop/issues",
+  "documentation": "https://github.com/ankimcp/anki-mcp-server#readme",
+  "support": "https://github.com/ankimcp/anki-mcp-server/issues",
   "icon": "icon.png",
   "tools": [
     {

@@ -1,4 +1,4 @@
-name: Publish to npm (@ankimcp/anki-mcp-server)
+name: Publish to npm (anki-mcp-http - legacy)
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - 'v*.*.*'
 
 jobs:
-  publish:
+  publish-legacy:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -27,7 +27,10 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Publish to npm as @ankimcp/anki-mcp-server
-        run: npm publish --access public
+      - name: Prepare package for legacy publishing
+        run: bash scripts/prepare-legacy-package.sh
+
+      - name: Publish to npm as anki-mcp-http (legacy)
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

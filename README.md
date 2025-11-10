@@ -1,7 +1,7 @@
-# Anki MCP Desktop
+# Anki MCP Server
 
-[![Tests](https://github.com/anki-mcp/anki-mcp-desktop/actions/workflows/test.yml/badge.svg)](https://github.com/anki-mcp/anki-mcp-desktop/actions/workflows/test.yml)
-[![npm version](https://badge.fury.io/js/anki-mcp-http.svg)](https://www.npmjs.com/package/anki-mcp-http)
+[![Tests](https://github.com/ankimcp/anki-mcp-server/actions/workflows/test.yml/badge.svg)](https://github.com/ankimcp/anki-mcp-server/actions/workflows/test.yml)
+[![npm version](https://badge.fury.io/js/@ankimcp%2Fanki-mcp-server.svg)](https://www.npmjs.com/package/@ankimcp/anki-mcp-server)
 
 <div align="center">
   <img src="./docs/images/ankimcp.png" alt="Anki + MCP Integration" width="600" />
@@ -75,7 +75,7 @@ This server works in two modes:
 
 The easiest way to install this MCP server for Claude Desktop:
 
-1. Download the latest `.mcpb` bundle from the [Releases](https://github.com/anki-mcp/anki-mcp-desktop/releases) page
+1. Download the latest `.mcpb` bundle from the [Releases](https://github.com/ankimcp/anki-mcp-server/releases) page
 2. In Claude Desktop, install the extension:
    - **Method 1**: Go to Settings → Extensions, then drag and drop the `.mcpb` file
    - **Method 2**: Go to Settings → Developer → Extensions → Install Extension, then select the `.mcpb` file
@@ -103,7 +103,7 @@ Want to use Anki with MCP clients like **Cursor IDE**, **Cline**, or **Zed Edito
   "mcpServers": {
     "anki-mcp": {
       "command": "npx",
-      "args": ["-y", "anki-mcp-http", "--stdio"],
+      "args": ["-y", "@ankimcp/anki-mcp-server", "--stdio"],
       "env": {
         "ANKI_CONNECT_URL": "http://localhost:8765"
       }
@@ -116,7 +116,7 @@ Want to use Anki with MCP clients like **Cursor IDE**, **Cline**, or **Zed Edito
 
 First, install globally:
 ```bash
-npm install -g anki-mcp-http
+npm install -g @ankimcp/anki-mcp-server
 ```
 
 Then configure:
@@ -124,7 +124,7 @@ Then configure:
 {
   "mcpServers": {
     "anki-mcp": {
-      "command": "anki-mcp-http",
+      "command": "@ankimcp/anki-mcp-server",
       "args": ["--stdio"],
       "env": {
         "ANKI_CONNECT_URL": "http://localhost:8765"
@@ -159,31 +159,31 @@ Want to use Anki with ChatGPT or Claude.ai in your browser? This mode lets you c
 
 ```bash
 # Quick start
-npx anki-mcp-http
+npx @ankimcp/anki-mcp-server
 
 # With ngrok tunnel (recommended for web-based AI)
-npx anki-mcp-http --ngrok
+npx @ankimcp/anki-mcp-server --ngrok
 
 # With custom options
-npx anki-mcp-http --port 8080 --host 0.0.0.0
-npx anki-mcp-http --anki-connect http://localhost:8765
+npx @ankimcp/anki-mcp-server --port 8080 --host 0.0.0.0
+npx @ankimcp/anki-mcp-server --anki-connect http://localhost:8765
 ```
 
 **Method 2: Using global installation**
 
 ```bash
 # Install once
-npm install -g anki-mcp-http
+npm install -g @ankimcp/anki-mcp-server
 
 # Run the server
-anki-mcp-http
+@ankimcp/anki-mcp-server
 
 # With ngrok tunnel (recommended for web-based AI)
-anki-mcp-http --ngrok
+@ankimcp/anki-mcp-server --ngrok
 
 # With custom options
-anki-mcp-http --port 8080 --host 0.0.0.0
-anki-mcp-http --anki-connect http://localhost:8765
+@ankimcp/anki-mcp-server --port 8080 --host 0.0.0.0
+@ankimcp/anki-mcp-server --anki-connect http://localhost:8765
 ```
 
 **Method 3: Install from source (for development)**
@@ -197,7 +197,7 @@ npm run start:prod:http
 **CLI Options:**
 
 ```bash
-anki-mcp-http [options]
+@ankimcp/anki-mcp-server [options]
 
 Options:
   --stdio                        Run in STDIO mode (for MCP clients)
@@ -208,17 +208,17 @@ Options:
   --help                         Show help message
 
 Usage with npx (no installation needed):
-  npx anki-mcp-http                        # HTTP mode
-  npx anki-mcp-http --port 8080            # Custom port
-  npx anki-mcp-http --stdio                # STDIO mode
-  npx anki-mcp-http --ngrok                # HTTP mode with ngrok tunnel
+  npx @ankimcp/anki-mcp-server                        # HTTP mode
+  npx @ankimcp/anki-mcp-server --port 8080            # Custom port
+  npx @ankimcp/anki-mcp-server --stdio                # STDIO mode
+  npx @ankimcp/anki-mcp-server --ngrok                # HTTP mode with ngrok tunnel
 
 Usage with global installation:
-  npm install -g anki-mcp-http             # Install once
-  anki-mcp-http                            # HTTP mode
-  anki-mcp-http --port 8080                # Custom port
-  anki-mcp-http --stdio                    # STDIO mode
-  anki-mcp-http --ngrok                    # HTTP mode with ngrok tunnel
+  npm install -g @ankimcp/anki-mcp-server             # Install once
+  @ankimcp/anki-mcp-server                            # HTTP mode
+  @ankimcp/anki-mcp-server --port 8080                # Custom port
+  @ankimcp/anki-mcp-server --stdio                    # STDIO mode
+  @ankimcp/anki-mcp-server --ngrok                    # HTTP mode with ngrok tunnel
 ```
 
 **Using with ngrok:**
@@ -231,7 +231,7 @@ npm install -g ngrok
 ngrok config add-authtoken <your-token>  # Get token from https://dashboard.ngrok.com
 
 # Start server with ngrok tunnel in one command:
-anki-mcp-http --ngrok
+@ankimcp/anki-mcp-server --ngrok
 
 # The tunnel URL will be displayed in the startup banner
 # Example output:
@@ -242,7 +242,7 @@ anki-mcp-http --ngrok
 
 ```bash
 # Terminal 1: Start the server
-anki-mcp-http
+@ankimcp/anki-mcp-server
 
 # Terminal 2: Create tunnel
 ngrok http 3000
@@ -255,7 +255,7 @@ ngrok http 3000
 - ✅ One command instead of two terminals
 - ✅ Automatic cleanup when you press Ctrl+C
 - ✅ URL displayed directly in the startup banner
-- ✅ Works with custom ports: `anki-mcp-http --port 8080 --ngrok`
+- ✅ Works with custom ports: `@ankimcp/anki-mcp-server --port 8080 --ngrok`
 
 **Security note:** Anyone with your ngrok URL can access your Anki, so keep that URL private!
 
@@ -283,7 +283,7 @@ Add the following to your Claude Desktop config:
   "mcpServers": {
     "anki-mcp": {
       "command": "node",
-      "args": ["/path/to/anki-mcp-desktop/dist/main-stdio.js"],
+      "args": ["/path/to/anki-mcp-server/dist/main-stdio.js"],
       "env": {
         "ANKI_CONNECT_URL": "http://localhost:8765"
       }
@@ -292,7 +292,7 @@ Add the following to your Claude Desktop config:
 }
 ```
 
-Replace `/path/to/anki-mcp-desktop` with your actual project path.
+Replace `/path/to/anki-mcp-server` with your actual project path.
 
 ### Config File Locations
 
@@ -439,7 +439,7 @@ This command will:
 3. Build the TypeScript project
 4. Package `dist/` and `node_modules/` into an `.mcpb` file
 
-The output file will be named based on the current version (e.g., `anki-mcp-http-0.5.0.mcpb`) and can be distributed for one-click installation.
+The output file will be named based on the current version (e.g., `@ankimcp/anki-mcp-server-0.5.0.mcpb`) and can be distributed for one-click installation.
 
 #### What Gets Bundled
 
@@ -552,7 +552,7 @@ Update your Claude Desktop config to enable debugging:
       "command": "node",
       "args": [
         "--inspect=9229",
-        "<path_to_project>/anki-mcp-desktop/dist/main-stdio.js"
+        "<path_to_project>/anki-mcp-server/dist/main-stdio.js"
       ],
       "env": {
         "ANKI_CONNECT_URL": "http://localhost:8765"
@@ -641,10 +641,10 @@ Test the npm package locally before publishing:
 
 ```bash
 # 1. Create local package
-npm run pack:local         # Builds and creates anki-mcp-http-*.tgz
+npm run pack:local         # Builds and creates @ankimcp/anki-mcp-server-*.tgz
 
 # 2. Install globally from local package
-npm run install:local      # Installs from ./anki-mcp-http-*.tgz
+npm run install:local      # Installs from ./@ankimcp/anki-mcp-server-*.tgz
 
 # 3. Test the command
 ankimcp                    # Runs HTTP server on port 3000
@@ -710,7 +710,7 @@ If you're exploring Anki MCP integrations, here are other projects in this space
 - **Architecture**: Procedural code structure with all tools in one file
 - **Good for**: Simple use cases, minimal dependencies
 
-**Why this project (anki-mcp-desktop) differs:**
+**Why this project differs:**
 - **Enterprise-grade architecture**: Built on NestJS with dependency injection
 - **Modular design**: Each tool is a separate class with clear separation of concerns
 - **Maintainability**: Easy to extend with new features without touching existing code
