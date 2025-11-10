@@ -1,6 +1,6 @@
 {
   "name": "@ankimcp/anki-mcp-server",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "Model Context Protocol server for Anki - enables AI assistants to interact with your Anki flashcards",
   "author": "Anatoly Tarnavsky",
   "private": false,
@@ -36,7 +36,7 @@
     "inspector:http": "./node_modules/.bin/mcp-inspector --config mcp-inspector-config.json --server http-server",
     "sync-version": "node scripts/sync-version.js",
     "mcpb:clean": "rm -f *.mcpb",
-    "mcpb:bundle": "npm run sync-version && npm run mcpb:clean && npm run build && mcpb pack . \"$npm_package_name-$npm_package_version.mcpb\"",
+    "mcpb:bundle": "npm run sync-version && npm run mcpb:clean && npm run build && mcpb pack . \"anki-mcp-server-$npm_package_version.mcpb\"",
     "pack:local": "rm -f *.tgz && npm run build && npm pack",
     "install:local": "npm install -g ./@ankimcp-anki-mcp-server-*.tgz",
     "uninstall:local": "npm uninstall -g @ankimcp/anki-mcp-server",

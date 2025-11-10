@@ -358,6 +358,7 @@ npm run sync-version          # Sync version from package.json to manifest.json
 
 **Key Points**:
 - `mcpb:bundle` automatically syncs version from `package.json` to `manifest.json` before building
+- **Bundle Filename**: Uses hardcoded name `anki-mcp-server` with version from package.json to create `anki-mcp-server-0.x.x.mcpb`. This avoids issues with special characters in scoped package names (`@ankimcp/anki-mcp-server`) which would create directory structures instead of flat files.
 - MCPB bundles use **STDIO entry point** (`manifest.json` → `dist/main-stdio.js`)
 - User config keys in `manifest.json` **must use snake_case** (e.g., `anki_connect_url`), not camelCase
 - MCPB variable substitution syntax: `${user_config.key_name}`
