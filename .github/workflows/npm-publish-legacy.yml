@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*.*.*'
+  workflow_dispatch:  # Allows manual triggering from GitHub UI
 
 jobs:
   publish-legacy:
