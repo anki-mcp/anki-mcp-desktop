@@ -124,7 +124,7 @@ Then configure:
 {
   "mcpServers": {
     "anki-mcp": {
-      "command": "@ankimcp/anki-mcp-server",
+      "command": "ankimcp",
       "args": ["--stdio"],
       "env": {
         "ANKI_CONNECT_URL": "http://localhost:8765"
@@ -176,14 +176,14 @@ npx @ankimcp/anki-mcp-server --anki-connect http://localhost:8765
 npm install -g @ankimcp/anki-mcp-server
 
 # Run the server
-@ankimcp/anki-mcp-server
+ankimcp
 
 # With ngrok tunnel (recommended for web-based AI)
-@ankimcp/anki-mcp-server --ngrok
+ankimcp --ngrok
 
 # With custom options
-@ankimcp/anki-mcp-server --port 8080 --host 0.0.0.0
-@ankimcp/anki-mcp-server --anki-connect http://localhost:8765
+ankimcp --port 8080 --host 0.0.0.0
+ankimcp --anki-connect http://localhost:8765
 ```
 
 **Method 3: Install from source (for development)**
@@ -197,7 +197,7 @@ npm run start:prod:http
 **CLI Options:**
 
 ```bash
-@ankimcp/anki-mcp-server [options]
+ankimcp [options]
 
 Options:
   --stdio                        Run in STDIO mode (for MCP clients)
@@ -215,10 +215,10 @@ Usage with npx (no installation needed):
 
 Usage with global installation:
   npm install -g @ankimcp/anki-mcp-server             # Install once
-  @ankimcp/anki-mcp-server                            # HTTP mode
-  @ankimcp/anki-mcp-server --port 8080                # Custom port
-  @ankimcp/anki-mcp-server --stdio                    # STDIO mode
-  @ankimcp/anki-mcp-server --ngrok                    # HTTP mode with ngrok tunnel
+  ankimcp                                             # HTTP mode
+  ankimcp --port 8080                                 # Custom port
+  ankimcp --stdio                                     # STDIO mode
+  ankimcp --ngrok                                     # HTTP mode with ngrok tunnel
 ```
 
 **Using with ngrok:**
@@ -231,7 +231,7 @@ npm install -g ngrok
 ngrok config add-authtoken <your-token>  # Get token from https://dashboard.ngrok.com
 
 # Start server with ngrok tunnel in one command:
-@ankimcp/anki-mcp-server --ngrok
+ankimcp --ngrok
 
 # The tunnel URL will be displayed in the startup banner
 # Example output:
@@ -242,7 +242,7 @@ ngrok config add-authtoken <your-token>  # Get token from https://dashboard.ngro
 
 ```bash
 # Terminal 1: Start the server
-@ankimcp/anki-mcp-server
+ankimcp
 
 # Terminal 2: Create tunnel
 ngrok http 3000
@@ -255,7 +255,7 @@ ngrok http 3000
 - ✅ One command instead of two terminals
 - ✅ Automatic cleanup when you press Ctrl+C
 - ✅ URL displayed directly in the startup banner
-- ✅ Works with custom ports: `@ankimcp/anki-mcp-server --port 8080 --ngrok`
+- ✅ Works with custom ports: `ankimcp --port 8080 --ngrok`
 
 **Security note:** Anyone with your ngrok URL can access your Anki, so keep that URL private!
 
