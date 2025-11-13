@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is an MCP (Model Context Protocol) server that enables AI assistants to interact with Anki via the AnkiConnect plugin. Built with NestJS and the `@rekog/mcp-nest` library, it exposes Anki functionality as MCP tools, prompts, and resources.
 
-**Version**: 0.8.0 (Beta) - This project is in active development. Breaking changes may occur in 0.x versions.
+**Version**: 0.8.3 (Beta) - This project is in active development. Breaking changes may occur in 0.x versions.
 
 **License**: AGPL-3.0-or-later - Changed from MIT to enable future integration of Anki source code. See README.md for details.
 
@@ -17,8 +17,9 @@ This is an MCP (Model Context Protocol) server that enables AI assistants to int
 - `architecture-tunnel.md` - Ngrok tunnel integration architecture
 - `gui-tools-implementation-plan.md` - GUI tools design and planning
 - `MODEL_ACTIONS_IMPLEMENTATION_PLAN.md` - Model creation/modification tools
+- `ACTIONS_IMPLEMENTATION.md` - AnkiConnect API implementation status tracking (31/127 actions completed)
 
-**NPM Package**: Published as `@ankimcp/anki-mcp-server` on npm registry for global installation.
+**NPM Package**: Published as `@ankimcp/anki-mcp-server` on npm registry for global installation. The old `anki-mcp-http` package continues to be published for backward compatibility but is deprecated.
 
 ## Essential Commands
 
@@ -89,7 +90,7 @@ The application follows a modular NestJS architecture with MCP primitives organi
 - **`src/anki-config.service.ts`** - Configuration service implementing `IAnkiConfig`
 - **`src/http/guards/origin-validation.guard.ts`** - Origin validation for HTTP mode security
 - **`bin/ankimcp.js`** - CLI wrapper for npm global install (routes to main-http.js or main-stdio.js based on --stdio flag)
-  - Exposed as both `ankimcp` and `@ankimcp/anki-mcp-server` commands when installed globally
+  - Exposed as both `ankimcp` and `anki-mcp-server` commands when installed globally (see package.json bin field)
 
 ### Transport Modes
 

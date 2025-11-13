@@ -369,10 +369,25 @@ The `findNotes` tool supports Anki's powerful query syntax:
 - Each note model has its own CSS styling - use `modelStyling` to get model-specific CSS
 
 #### Update Warning
-⚠️ **IMPORTANT**: When using `updateNoteFields`, do NOT view the note in Anki's browser while updating, or the fields will not update properly. Close the browser or switch to a different note before updating.
+⚠️ **IMPORTANT**: When using `updateNoteFields`, do NOT view the note in Anki's browser while updating, or the fields will not update properly. Close the browser or switch to a different note before updating. See [Known Issues](#known-issues) for more details.
 
 #### Deletion Safety
 The `deleteNotes` tool requires explicit confirmation (`confirmDeletion: true`) to prevent accidental deletions. Deleting a note removes ALL associated cards permanently.
+
+## Known Issues
+
+For a comprehensive list of known issues and limitations, please visit our documentation:
+
+**[Known Issues Documentation](https://ankimcp.ai/docs/known-issues/)**
+
+### Critical Limitations
+
+#### Note Updates Fail When Viewed in Browser
+⚠️ **IMPORTANT**: When updating notes using `updateNoteFields`, the update will silently fail if the note is currently being viewed in Anki's browser window. This is an upstream AnkiConnect limitation.
+
+**Workaround**: Always close the browser or navigate to a different note before updating.
+
+For more details and other known issues, see the [full documentation](https://ankimcp.ai/docs/known-issues/).
 
 ## Development
 
