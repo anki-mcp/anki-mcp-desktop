@@ -61,10 +61,15 @@ export class NgrokService {
 
   /**
    * Check if ngrok binary is installed globally
+   * Uses 'where' on Windows, 'which' on Unix-like systems
    */
   private async isNgrokInstalled(): Promise<boolean> {
     return new Promise((resolve) => {
-      const check = spawn("which", ["ngrok"]);
+      const isWindows = process.platform === "win32";
+      const command = isWindows ? "where" : "which";
+      const check = spawn(command, ["ngrok"], {
+        shell: isWindows, // Windows requires shell for 'where' command
+      });
       check.on("close", (code) => resolve(code === 0));
       check.on("error", () => resolve(false));
     });
