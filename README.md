@@ -464,14 +464,15 @@ This command will:
 2. Remove old `.mcpb` files
 3. Build the TypeScript project
 4. Package `dist/` and `node_modules/` into an `.mcpb` file
+5. Run `mcpb clean` to remove devDependencies (optimizes bundle from ~47MB to ~10MB)
 
-The output file will be named based on the current version (e.g., `@ankimcp/anki-mcp-server-0.5.0.mcpb`) and can be distributed for one-click installation.
+The output file will be named `anki-mcp-server-X.X.X.mcpb` and can be distributed for one-click installation.
 
 #### What Gets Bundled
 
 The MCPB package includes:
 - Compiled JavaScript (`dist/` directory - includes both entry points)
-- All dependencies (`node_modules/`)
+- Production dependencies only (`node_modules/` - devDependencies removed by `mcpb clean`)
 - Package metadata (`package.json`)
 - Manifest configuration (`manifest.json` - configured to use `main-stdio.js`)
 - Icon (`icon.png`)
