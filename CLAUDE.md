@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is an MCP (Model Context Protocol) server that enables AI assistants to interact with Anki via the AnkiConnect plugin. Built with NestJS and the `@rekog/mcp-nest` library, it exposes Anki functionality as MCP tools, prompts, and resources.
 
-**Version**: 0.8.3 (Beta) - This project is in active development. Breaking changes may occur in 0.x versions.
+**Version**: 0.8.5 (Beta) - This project is in active development. Breaking changes may occur in 0.x versions.
 
 **License**: AGPL-3.0-or-later - Changed from MIT to enable future integration of Anki source code. See README.md for details.
 
@@ -352,20 +352,31 @@ This simulates the full user experience of installing via `npm install -g @ankim
 The project can be packaged as an MCPB (Model Context Protocol Bundle) for one-click installation:
 
 ```bash
-npm run mcpb:bundle           # Sync version, build, and package into .mcpb file
+npm run mcpb:bundle           # Sync version, build, pack, and clean (optimizes bundle size)
 npm run mcpb:clean            # Remove old .mcpb files
 npm run sync-version          # Sync version from package.json to manifest.json
 ```
 
 **Key Points**:
 - `mcpb:bundle` automatically syncs version from `package.json` to `manifest.json` before building
+- **Bundle Optimization**: The script includes `mcpb clean` step which removes devDependencies from the bundle (47MB → ~10MB)
 - **Bundle Filename**: Uses hardcoded name `anki-mcp-server` with version from package.json to create `anki-mcp-server-0.x.x.mcpb`. This avoids issues with special characters in scoped package names (`@ankimcp/anki-mcp-server`) which would create directory structures instead of flat files.
 - MCPB bundles use **STDIO entry point** (`manifest.json` → `dist/main-stdio.js`)
 - User config keys in `manifest.json` **must use snake_case** (e.g., `anki_connect_url`), not camelCase
 - MCPB variable substitution syntax: `${user_config.key_name}`
 - The `.mcpbignore` file uses patterns like `/src/` (with leading slash) to exclude only root-level directories, not node_modules subdirectories
-- Bundle includes: `dist/` (both entry points), `node_modules/`, `package.json`, `manifest.json`, `icon.png`
-- Excluded: source files, tests, development configs
+- Bundle includes: `dist/` (both entry points), `node_modules/` (production only), `package.json`, `manifest.json`, `icon.png`
+- Excluded: source files, tests, development configs, devDependencies
+
+**IMPORTANT - Peer Dependencies as Direct Dependencies**:
+The `@rekog/mcp-nest` library has peer dependencies that `mcpb clean` would incorrectly remove. These MUST remain as direct dependencies in `package.json`:
+- `@nestjs/jwt`, `@nestjs/passport` - Auth modules
+- `jsonwebtoken`, `passport`, `passport-jwt` - JWT/Passport runtime
+- `zod-to-json-schema` - Schema conversion
+
+If you see "Cannot find module" errors after installing the MCPB bundle, a peer dependency was likely removed.
+
+**Package Manager**: This project is standardized on **npm** (not pnpm or yarn). The `mcpb clean` command doesn't work correctly with pnpm's node_modules structure.
 
 ### Versioning Convention
 
