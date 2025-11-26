@@ -1,6 +1,6 @@
 {
   "name": "@ankimcp/anki-mcp-server",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "description": "Model Context Protocol server for Anki - enables AI assistants to interact with your Anki flashcards",
   "author": "Anatoly Tarnavsky",
   "private": false,
@@ -71,6 +71,7 @@
     "@nestjs/testing": "^11.1.6",
     "@types/express": "^5.0.3",
     "@types/jest": "^30.0.0",
+    "@types/mdast": "^4.0.4",
     "@types/node": "^24.6.2",
     "@types/supertest": "^6.0.3",
     "@types/update-notifier": "^6.0.8",
@@ -132,7 +133,7 @@
       "^@test/(.*)$": "<rootDir>/test/$1"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!(ky|unified|remark-parse|unist-util-visit|mdast-util-to-string|micromark.*|decode-named-character-reference|character-entities|unist-.*|vfile.*|bail|is-plain-obj|trough|devlop|mdast.*|hast.*)/)"
+      "/node_modules/(?!(\\.pnpm/.+/node_modules/)?(ky|unified|remark-parse|unist-util-visit|mdast-util-to-string|micromark.*|decode-named-character-reference|character-entities|unist-.*|vfile.*|bail|is-plain-obj|trough|devlop|mdast.*|hast.*))"
     ],
     "forceExit": true
   },
