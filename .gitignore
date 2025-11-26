@@ -100,3 +100,7 @@ tsconfig.build.tsbuildinfo
 
 # Claude draft files
 .claude-draft/
+
+# Standardized on npm
+pnpm-lock.yaml
+yarn.lock
