@@ -233,7 +233,7 @@ describe("CLI Module", () => {
       const output = consoleLogSpy.mock.calls.map((call) => call[0]).join("\n");
 
       expect(output).toContain("ngrok");
-      expect(output).toContain("anki-mcp-http --ngrok");
+      expect(output).toContain("ankimcp --ngrok");
 
       consoleLogSpy.mockRestore();
     });
@@ -252,7 +252,7 @@ describe("CLI Module", () => {
 
       const output = consoleLogSpy.mock.calls.map((call) => call[0]).join("\n");
 
-      expect(output).toContain("anki-mcp-http --ngrok");
+      expect(output).toContain("ankimcp --ngrok");
 
       consoleLogSpy.mockRestore();
     });
@@ -271,7 +271,7 @@ describe("CLI Module", () => {
 
       const output = consoleLogSpy.mock.calls.map((call) => call[0]).join("\n");
 
-      expect(output).toContain("anki-mcp-http --help");
+      expect(output).toContain("ankimcp --help");
 
       consoleLogSpy.mockRestore();
     });

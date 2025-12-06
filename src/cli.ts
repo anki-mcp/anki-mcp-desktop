@@ -16,7 +16,7 @@ function getPackageJson() {
       readFileSync(join(__dirname, "../package.json"), "utf-8"),
     );
   } catch {
-    return { version: "0.0.0", name: "anki-mcp-http" };
+    return { version: "0.0.0", name: "ankimcp" };
   }
 }
 
@@ -58,25 +58,25 @@ Transport Modes:
   STDIO Mode:           For desktop MCP clients (Cursor, Cline, Zed)
 
 Examples - HTTP Mode:
-  $ anki-mcp-http                                    # Use defaults
-  $ anki-mcp-http --port 8080                        # Custom port
-  $ anki-mcp-http --host 0.0.0.0 --port 3000         # Listen on all interfaces
-  $ anki-mcp-http --anki-connect http://localhost:8765
+  $ ankimcp                                    # Use defaults
+  $ ankimcp --port 8080                        # Custom port
+  $ ankimcp --host 0.0.0.0 --port 3000         # Listen on all interfaces
+  $ ankimcp --anki-connect http://localhost:8765
 
 Examples - HTTP Mode with Ngrok:
-  $ anki-mcp-http --ngrok                            # Start with ngrok tunnel
-  $ anki-mcp-http --port 8080 --ngrok                # Custom port + ngrok
-  $ anki-mcp-http --host 0.0.0.0 --ngrok             # Public host + ngrok
+  $ ankimcp --ngrok                            # Start with ngrok tunnel
+  $ ankimcp --port 8080 --ngrok                # Custom port + ngrok
+  $ ankimcp --host 0.0.0.0 --ngrok             # Public host + ngrok
 
 Examples - STDIO Mode:
-  $ anki-mcp-http --stdio                            # For use with npx in MCP clients
+  $ ankimcp --stdio                            # For use with npx in MCP clients
 
   # MCP client configuration (Cursor, Cline, Zed, etc.):
   {
     "mcpServers": {
       "anki-mcp": {
         "command": "npx",
-        "args": ["-y", "anki-mcp-http", "--stdio"]
+        "args": ["-y", "ankimcp", "--stdio"]
       }
     }
   }
@@ -85,7 +85,7 @@ Ngrok Setup (one-time):
   1. Install: npm install -g ngrok
   2. Get auth token from: https://dashboard.ngrok.com/get-started/your-authtoken
   3. Setup: ngrok config add-authtoken <your-token>
-  4. Run: anki-mcp-http --ngrok
+  4. Run: ankimcp --ngrok
 `,
     );
 
@@ -130,13 +130,13 @@ ${
 Usage with ngrok:
   1. Install: npm install -g ngrok
   2. Setup: ngrok config add-authtoken <your-token>
-  3. Run: anki-mcp-http --ngrok
+  3. Run: ankimcp --ngrok
 `
     : `
 Share this URL with your AI assistant:
   ${ngrokUrl}
 `
 }
-Run 'anki-mcp-http --help' for more options.
+Run 'ankimcp --help' for more options.
 `);
 }

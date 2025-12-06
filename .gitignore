@@ -104,3 +104,6 @@ tsconfig.build.tsbuildinfo
 # Standardized on npm
 pnpm-lock.yaml
 yarn.lock
+dist-bundle/
+dist-executables/
+*.bun-build
