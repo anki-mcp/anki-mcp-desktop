@@ -19,6 +19,7 @@ export { SyncTool } from "./tools/sync.tool";
 export { ListDecksTool } from "./tools/list-decks.tool";
 export { CreateDeckTool } from "./tools/create-deck.tool";
 export { GetDueCardsTool } from "./tools/get-due-cards.tool";
+export { GetCardsTool } from "./tools/get-cards.tool";
 export { PresentCardTool } from "./tools/present-card.tool";
 export { RateCardTool } from "./tools/rate-card.tool";
 export { ModelNamesTool } from "./tools/model-names.tool";
@@ -47,6 +48,7 @@ import { SyncTool } from "./tools/sync.tool";
 import { ListDecksTool } from "./tools/list-decks.tool";
 import { CreateDeckTool } from "./tools/create-deck.tool";
 import { GetDueCardsTool } from "./tools/get-due-cards.tool";
+import { GetCardsTool } from "./tools/get-cards.tool";
 import { PresentCardTool } from "./tools/present-card.tool";
 import { RateCardTool } from "./tools/rate-card.tool";
 import { ModelNamesTool } from "./tools/model-names.tool";
@@ -72,6 +74,7 @@ const MCP_PRIMITIVES = [
   ListDecksTool,
   CreateDeckTool,
   GetDueCardsTool,
+  GetCardsTool,
   PresentCardTool,
   RateCardTool,
   ModelNamesTool,

@@ -1,6 +1,6 @@
 {
   "name": "@ankimcp/anki-mcp-server",
-  "version": "0.8.5",
+  "version": "0.9.0",
   "description": "Model Context Protocol server for Anki - enables AI assistants to interact with your Anki flashcards",
   "author": "Anatoly Tarnavsky",
   "private": false,
